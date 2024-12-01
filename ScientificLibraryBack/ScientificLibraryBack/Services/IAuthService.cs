@@ -6,6 +6,7 @@ namespace ScientificLibraryBack.Services
     {
         string GenerateTokenString(LoginUser user);
         Task<bool> Login(LoginUser user);
-        Task<bool> RegisterUser(LoginUser user);
+        Task<bool> RegisterReader(LoginUser user);
+        IEnumerable<string> GetUserRole(LoginUser user);
     }
 }

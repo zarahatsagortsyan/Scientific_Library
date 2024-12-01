@@ -1,0 +1,34 @@
+networks:
+  scientificlibraryapp:
+
+services:
+  scientificlibraryDB:
+    container_name: app-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+        - 8002:1433
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=Test123!@#
+    networks:
+        - scientificlibraryapp
+  
+
+  scientificlibraryback:
+    container_name: scientific-library-app
+    image: ${DOCKER_REGISTRY-}scientificlibraryback
+    build:
+      context: .
+      dockerfile: ScientificLibraryBack/Dockerfile
+    ports:
+        - 8001:8080
+    volumes:
+      - ./ScientificLibraryBack:/app
+    depends_on:
+        - scientificlibraryDB
+    environment:
+        - DB_HOST=scientificlibraryDB
+        - DB_NAME=LibDB
+        - DB_SA_PASSWORD=Test123!@#
+    networks:
+        - scientificlibraryapp

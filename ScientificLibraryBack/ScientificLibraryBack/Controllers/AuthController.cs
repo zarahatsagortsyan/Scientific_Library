@@ -18,9 +18,9 @@ namespace ScientificLibraryBack.Controllers
             _authService = authService;
         }
         [HttpPost("register/reader")]
-        public async Task<IActionResult> RegisterUser(LoginUser user)
+        public async Task<IActionResult> RegisterReader(LoginUser user)
         {
-            if (await _authService.RegisterUser(user))
+            if (await _authService.RegisterReader(user))
             {
                 return Ok("Successfuly done");
             }
