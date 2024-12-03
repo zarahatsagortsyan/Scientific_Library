@@ -24,8 +24,6 @@ namespace ScientificLibraryBack.Contextes
                         databaseCreator.Create();
                     if (!databaseCreator.HasTables())
                         databaseCreator.CreateTables();
-
-
                 }
             }
             catch (Exception ex)
@@ -38,7 +36,7 @@ namespace ScientificLibraryBack.Contextes
         //{
 
         //}
-        public DbSet<User> Users { get; set; }
+        public DbSet<ExtendedIdentityUser> Users { get; set; }
 
     }
 }

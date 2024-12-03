@@ -27,19 +27,67 @@ namespace ScientificLibraryBack.Controllers
             return BadRequest("Something went wrong");
         }
 
+        [HttpPost("register/publisher")]
+        public async Task<IActionResult> RegisterPublisher(LoginUser user)
+        {
+            if (await _authService.RegisterPublisher(user))
+            {
+                return Ok("Successfuly done");
+            }
+            return BadRequest("Something went wrong");
+        }
+
+
+        [HttpPost("RefreshToken")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
+        {
+            var loginResult = await _authService.RefreshToken(model);
+            if (loginResult.IsLogedIn)
+            {
+
+                return Ok(loginResult);
+            }
+            return Unauthorized();
+        }
+
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login(LoginUser user)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
+        //    if (await _authService.Login(user))
+        //    {
+        //        var tokenString = _authService.GenerateTokenString(user);
+        //        return Ok(tokenString);
+        //    }
+        //    return BadRequest();
+        //}
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUser user)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+
+                var loginResult = await _authService.Login(user);
+                if (loginResult.IsLogedIn)
+                {
+                    return Ok(loginResult);
+                }
+
+                return Unauthorized();
             }
-            if (await _authService.Login(user))
+            catch (Exception excp)
             {
-                var tokenString = _authService.GenerateTokenString(user);
-                return Ok(tokenString);
+                return BadRequest(excp);
             }
-            return BadRequest();
         }
+
     }
 }

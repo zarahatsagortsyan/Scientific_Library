@@ -6,7 +6,7 @@ namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Reader")]
+//    [Authorize(Roles = "Reader")]
     public class TestController : ControllerBase
     {
         [HttpGet]
@@ -15,5 +15,14 @@ namespace ScientificLibraryBack.Controllers
 
             return "You hit me!";
         }
+
+        [HttpGet("AuthorizedTest")]
+        [Authorize]
+        public IActionResult AuthorizedTest()
+        {
+            return Ok();
+        
+        }
+
     }
 }

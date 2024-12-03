@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ScientificLibraryBack.Models.DB;
 using System.Collections;
 
 namespace ScientificLibraryBack.Services
@@ -8,13 +9,13 @@ namespace ScientificLibraryBack.Services
     public class UserService : IUserService
     {
 
-        private readonly UserManager<IdentityUser> _userManager;
-        public UserService(UserManager<IdentityUser> userManager)
+        private readonly UserManager<ExtendedIdentityUser> _userManager;
+        public UserService(UserManager<ExtendedIdentityUser> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task<IEnumerable<IdentityUser>> GetUsersAsync()
+        public async Task<IEnumerable<ExtendedIdentityUser>> GetUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync(); // Ensure this line is async
             return users;

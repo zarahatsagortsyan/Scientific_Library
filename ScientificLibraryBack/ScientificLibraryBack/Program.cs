@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ScientificLibraryBack.Contextes;
+using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services;
 using System.Data;
 using System.Security.Claims;
@@ -23,7 +24,7 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Encrypt=False;MultipleActiveResultSets=true;";
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 5;
 })
@@ -94,14 +95,14 @@ using (var scope = app.Services.CreateScope())
 
 using (var scope = app.Services.CreateScope())
 {
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ExtendedIdentityUser>>();
 
     string email = "admin@admin.com";
     string password = "Test123!@#";
 
     if (await userManager.FindByEmailAsync(email) == null)
     {
-        var user = new IdentityUser();
+        var user = new ExtendedIdentityUser();
         user.Email = email;
         user.UserName = email;
         user.EmailConfirmed = true;
