@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,6 @@ namespace ScientificLibraryBack.Controllers
             var loginResult = await _authService.RefreshToken(model);
             if (loginResult.IsLogedIn)
             {
-
                 return Ok(loginResult);
             }
             return Unauthorized();
@@ -89,5 +89,23 @@ namespace ScientificLibraryBack.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(string userName)
+        {
+            try
+            {
+                var logoutResponse = await _authService.Logout(userName);
+
+                if (logoutResponse is null || logoutResponse.code == 0)
+                    return BadRequest();
+
+                return Ok(logoutResponse);
+            }
+            catch (Exception excp)
+            {
+                return BadRequest(excp);
+            }
+        }
     }
 }

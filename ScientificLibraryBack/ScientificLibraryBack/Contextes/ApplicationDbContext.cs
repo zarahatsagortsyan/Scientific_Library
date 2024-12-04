@@ -32,11 +32,20 @@ namespace ScientificLibraryBack.Contextes
             }
 
         }
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
 
-        //}
-        public DbSet<ExtendedIdentityUser> Users { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Specify "no action" for the cascade delete on the relationship between Reviews and Books
+            modelBuilder.Entity<Review>()
+            .HasOne(r => r.Book)
+            .WithMany(b => b.Reviews)
+            .HasForeignKey(r => r.BookId)
+            .OnDelete(DeleteBehavior.Restrict); // NO ACTION or Restrict
 
+            base.OnModelCreating(modelBuilder);
+        }
+        //public DbSet<ExtendedIdentityUser> Users { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }

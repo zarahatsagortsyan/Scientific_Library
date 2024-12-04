@@ -9,6 +9,7 @@ namespace ScientificLibraryBack.Services
         //Task<bool> Login(LoginUser user);
         Task<LoginResponse> Login(LoginUser user);
         Task<LoginResponse> RefreshToken(RefreshTokenModel model);
+        Task<LogoutResponse> Logout(string userName);
 
 
         Task<bool> RegisterReader(LoginUser user);

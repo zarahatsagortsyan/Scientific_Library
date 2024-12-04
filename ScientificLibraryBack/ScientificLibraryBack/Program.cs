@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration.GetSection("JWT:Issuer").Value,
         ValidAudience = builder.Configuration.GetSection("JWT:Audience").Value,
+        ClockSkew = TimeSpan.Zero,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("JWT:Key").Value)),
         RoleClaimType = ClaimTypes.Role // Make sure this is set correctly for role validation
     };
@@ -55,6 +56,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddScoped<IBookService, BookService>();
+
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

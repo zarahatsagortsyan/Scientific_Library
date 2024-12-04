@@ -1,0 +1,46 @@
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+
+namespace ScientificLibraryBack.Models.DB
+{
+    public class Book
+    {
+        public Guid Id { get; set; }
+
+        [Required(ErrorMessage = "Title is required.")]
+        public string Title { get; set; }
+        
+        [Required(ErrorMessage = "Author is required.")]
+        public string Author { get; set; }
+   
+        [Required(ErrorMessage = "Genre is required.")]
+        public string Genre { get; set; }
+        
+        [Required(ErrorMessage = "Description is required.")]
+        public string Description { get; set; }
+
+        [Required(ErrorMessage = "ISBN is required.")]
+        public string ISBN { get; set; }  // ISBN of the book
+        public byte[] CoverImage { get; set; } // If storing the image in the database
+        public string CoverImageUrl { get; set; } // If storing the image in a file system
+        public DateTime PublicationDate { get; set; }  // Date when the book was published
+        public int PageCount { get; set; }  // Number of pages
+
+        [Required(ErrorMessage = "Language is required.")]
+        public string Language { get; set; }  // Language of the book
+
+        public string Format { get; set; }  // eBook, Audiobook, etc.
+        public string Keywords { get; set; }  // In the database, this will be stored as nvarchar
+        public bool IsAvailable { get; set; }  // Availability status
+
+        // Publisher (User) Information
+        public string PublisherId { get; set; }  // Foreign Key to AspNetUsers
+        public ExtendedIdentityUser Publisher { get; set; }  // Navigation property to AspNetUsers
+
+        // Navigation property for Reviews
+        //This is the navigation property in the Book model that links each book to its associated reviews. The ICollection<Review> type represents a collection of Review entities related to the Book entity.
+        public virtual ICollection<Review> Reviews { get; set; }  // Collection of reviews for this book
+
+    }
+}

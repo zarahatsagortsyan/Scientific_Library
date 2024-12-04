@@ -48,7 +48,7 @@ namespace ScientificLibraryBack.Services
 
             var securityToken = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddHours(20),
                 issuer: _config["JWT:Issuer"],
                 audience: _config["JWT:Audience"],
                 signingCredentials: signingCredentials
@@ -263,6 +263,31 @@ namespace ScientificLibraryBack.Services
             };
 
             return new JwtSecurityTokenHandler().ValidateToken(token, tokenValitationParameters, out _);
+        }
+
+        public async Task<LogoutResponse> Logout(string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var logoutResponse = new LogoutResponse();
+            if (user != null)
+            {
+                try
+                {
+                    user.RefreshToken = null;
+                    user.RefreshTokenExpiryTime = null;
+                    await _userManager.UpdateAsync(user);
+                    logoutResponse.code = 1;
+                    logoutResponse.message = "ok";
+                }
+                catch (Exception ex)
+                {
+                    logoutResponse.code = 1;
+                    logoutResponse.message = ex.Message;
+
+                    return logoutResponse;
+                }
+            }
+            return logoutResponse;
         }
     }
 }
