@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using ScientificLibraryBack.Models;
-using ScientificLibraryBack.Services;
+using ScientificLibraryBack.Services.UserService;
 
 namespace ScientificLibraryBack.Controllers
 {
@@ -18,7 +18,7 @@ namespace ScientificLibraryBack.Controllers
             _userService = userService;
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
@@ -51,6 +51,34 @@ namespace ScientificLibraryBack.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}"); // Generic error handling
             }
 
+        }
+
+        [HttpGet("GetActiveReaders")]
+        public async Task<IActionResult> GetActiveReaders()
+        {
+            try
+            {
+                var activeReaders = await _userService.GetActiveReadersAsync();
+                return Ok(activeReaders);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("GetActivePublishers")]
+        public async Task<IActionResult> GetActivePublishers()
+        {
+            try
+            {
+                var activePublishers = await _userService.GetActivePublishersAsync();
+                return Ok(activePublishers);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
         }
     }
 }

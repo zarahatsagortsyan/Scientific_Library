@@ -42,7 +42,14 @@ namespace ScientificLibraryBack.Contextes
             .HasForeignKey(r => r.BookId)
             .OnDelete(DeleteBehavior.Restrict); // NO ACTION or Restrict
 
+            //modelBuilder.Entity<Book>()
+            //.HasOne(b => b.Publisher)
+            //.WithMany() // Specify if a Publisher has a collection of books, e.g., `.WithMany(p => p.Books)`
+            //.HasForeignKey(b => b.PublisherId)
+            //.OnDelete(DeleteBehavior.Cascade); // Optional: Set delete behavior
+
             base.OnModelCreating(modelBuilder);
+
         }
         //public DbSet<ExtendedIdentityUser> Users { get; set; }
         public DbSet<Book> Books { get; set; }

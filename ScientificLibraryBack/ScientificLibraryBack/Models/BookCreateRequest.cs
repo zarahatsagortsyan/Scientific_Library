@@ -1,35 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using ScientificLibraryBack.Models.DB;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 
-namespace ScientificLibraryBack.Models.DB
+namespace ScientificLibraryBack.Models
 {
-    public enum ApprovalStatus
+    public class BookCreateRequest
     {
-        Pending,   // Book is waiting for approval
-        Approved,  // Book has been approved by the admin
-        Rejected   // Book was rejected by the admin
-    }
-
-    public enum State
-    {
-        New,   // Book is new
-        Edited,  // Book is edited
-        Deleted   // Book is deleted
-    }
-    public class Book
-    {
-        public Guid Id { get; set; }
+        //public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; }
-        
+
         [Required(ErrorMessage = "Author is required.")]
         public string Author { get; set; }
-   
+
         [Required(ErrorMessage = "Genre is required.")]
         public string Genre { get; set; }
-        
+
         [Required(ErrorMessage = "Description is required.")]
         public string Description { get; set; }
 
@@ -46,17 +32,7 @@ namespace ScientificLibraryBack.Models.DB
         public string Format { get; set; }  // eBook, Audiobook, etc.
         public string Keywords { get; set; }  // In the database, this will be stored as nvarchar
         public bool IsAvailable { get; set; }  // Availability status
-        public State State { get; set; }
-        public ApprovalStatus Status { get; set; }
-
-
-        // Publisher (User) Information
         public string PublisherId { get; set; }  // Foreign Key to AspNetUsers
-        public ExtendedIdentityUser Publisher { get; set; }  // Navigation property to AspNetUsers
-
-        // Navigation property for Reviews
-        //This is the navigation property in the Book model that links each book to its associated reviews. The ICollection<Review> type represents a collection of Review entities related to the Book entity.
-        public virtual ICollection<Review> Reviews { get; set; }  // Collection of reviews for this book
 
     }
 }

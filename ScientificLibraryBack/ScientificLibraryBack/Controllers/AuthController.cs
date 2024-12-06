@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using ScientificLibraryBack.Models;
-using ScientificLibraryBack.Services;
+using ScientificLibraryBack.Services.AuthService;
+using System.Security.Principal;
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
@@ -29,13 +30,12 @@ namespace ScientificLibraryBack.Controllers
         }
 
         [HttpPost("register/publisher")]
-        public async Task<IActionResult> RegisterPublisher(LoginUser user)
+        public async Task<IdentityResult> RegisterPublisher(LoginUser user)
         {
-            if (await _authService.RegisterPublisher(user))
-            {
-                return Ok("Successfuly done");
-            }
-            return BadRequest("Something went wrong");
+
+                return await _authService.RegisterPublisher(user);
+            
+            //return BadRequest("Something went wrong");
         }
 
 

@@ -5,7 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ScientificLibraryBack.Contextes;
 using ScientificLibraryBack.Models.DB;
-using ScientificLibraryBack.Services;
+using ScientificLibraryBack.Services.AuthService;
+using ScientificLibraryBack.Services.BookService;
+using ScientificLibraryBack.Services.UserService;
+
 using System.Data;
 using System.Security.Claims;
 using System.Text;
@@ -106,6 +109,7 @@ using (var scope = app.Services.CreateScope())
     if (await userManager.FindByEmailAsync(email) == null)
     {
         var user = new ExtendedIdentityUser();
+        user.Type = UserType.Admin;
         user.Email = email;
         user.UserName = email;
         user.EmailConfirmed = true;
