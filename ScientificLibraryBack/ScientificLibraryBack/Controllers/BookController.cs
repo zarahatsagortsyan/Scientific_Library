@@ -5,6 +5,8 @@ using ScientificLibraryBack.Services.BookService;
 
 namespace ScientificLibraryBack.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class BookController : Controller
     {
         private readonly IBookService _bookService;
@@ -88,7 +90,7 @@ namespace ScientificLibraryBack.Controllers
             return Ok(books);
         }
 
-        [HttpGet("GetPendingBooks/{publisherId}")]
+        [HttpGet("GetPendingBooks")]
         public async Task<IActionResult> GetPendingBooks(string publisherId)
         {
             var books = await _bookService.GetPendingBooksAsync(publisherId);

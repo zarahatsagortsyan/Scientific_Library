@@ -39,7 +39,7 @@ namespace ScientificLibraryBack.Controllers
         }
 
 
-        [HttpPost("RefreshToken")]
+        [HttpPost("refreshToken")]
         public async Task<IActionResult> RefreshToken(RefreshTokenModel model)
         {
             var loginResult = await _authService.RefreshToken(model);
