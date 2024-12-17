@@ -92,23 +92,32 @@ namespace ScientificLibraryBack.Services.AuthService
             }
         }
 
-        public async Task<bool> RegisterReader(LoginUser user)
+        public async Task<IdentityResult> RegisterReader(LoginUser user)
         {
-            var identityUser = new ExtendedIdentityUser
+            try
             {
-                UserName = user.UserName,
-                Email = user.UserName,
-            };
+                var identityUser = new ExtendedIdentityUser
+                {
+                    UserName = user.UserName,
+                    Email = user.UserName,
+                };
 
-            identityUser.Type = UserType.Reader;
-            identityUser.IsActive = true;
-            var result = await _userManager.CreateAsync(identityUser, user.Password);
-            if (result.Succeeded)
-            {
-                await _userManager.AddToRoleAsync(identityUser, "Reader"); // Example role assignment
+                identityUser.Type = UserType.Publisher;
+                identityUser.IsActive = true;
+                var result = await _userManager.CreateAsync(identityUser, user.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(identityUser, "Reader"); // Example role assignment
+                }
+                Console.WriteLine(result.Errors);
+
+                return result;
             }
-            Console.WriteLine(result.Errors);
-            return result.Succeeded;
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         public IEnumerable<string>? GetUserRole(string userName)

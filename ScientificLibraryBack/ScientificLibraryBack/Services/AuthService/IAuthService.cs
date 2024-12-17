@@ -13,7 +13,7 @@ namespace ScientificLibraryBack.Services.AuthService
         Task<LogoutResponse> Logout(string userName);
 
 
-        Task<bool> RegisterReader(LoginUser user);
+        Task<IdentityResult> RegisterReader(LoginUser user);
         IEnumerable<string> GetUserRole(string userName);
         Task<IdentityResult> RegisterPublisher(LoginUser user);
         //Task<TokenDto> GenerateTokenString(bool populateExp);

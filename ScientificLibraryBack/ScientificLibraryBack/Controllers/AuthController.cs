@@ -20,13 +20,14 @@ namespace ScientificLibraryBack.Controllers
             _authService = authService;
         }
         [HttpPost("register/reader")]
-        public async Task<IActionResult> RegisterReader(LoginUser user)
+        public async Task<IdentityResult> RegisterReader(LoginUser user)
         {
-            if (await _authService.RegisterReader(user))
-            {
-                return Ok("Successfuly done");
-            }
-            return BadRequest("Something went wrong");
+            return await _authService.RegisterPublisher(user);
+            //if (await _authService.RegisterReader(user))
+            //{
+            //    return Ok("Successfuly done");
+            //}
+            //return BadRequest("Something went wrong");
         }
 
         [HttpPost("register/publisher")]
