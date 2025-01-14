@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificLibraryBack.Contextes;
-using ScientificLibraryBack.Models;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
 using ScientificLibraryBack.Services.UserService;
@@ -386,6 +386,23 @@ namespace ScientificLibraryBack.Services.BookService
                 response.Success = false;
                 response.Message = $"An error occurred: {ex.Message}";
             }
+
+            return response;
+        }
+
+        public async Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId)
+        {
+            var response = new ApiResponse<IEnumerable<Review>>();
+
+            // Retrieve reviews for the given book
+            var reviews = await _context.Reviews
+                .Where(r => r.BookId == bookId)
+                .Include(r => r.User)  // You can include user info if needed
+                .ToListAsync();
+
+            response.Success = true;
+            response.Message = "Reviews fetched successfully.";
+            response.Data = reviews;
 
             return response;
         }

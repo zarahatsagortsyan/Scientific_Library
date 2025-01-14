@@ -50,9 +50,17 @@ namespace ScientificLibraryBack.Contextes
 
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<UserBook>()
+                         .HasIndex(ub => new { ub.BookId, ub.UserId })
+                         .IsUnique();
         }
         //public DbSet<ExtendedIdentityUser> Users { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<UserBook> UserBooks { get; set; }
+
+
+
+
     }
 }

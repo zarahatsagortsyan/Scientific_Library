@@ -304,3 +304,8 @@ C:\Users\Zara\OneDrive\Рабочий стол\anhatakan\diplom\Scientific_Libra
 C:\Users\Zara\OneDrive\Рабочий стол\anhatakan\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ScientificLibraryBack.genruntimeconfig.cache
 C:\Users\Zara\OneDrive\Рабочий стол\anhatakan\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ref\ScientificLibraryBack.dll
 C:\Users\Zara\OneDrive\Рабочий стол\anhatakan\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\MailKit.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\MimeKit.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

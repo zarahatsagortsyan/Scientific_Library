@@ -1,17 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ScientificLibraryBack.Contextes;
 using ScientificLibraryBack.Models.DB;
+using ScientificLibraryBack.Services.AdminService;
 using ScientificLibraryBack.Services.AuthService;
 using ScientificLibraryBack.Services.BookService;
+using ScientificLibraryBack.Services.EmailService;
+using ScientificLibraryBack.Services.EmailService.Models;
+using ScientificLibraryBack.Services.PublisherService;
 using ScientificLibraryBack.Services.UserService;
 
 using System.Data;
 using System.Security.Claims;
 using System.Text;
+using User.Management.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +40,15 @@ builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+
+//Config for Email
+builder.Services.Configure<IdentityOptions>(options => options.SignIn.RequireConfirmedEmail = true);
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
+
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 builder.Services.AddAuthentication(options =>
@@ -59,7 +74,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddScoped<IReaderService, ReaderService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 
 builder.Services.AddControllers();

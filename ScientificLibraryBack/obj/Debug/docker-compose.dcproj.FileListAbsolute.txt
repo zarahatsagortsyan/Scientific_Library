@@ -77,3 +77,7 @@ C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\bin\Debug\Scie
 C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\obj\Debug\docker-compose.dcproj.AssemblyReference.cache
 C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
 C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\obj\Debug\docker-c.35A3FFBA.Up2Date
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\bin\Debug\MimeKit.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\bin\Debug\MailKit.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\bin\Debug\BouncyCastle.Cryptography.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\bin\Debug\System.Security.Cryptography.Pkcs.dll

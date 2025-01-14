@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using ScientificLibraryBack.Models;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Shared;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -230,5 +232,34 @@ namespace ScientificLibraryBack.Services.AuthService
             }
             return logoutResponse;
         }
+
+        public async Task<IdentityResult> ResetPassword(string userName, string newPassword, string token)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                // User not found
+                return IdentityResult.Failed(new IdentityError { Description = "User not found" });
+            }
+
+            // Reset the password
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            return result;
+        }
+
+        //public async Task<IActionResult> ForgotPassword(string email)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(email);
+        //    if (user == null)
+        //    {
+        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //        var forgotPasswordLink = Url.Action("ResetPassword", "Auth", new {token, email = user.Email}, Request.Scheme);
+        //        var message = new Message(new string[] { user.Email! }, "Confirmation email link", forgotPasswordLink!);
+
+
+        //    }
+
+        //}
     }
 }

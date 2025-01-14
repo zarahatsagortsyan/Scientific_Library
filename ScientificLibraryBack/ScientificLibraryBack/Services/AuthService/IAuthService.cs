@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using ScientificLibraryBack.Models;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Shared;
 
 namespace ScientificLibraryBack.Services.AuthService
@@ -16,6 +16,7 @@ namespace ScientificLibraryBack.Services.AuthService
         Task<IdentityResult> RegisterReader(LoginUser user);
         IEnumerable<string> GetUserRole(string userName);
         Task<IdentityResult> RegisterPublisher(LoginUser user);
+        Task<IdentityResult> ResetPassword(string userName, string newPassword, string token); // Reset Password method
         //Task<TokenDto> GenerateTokenString(bool populateExp);
     }
 }
