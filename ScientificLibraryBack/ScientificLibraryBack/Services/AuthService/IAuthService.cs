@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScientificLibraryBack.DTO;
+using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Shared;
 
 namespace ScientificLibraryBack.Services.AuthService
 {
     public interface IAuthService
     {
-        string GenerateTokenString(string userName);
+        //string GenerateTokenString(string userName);
+        string GenerateTokenString(ExtendedIdentityUser userName);
+
         //Task<bool> Login(LoginUser user);
         Task<LoginResponse> Login(LoginUser user);
         Task<LoginResponse> RefreshToken(RefreshTokenModel model);

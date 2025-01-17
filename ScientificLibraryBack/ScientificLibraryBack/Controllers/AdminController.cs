@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Services.AdminService;
 
 namespace ScientificLibraryBack.Controllers
@@ -13,7 +14,7 @@ namespace ScientificLibraryBack.Controllers
             _adminService = adminService;
         }
 
-        [HttpPost("ApproveBook/{bookId}")]
+        [HttpPatch("books/{bookId}/approve")]
         public async Task<IActionResult> ApproveBook(Guid bookId)
         {
             var respone = await _adminService.ApproveBook(bookId);
@@ -27,10 +28,51 @@ namespace ScientificLibraryBack.Controllers
         }
 
 
-        [HttpPost("RejectBook/{bookId}")]
+        [HttpPatch("books/{bookId}/reject")]
         public async Task<IActionResult> RejectBook(Guid bookId)
         {
             var respone = await _adminService.RejectBook(bookId);
+
+            if (respone.Success)
+            {
+                return Ok(respone);
+            }
+
+            return BadRequest(respone);
+        }
+
+        [HttpPost("genres")]
+        public async Task<IActionResult> CreateGenre(CreateGenreRequest genreRequest)
+        {
+            var respone = await _adminService.CreateGenre(genreRequest);
+
+            if (respone.Success)
+            {
+                return Ok(respone);
+            }
+
+            return BadRequest(respone);
+        }
+
+        [HttpDelete("genres/{id}")]
+        public async Task<IActionResult> DeleteGenre(int id)
+        {
+            var respone = await _adminService.DeleteGenre(id);
+
+            if (respone.Success)
+            {
+                return Ok(respone);
+            }
+
+            return BadRequest(respone);
+        }
+
+        [HttpPatch("genres/{id}")]
+        public async Task<IActionResult> UpdateGenre(int id, UpdateGenreRequest updateGenre)
+        {
+            updateGenre.genreId = id;
+
+            var respone = await _adminService.UpdateGenre(updateGenre);
 
             if (respone.Success)
             {

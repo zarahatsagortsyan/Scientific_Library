@@ -406,5 +406,28 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
+
+        public async Task<ApiResponse<IEnumerable<Genre>>> GetGenresAsync()
+        {
+            var response = new ApiResponse<IEnumerable<Genre>>();
+
+            try
+            {
+                // Fetch books with related entities
+                var genres = await _context.Genres.ToListAsync();
+
+                // Wrap the result in ApiResponse
+                response.Success = true;
+                response.Message = "Books retrieved successfully.";
+                response.Data = genres; // Assign the books to the Data property
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
     }
 }

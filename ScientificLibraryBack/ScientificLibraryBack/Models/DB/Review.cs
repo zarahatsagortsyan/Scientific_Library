@@ -4,7 +4,7 @@ namespace ScientificLibraryBack.Models.DB
 {
     public class Review
     {
-        public int Id { get; set; }  // Unique identifier for each review
+        public Guid Id { get; set; }  // Unique identifier for each review
         public string ReviewText { get; set; }  // The text content of the review
         public int Rating { get; set; }  // Rating value (1-5 or 1-10, depending on your system)
         public DateTime CreatedAt { get; set; }  // Timestamp for when the review was created

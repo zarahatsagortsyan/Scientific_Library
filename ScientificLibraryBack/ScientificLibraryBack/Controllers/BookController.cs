@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using ScientificLibraryBack.Models;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
@@ -15,7 +16,7 @@ namespace ScientificLibraryBack.Controllers
             _bookService = bookService;
         }
 
-        [HttpGet("GetBook/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetBookById(Guid id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
@@ -28,17 +29,32 @@ namespace ScientificLibraryBack.Controllers
             return Ok(book);
         }
 
-        [HttpGet("GetAllBooks")]
+        //[HttpGet("books")]
+        [HttpGet]
         public async Task<IActionResult> GetAllBooks()
         {
-            var books = await _bookService.GetAllBooksAsync();
+            var booksResponse = await _bookService.GetAllBooksAsync();
 
-            if (books == null)
+            if (!booksResponse.Success || booksResponse.Data == null || !booksResponse.Data.Any())
             {
-                return NotFound(books);
+                return NotFound(booksResponse);
             }
 
-            return Ok(books);
+            return Ok(booksResponse);
+        }
+
+        [HttpGet("genres")]
+        public async Task<IActionResult> GetAllGenres()
+        {
+            var genreResponse = await _bookService.GetGenresAsync();
+
+            if (!genreResponse.Success || genreResponse.Data == null || !genreResponse.Data.Any())
+            {
+                return NotFound(genreResponse);
+            }
+
+            return Ok(genreResponse);
         }
     }
+
 }

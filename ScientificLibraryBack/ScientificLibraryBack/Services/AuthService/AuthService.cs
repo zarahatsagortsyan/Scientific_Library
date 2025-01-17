@@ -26,9 +26,44 @@ namespace ScientificLibraryBack.Services.AuthService
             _config = config;
         }
 
-        public string GenerateTokenString(string userName)
+        //public string GenerateTokenString(string userName)
+        //{
+        //    var roles = GetUserRole(userName); // Call the synchronous method to get roles
+
+        //    if (roles == null || roles.Count() == 0)
+        //    {
+        //        throw new UnauthorizedAccessException("User has no roles assigned.");
+        //    }
+
+        //    var claims = new List<Claim>
+        //    {
+        //        new Claim(ClaimTypes.Name, userName),
+        //    };
+
+        //    foreach (var role in roles)
+        //    {
+        //        claims.Add(new Claim(ClaimTypes.Role, role)); // Add each role to the claims
+        //    }
+
+        //    var staticKey = _config.GetSection("Jwt:Key").Value;
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(staticKey));
+        //    var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+        //    var securityToken = new JwtSecurityToken(
+        //        claims: claims,
+        //        expires: DateTime.Now.AddHours(20),
+        //        issuer: _config["JWT:Issuer"],
+        //        audience: _config["JWT:Audience"],
+        //        signingCredentials: signingCredentials
+        //    );
+
+        //    string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
+        //    return tokenString;
+        //}
+
+        public string GenerateTokenString(ExtendedIdentityUser user)
         {
-            var roles = GetUserRole(userName); // Call the synchronous method to get roles
+            var roles = GetUserRole(user.UserName!); // Call the synchronous method to get roles
 
             if (roles == null || roles.Count() == 0)
             {
@@ -37,7 +72,8 @@ namespace ScientificLibraryBack.Services.AuthService
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName!),
             };
 
             foreach (var role in roles)
@@ -72,7 +108,9 @@ namespace ScientificLibraryBack.Services.AuthService
             }
 
             response.IsLogedIn = true;
-            response.JwtToken = GenerateTokenString(identityUser.Email);
+            //response.JwtToken = GenerateTokenString(identityUser.Email);
+            response.JwtToken = GenerateTokenString(identityUser);
+
             response.RefreshToken = GenerateRefreshTokenString();
 
 
@@ -176,7 +214,8 @@ namespace ScientificLibraryBack.Services.AuthService
                 return response;
 
             response.IsLogedIn = true;
-            response.JwtToken = GenerateTokenString(identityUser.Email);
+            //response.JwtToken = GenerateTokenString(identityUser.Email!);
+            response.JwtToken = GenerateTokenString(identityUser!);
             response.RefreshToken = GenerateRefreshTokenString();
 
 

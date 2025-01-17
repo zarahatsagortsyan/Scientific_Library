@@ -27,6 +27,15 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             try
             {
+                var findISBN = _context.Books.Where(b=>b.ISBN == bookRequest.ISBN);
+
+                if (findISBN.Any())
+                {
+                    response.Success = false;
+                    response.Message = "A material with same ISBN already exists.";
+                    return response;
+                }
+
                 if (string.IsNullOrWhiteSpace(bookRequest.Title) || string.IsNullOrWhiteSpace(bookRequest.Author))
                 {
                     response.Success = false;

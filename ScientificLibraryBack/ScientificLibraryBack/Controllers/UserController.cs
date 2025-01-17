@@ -8,7 +8,7 @@ using ScientificLibraryBack.Services.UserService;
 
 namespace ScientificLibraryBack.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -18,17 +18,18 @@ namespace ScientificLibraryBack.Controllers
             _userService = userService;
         }
 
-        //[Authorize(Roles = "Admin")]
-        [HttpGet("GetUsers")]
+        // Get all users (Admin only)
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-
             var users = await _userService.GetUsersAsync();
             return Ok(users);
         }
 
+        // Delete a specific user by ID (Admin only)
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteUser")]
+        [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(string userId)
         {
             try
@@ -37,23 +38,23 @@ namespace ScientificLibraryBack.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Ok($"User with ID '{userId}' deleted successfully.");
+                    return Ok(new { message = $"User with ID '{userId}' deleted successfully." });
                 }
 
-                return BadRequest("Failed to delete the user.");
+                return BadRequest(new { error = "Failed to delete the user." });
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);  // Return 404 if user is not found
+                return NotFound(new { error = ex.Message }); // Return 404 if user is not found
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}"); // Generic error handling
+                return StatusCode(500, new { error = $"Internal server error: {ex.Message}" }); // Generic error handling
             }
-
         }
 
-        [HttpGet("GetActiveReaders")]
+        // Get active readers
+        [HttpGet("readers/active")]
         public async Task<IActionResult> GetActiveReaders()
         {
             try
@@ -61,13 +62,14 @@ namespace ScientificLibraryBack.Controllers
                 var activeReaders = await _userService.GetActiveReadersAsync();
                 return Ok(activeReaders);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return StatusCode(500, new { error = ex.Message });
             }
         }
 
-        [HttpGet("GetActivePublishers")]
+        // Get active publishers
+        [HttpGet("publishers/active")]
         public async Task<IActionResult> GetActivePublishers()
         {
             try
@@ -75,9 +77,9 @@ namespace ScientificLibraryBack.Controllers
                 var activePublishers = await _userService.GetActivePublishersAsync();
                 return Ok(activePublishers);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return BadRequest();
+                return StatusCode(500, new { error = ex.Message });
             }
         }
     }
