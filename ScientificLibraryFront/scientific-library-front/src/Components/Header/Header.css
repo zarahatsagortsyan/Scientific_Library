@@ -1,0 +1,114 @@
+/* Ensure the navbar is stretched across the top */
+.navbar {
+    width: 100%;
+    background-color: #f8f9fa; /* Light background color */
+    padding: 0.5rem 1rem; /* Add some padding */
+    position: relative; /* Ensure dropdown is positioned correctly */
+  }
+  
+  /* Container for centering content inside navbar */
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Navbar brand for logo */
+  .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #007bff;
+    margin-right: auto; /* Pushes the logo to the left side */
+  }
+  
+  /* Navbar links */
+  .navbar-nav {
+    list-style: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Right-align navbar links */
+  .navbar-nav {
+    margin-left: auto; /* Pushes the links and user icon to the right */
+  }
+  
+  /* Individual nav items */
+  .nav-item {
+    margin-left: 1rem;
+  }
+  
+  /* Link styles */
+  .nav-link {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1rem;
+  }
+  
+  /* Hover effect for links */
+  .nav-link:hover {
+    color: #0056b3;
+  }
+  
+  /* Style for the user icon image */
+  .user-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-right: 10px; /* Add space between icon and edge */
+  }
+  
+  /* Dropdown menu for the user icon */
+  .dropdown-menu {
+    position: absolute;
+    top: 35px; /* Adjust the space below the icon */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Make sure the dropdown stays above other content */
+    min-width: 200px;
+    padding: 0.5rem;
+  }
+  
+  /* Style for the dropdown items */
+  .dropdown-item {
+    padding: 0.5rem;
+    text-decoration: none;
+    color: #007bff;
+    display: block;
+  }
+  
+  /* Hover effect for dropdown items */
+  .dropdown-item:hover {
+    background-color: #f1f1f1;
+    color: #0056b3;
+  }
+  
+  /* Optionally add styles for the active/hover states of the register/login links */
+  .navbar-nav .nav-item a:active,
+  .navbar-nav .nav-item a:hover {
+    color: #0056b3;
+  }
+  
+  /* Responsive adjustments for small screens */
+  @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav-item {
+      margin-left: 0;
+      margin-bottom: 1rem;
+    }
+  
+    .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  

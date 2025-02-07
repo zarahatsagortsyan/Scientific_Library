@@ -1,0 +1,48 @@
+.BookListPage {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .BookList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .BookItem {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .BookItem:hover {
+    transform: scale(1.05);
+  }
+  
+  .BookThumbnail {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .BookDetails {
+    margin-top: 10px;
+  }
+  
+  .BookDetails h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .BookDetails p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #666;
+  }
+  

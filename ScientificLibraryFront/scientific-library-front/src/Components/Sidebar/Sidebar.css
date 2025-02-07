@@ -1,0 +1,36 @@
+/* Sidebar container */
+.sidebar {
+    position: fixed;
+    top: 60px; /* To fit below the header */
+    left: 0;
+    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+    border-bottom: 1px solid #444;
+  }
+  
+  .sidebar a:hover {
+    background-color: #575757;
+  }
+  
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+  }
+  

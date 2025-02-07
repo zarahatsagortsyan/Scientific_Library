@@ -1,0 +1,158 @@
+/* Container to center the form */
+.registration-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.registration-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Title for the form */
+.registration-form h2 {
+  color: #4CAF50;
+  font-size: 32px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Styling for form labels */
+.registration-form label {
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+/* Input field styling */
+.registration-form input[type="text"],
+.registration-form input[type="email"],
+.registration-form input[type="password"],
+.registration-form input[type="date"] {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.registration-form input[type="text"]:focus,
+.registration-form input[type="email"]:focus,
+.registration-form input[type="password"]:focus,
+.registration-form input[type="date"]:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+/* Phone input field styling
+.phone-input-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.phone-input-container input {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.phone-input-container input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+} */
+
+/* Error message styling */
+.registration-form .error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+  display: block;
+  text-align: left;
+}
+
+/* Submit button */
+.registration-form button {
+  width: 100%;
+  padding: 14px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.registration-form button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.registration-form button:active {
+  background-color: #388e3c;
+}
+
+/* Responsive styling */
+@media (max-width: 500px) {
+  .registration-form {
+    padding: 25px;
+  }
+
+  .registration-form h2 {
+    font-size: 28px;
+  }
+
+  .registration-form input {
+    font-size: 14px;
+  }
+
+  .registration-form button {
+    font-size: 16px;
+  }
+}
+/* Style for PhoneInput wrapper */
+.phone-input-container {
+  margin-bottom: 20px;
+}
+
+.PhoneInput {
+  width: 100%;
+  display: block;
+}
+
+.PhoneInputInput {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.PhoneInputInput:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+

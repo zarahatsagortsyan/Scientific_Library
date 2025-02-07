@@ -101,11 +101,11 @@ namespace ScientificLibraryBack.Controllers
 
         [Authorize]
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout(string userName)
+        public async Task<IActionResult> Logout(string userEmail)
         {
             try
             {
-                var logoutResponse = await _authService.Logout(userName);
+                var logoutResponse = await _authService.Logout(userEmail);
 
                 if (logoutResponse is null || logoutResponse.code == 0)
                     return BadRequest();

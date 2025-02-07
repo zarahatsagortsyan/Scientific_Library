@@ -1,1 +1,14 @@
 .vs/
+# Ignore node_modules folder inside the React project
+ScientificLibraryFront/node_modules/
+
+# Ignore build folder inside the React project
+ScientificLibraryFront/build/
+
+# Ignore .env files inside the React project
+ScientificLibraryFront/scientific-library-front/.env
+ScientificLibraryFront/scientific-library-front/.gitignore
+
+
+# Ignore logs
+# ScientificLibraryFront/*.log

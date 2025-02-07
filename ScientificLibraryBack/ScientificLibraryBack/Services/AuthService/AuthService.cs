@@ -63,7 +63,7 @@ namespace ScientificLibraryBack.Services.AuthService
 
         public string GenerateTokenString(ExtendedIdentityUser user)
         {
-            var roles = GetUserRole(user.UserName!); // Call the synchronous method to get roles
+            var roles = GetUserRole(user.Email!); // Call the synchronous method to get roles
 
             if (roles == null || roles.Count() == 0)
             {
@@ -73,7 +73,7 @@ namespace ScientificLibraryBack.Services.AuthService
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
             };
 
             foreach (var role in roles)
@@ -99,7 +99,7 @@ namespace ScientificLibraryBack.Services.AuthService
         public async Task<LoginResponse> Login(LoginUser user)
         {
             var response = new LoginResponse();
-            var identityUser = await _userManager.FindByEmailAsync(user.UserName);
+            var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
 
             if (identityUser == null || await _userManager.CheckPasswordAsync(identityUser, user.Password) == false)
@@ -139,7 +139,7 @@ namespace ScientificLibraryBack.Services.AuthService
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.UserName,
-                    Email = user.UserName,
+                    Email = user.Email,
                 };
 
                 identityUser.Type = UserType.Publisher;
@@ -160,9 +160,9 @@ namespace ScientificLibraryBack.Services.AuthService
 
         }
 
-        public IEnumerable<string>? GetUserRole(string userName)
+        public IEnumerable<string>? GetUserRole(string userEmail)
         {
-            var identityUser = _userManager.FindByEmailAsync(userName).Result; // Get the user synchronously
+            var identityUser = _userManager.FindByEmailAsync(userEmail).Result; // Get the user synchronously
             if (identityUser == null)
             {
                 return null; // Return null if user not found
@@ -179,7 +179,7 @@ namespace ScientificLibraryBack.Services.AuthService
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.UserName,
-                    Email = user.UserName,
+                    Email = user.Email,
                 };
 
                 identityUser.Type = UserType.Publisher;
@@ -247,9 +247,9 @@ namespace ScientificLibraryBack.Services.AuthService
             return new JwtSecurityTokenHandler().ValidateToken(token, tokenValitationParameters, out _);
         }
 
-        public async Task<LogoutResponse> Logout(string userName)
+        public async Task<LogoutResponse> Logout(string userEmail)
         {
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByNameAsync(userEmail);
             var logoutResponse = new LogoutResponse();
             if (user != null)
             {

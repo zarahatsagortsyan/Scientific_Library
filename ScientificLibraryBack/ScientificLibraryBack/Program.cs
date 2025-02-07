@@ -72,6 +72,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        builder => builder
+            .WithOrigins("http://localhost:5173") // React app's origin
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IBookService, BookService>();
@@ -136,5 +144,5 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
+app.UseCors("AllowReactApp");
 app.Run();

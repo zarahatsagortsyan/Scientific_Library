@@ -1,0 +1,56 @@
+/* Ensure the phone number and country code are on the same row */
+.phone-number-input {
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Ensures vertical alignment of both inputs */
+    width: 100%;
+  }
+  
+  .phone-input-wrapper {
+    display: flex;
+    align-items: center; /* Ensures both inputs are aligned vertically in the center */
+    width: 100%;
+  }
+  
+  .country-code-select {
+    width: 120px; /* Fixed width for the country code dropdown */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px; /* Space between country code and phone number input */
+    height: 40px; /* Ensure consistent height */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    display: flex;
+    align-items: center; /* Ensures the text in the dropdown is vertically centered */
+  }
+  
+  .phone-number-input-field {
+    flex-grow: 1; /* Takes up the remaining space */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 40px; /* Same height as the country code dropdown */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+    display: flex;
+    align-items: center; /* Ensures the text inside the input is vertically centered */
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  input,
+  select {
+    box-sizing: border-box; /* Prevents padding from affecting the width */
+  }
+  
+  input[type="date"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="text"] {
+    margin-bottom: 10px;
+  }
+  
