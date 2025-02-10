@@ -1,32 +1,72 @@
 import React, { useState } from "react";
 import "./Register.css";
-import PhoneNumberInput from "../../Components/PhoneNumbers/PhoneNumberInput";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPublisher: React.FC = () => {
+  const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dateOfEstablishment, setDateOfEstablishment] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(""); // Store the local phone number
-  //   const [countryCode, setCountryCode] = useState("+1"); // Store the country code
-  const [companyName, setCompanyName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
+
+    // Check if all required fields are filled
     if (
+      !companyName ||
       !email ||
       !password ||
       !dateOfEstablishment ||
-      !phoneNumber ||
-      !companyName
+      !phoneNumber
     ) {
       setError("All fields are required.");
-    } else {
-      setError("");
-      // Here, you can send the phoneNumber and countryCode separately to the backend
-      alert(`Publisher Registered! \nFull phone number: ${phoneNumber}`);
+      return;
+    }
+
+    setError("");
+    setSuccessMessage("");
+
+    // Prepare the payload
+    const payload = {
+      email,
+      userName: companyName,
+      password,
+      birthDate: new Date(dateOfEstablishment).toISOString(),
+      phone: phoneNumber,
+    };
+
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL; // Ensure your env variable is set
+      const response = await fetch(`${apiUrl}/Auth/register/publisher`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success && data.data.succeeded) {
+        // Registration successful
+        setError("");
+        setSuccessMessage("Registration successful! You may now log in.");
+        setTimeout(() => navigate("/login"), 3000);
+      } else {
+        // If errors are present
+        const errorDescriptions =
+          data.data.errors?.map((err: any) => err.description).join("\n ") ||
+          "Registration failed.";
+        setError(errorDescriptions);
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
     }
   };
 
@@ -35,6 +75,7 @@ const RegisterPublisher: React.FC = () => {
       <div className="registration-form">
         <h2>Register as Publisher</h2>
         {error && <p className="error">{error}</p>}
+        {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="companyName">Company Name</label>
@@ -75,14 +116,6 @@ const RegisterPublisher: React.FC = () => {
               onChange={(e) => setDateOfEstablishment(e.target.value)} // Directly update state
             />
           </div>
-
-          {/* Use the PhoneNumberInput Component
-          <PhoneNumberInput
-            countryCode={countryCode}
-            phoneNumber={phoneNumber}
-            onCountryCodeChange={setCountryCode} // Directly update state
-            onPhoneNumberChange={setPhoneNumber} // Directly update state
-          /> */}
           <div className="phone-input-container">
             <PhoneInput
               placeholder="Enter phone number"
@@ -90,7 +123,6 @@ const RegisterPublisher: React.FC = () => {
               onChange={setPhoneNumber}
             />
           </div>
-
           <button type="submit">Register</button>
         </form>
       </div>

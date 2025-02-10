@@ -1,32 +1,66 @@
 import React, { useState } from "react";
-import "./Register.css"; // Optional: Add styles for the form
+import "./Register.css";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { useNavigate } from "react-router-dom";
+
 const RegisterReader: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState(""); // Store the local phone number
-  const [countryCode, setCountryCode] = useState("+1"); // Store the country code
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !dateOfBirth ||
-      !phoneNumber ||
-      !countryCode
-    ) {
+
+    // Check if all required fields are filled
+    if (!name || !email || !password || !dateOfBirth || !phoneNumber) {
       setError("All fields are required.");
-    } else {
-      setError("");
-      // Handle form submission (e.g., API call)
-      alert("Reader Registered!");
+      return;
+    }
+
+    setError("");
+    setSuccessMessage("");
+
+    // Prepare the payload
+    const payload = {
+      email,
+      userName: name,
+      password,
+      birthDate: new Date(dateOfBirth).toISOString(),
+      phone: phoneNumber,
+    };
+
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL; // Ensure your env variable is set
+      const response = await fetch(`${apiUrl}/Auth/register/reader`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success && data.data.succeeded) {
+        // Registration successful
+        setError("");
+        setSuccessMessage("Registration successful! You may now log in.");
+        setTimeout(() => navigate("/login"), 3000);
+      } else {
+        // If errors are present
+        const errorDescriptions =
+          data.data.errors?.map((err: any) => err.description).join("\n ") ||
+          "Registration failed.";
+        setError(errorDescriptions);
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again later.");
     }
   };
 
@@ -35,6 +69,7 @@ const RegisterReader: React.FC = () => {
       <div className="registration-form">
         <h2>Register as Reader</h2>
         {error && <p className="error">{error}</p>}
+        {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
@@ -75,13 +110,6 @@ const RegisterReader: React.FC = () => {
               onChange={(e) => setDateOfBirth(e.target.value)}
             />
           </div>
-          {/* Use the PhoneNumberInput Component
-          <PhoneNumberInput
-            countryCode={countryCode}
-            phoneNumber={phoneNumber}
-            onCountryCodeChange={setCountryCode} // Directly update state
-            onPhoneNumberChange={setPhoneNumber} // Directly update state
-          /> */}
           <div className="phone-input-container">
             <PhoneInput
               placeholder="Enter phone number"

@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ScientificLibraryBack.Services.AuthService
 {
     public class AuthService : IAuthService
@@ -132,7 +133,7 @@ namespace ScientificLibraryBack.Services.AuthService
             }
         }
 
-        public async Task<IdentityResult> RegisterReader(LoginUser user)
+        public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterUser user)
         {
             try
             {
@@ -140,25 +141,38 @@ namespace ScientificLibraryBack.Services.AuthService
                 {
                     UserName = user.UserName,
                     Email = user.Email,
+                    PhoneNumber = user.Phone,
+                    DateOfBirth = user.BirthDate,
+                    Type = UserType.Reader,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now,
                 };
 
-                identityUser.Type = UserType.Publisher;
-                identityUser.IsActive = true;
-                var result = await _userManager.CreateAsync(identityUser, user.Password);
+                var result = await _userManager.CreateAsync(identityUser, user.Password!);
+
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "Reader"); // Example role assignment
+                    await _userManager.AddToRoleAsync(identityUser, "Reader");
                 }
-                Console.WriteLine(result.Errors);
 
-                return result;
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = result.Succeeded,
+                    Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+                    Data = result
+                };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = false,
+                    Message = $"An error occurred: {ex.Message}",
+                    Data = null
+                };
             }
-
         }
+
 
         public IEnumerable<string>? GetUserRole(string userEmail)
         {
@@ -171,33 +185,44 @@ namespace ScientificLibraryBack.Services.AuthService
             return _userManager.GetRolesAsync(identityUser).Result; // Get roles synchronously
         }
 
-        public async Task<IdentityResult> RegisterPublisher(LoginUser user)
+        public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterUser user)
         {
-
             try
             {
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.UserName,
                     Email = user.Email,
+                    PhoneNumber = user.Phone,
+                    DateOfBirth = user.BirthDate,
+                    Type = UserType.Publisher,
+                    IsActive = true,
+                    CreatedAt = DateTime.Now,
                 };
 
-                identityUser.Type = UserType.Publisher;
-                identityUser.IsActive = true;
-                var result = await _userManager.CreateAsync(identityUser, user.Password);
+                var result = await _userManager.CreateAsync(identityUser, user.Password!);
+
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "Publisher"); // Example role assignment
+                    await _userManager.AddToRoleAsync(identityUser, "Publisher");
                 }
-                Console.WriteLine(result.Errors);
 
-                return result;
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = result.Succeeded,
+                    Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+                    Data = result
+                };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = false,
+                    Message = $"An error occurred: {ex.Message}",
+                    Data = null
+                };
             }
-
         }
 
         public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
@@ -272,33 +297,70 @@ namespace ScientificLibraryBack.Services.AuthService
             return logoutResponse;
         }
 
-        public async Task<IdentityResult> ResetPassword(string userName, string newPassword, string token)
-        {
-            var user = await _userManager.FindByNameAsync(userName);
-            if (user == null)
-            {
-                // User not found
-                return IdentityResult.Failed(new IdentityError { Description = "User not found" });
-            }
-
-            // Reset the password
-            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
-
-            return result;
-        }
-
-        //public async Task<IActionResult> ForgotPassword(string email)
+        //public async Task<IdentityResult> ResetPassword(string userName, string newPassword, string token)
         //{
-        //    var user = await _userManager.FindByEmailAsync(email);
+        //    var user = await _userManager.FindByNameAsync(userName);
         //    if (user == null)
         //    {
-        //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //        var forgotPasswordLink = Url.Action("ResetPassword", "Auth", new {token, email = user.Email}, Request.Scheme);
-        //        var message = new Message(new string[] { user.Email! }, "Confirmation email link", forgotPasswordLink!);
-
-
+        //        // User not found
+        //        return IdentityResult.Failed(new IdentityError { Description = "User not found" });
         //    }
 
+        //    // Reset the password
+        //    var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+
+
+        //    return result;
         //}
+
+        public async Task<ApiResponse<IdentityResult>> ResetPassword(Models.ResetPasswordRequest resetPassword)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(resetPassword.Email!);
+                if (user is null)
+                {
+                    return new ApiResponse<IdentityResult>
+                    {
+                        Success = false,
+                        Message = $"Invalid Request",
+                        Data = null
+                    };
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.NewPassword!);
+
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = result.Succeeded,
+                    Message = result.Succeeded ? "Password changed successfully." : "Password change failed.",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<IdentityResult>
+                {
+                    Success = false,
+                    Message = $"An error occurred: {ex.Message}",
+                    Data = null
+                };
+            }
+        }
     }
+
+    //public async Task<IActionResult> ForgotPassword(string email)
+    //{
+    //    var user = await _userManager.FindByEmailAsync(email);
+    //    if (user == null)
+    //    {
+    //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+    //        var forgotPasswordLink = Url.Action("ResetPassword", "Auth", new {token, email = user.Email}, Request.Scheme);
+    //        var message = new Message(new string[] { user.Email! }, "Confirmation email link", forgotPasswordLink!);
+
+
+    //    }
+
+    //}
 }

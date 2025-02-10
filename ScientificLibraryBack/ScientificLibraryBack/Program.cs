@@ -36,6 +36,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(conn
 builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
 {
     options.Password.RequiredLength = 5;
+    options.User.RequireUniqueEmail = true;
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -7,6 +7,7 @@ import LoginPage from "../Pages/LoginPage/LoginPage";
 import RegisterReader from "../Pages/RegisterPage/RegisterReader";
 import RegisterPublisher from "../Pages/RegisterPage/RegisterPublisher";
 import SidebarMenu from "../Components/Sidebar/Sidebar";
+import ResetPassword from "../Pages/ResetPasswordPage/ResetPassword";
 
 const books = [
   {
@@ -58,6 +59,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/" element={<BookListPage />} />
             <Route path="/book/:id" element={<BookPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register/reader" element={<RegisterReader />} />
             <Route path="/register/publisher" element={<RegisterPublisher />} />
           </Routes>

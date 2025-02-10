@@ -28,24 +28,33 @@ namespace ScientificLibraryBack.Controllers
             _userManager = userManager;
             _emailService = emailService;
         }
+
         [HttpPost("register/reader")]
-        public async Task<IdentityResult> RegisterReader(LoginUser user)
+        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterReader([FromBody] RegisterUser user)
         {
-            return await _authService.RegisterReader(user);
-            //if (await _authService.RegisterReader(user))
-            //{
-            //    return Ok("Successfuly done");
-            //}
-            //return BadRequest("Something went wrong");
+            var response = await _authService.RegisterReader(user);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
         }
 
+
         [HttpPost("register/publisher")]
-        public async Task<IdentityResult> RegisterPublisher(LoginUser user)
+        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterPublisher([FromBody] RegisterUser user)
         {
 
-            return await _authService.RegisterPublisher(user);
+            var response = await _authService.RegisterPublisher(user);
 
-            //return BadRequest("Something went wrong");
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
         }
 
 
@@ -144,25 +153,32 @@ namespace ScientificLibraryBack.Controllers
             return Ok();
         }
 
-    [HttpPost("resetpassword")]
+        [HttpPost("resetpassword")]
         public async Task<IActionResult> ResetPassword([FromBody] Models.ResetPasswordRequest resetPassword)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var user = await _userManager.FindByEmailAsync(resetPassword.Email!);
-            if (user is null)
-                return BadRequest("Invalid Request");
-            var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.NewPassword!);
+            var response = await _authService.ResetPassword(resetPassword);
 
-            if (!result.Succeeded)
+            if (response.Success)
             {
-                var errors = result.Errors.Select(e => e.Description);
-
-                return BadRequest(errors);
+                return Ok(response);
             }
-            return Ok();
-        
+
+            return BadRequest(response);
+            //var user = await _userManager.FindByEmailAsync(resetPassword.Email!);
+            //if (user is null)
+            //    return BadRequest("Invalid Request");
+            //var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.NewPassword!);
+
+            //if (!result.Succeeded)
+            //{
+            //    var errors = result.Errors.Select(e => e.Description);
+
+            //    return BadRequest(errors);
+            //}
+            //return Ok();
         }
     }
 }

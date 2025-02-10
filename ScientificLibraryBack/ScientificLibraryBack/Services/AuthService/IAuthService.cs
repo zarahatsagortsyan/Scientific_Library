@@ -16,10 +16,10 @@ namespace ScientificLibraryBack.Services.AuthService
         Task<LogoutResponse> Logout(string userEmail);
 
 
-        Task<IdentityResult> RegisterReader(LoginUser user);
+        Task<ApiResponse<IdentityResult>> RegisterReader(RegisterUser user);
+        Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterUser user);
         IEnumerable<string> GetUserRole(string userEmail);
-        Task<IdentityResult> RegisterPublisher(LoginUser user);
-        Task<IdentityResult> ResetPassword(string userName, string newPassword, string token); // Reset Password method
+        Task<ApiResponse<IdentityResult>> ResetPassword(Models.ResetPasswordRequest resetPassword); // Reset Password method
         //Task<TokenDto> GenerateTokenString(bool populateExp);
     }
 }

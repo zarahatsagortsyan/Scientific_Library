@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "./LoginForm.css";
 
 const LoginForm: React.FC = () => {
@@ -7,7 +7,9 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +29,6 @@ const LoginForm: React.FC = () => {
     };
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL; // Use your env variable
       const response = await fetch(`${apiUrl}/Auth/login`, {
         method: "POST",
         headers: {
@@ -45,12 +46,44 @@ const LoginForm: React.FC = () => {
         setSuccessMessage("Login successful!");
         localStorage.setItem("jwtToken", data.jwtToken);
         localStorage.setItem("refreshToken", data.refreshToken);
-
-        // Redirect to the BookListPage route after successful login
-        navigate("/"); // Navigate to the home page ("/")
+        navigate("/");
+        window.location.reload();
       } else {
         setError("Invalid login credentials.");
       }
+    } catch (error) {
+      setError((error as Error).message);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Please enter your email before requesting a password reset.");
+      return;
+    }
+
+    setError("");
+    setSuccessMessage("");
+
+    const payload = {
+      clientUri: `${window.location.origin}/reset-password`,
+      email: email,
+    };
+
+    try {
+      const response = await fetch(`${apiUrl}/Auth/forgotpassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send password reset email.");
+      }
+
+      setSuccessMessage("Password reset email sent. Please check your inbox.");
     } catch (error) {
       setError((error as Error).message);
     }
@@ -86,9 +119,13 @@ const LoginForm: React.FC = () => {
           <button type="submit">Login</button>
         </form>
         <div className="links">
-          <a href="/forgot-password">Forgot Password?</a>
+          <button
+            onClick={handleForgotPassword}
+            className="forgot-password-btn"
+          >
+            Forgot Password?
+          </button>
           <br />
-          <a href="/register">Create an Account</a>
         </div>
       </div>
     </div>
