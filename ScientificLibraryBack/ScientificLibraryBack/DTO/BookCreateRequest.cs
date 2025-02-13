@@ -22,7 +22,7 @@ namespace ScientificLibraryBack.DTO
         [Required(ErrorMessage = "ISBN is required.")]
         public string ISBN { get; set; }  // ISBN of the book
         public byte[]? CoverImage { get; set; } // If storing the image in the database
-        public string CoverImageUrl { get; set; } // If storing the image in a file system
+        //public string CoverImageUrl { get; set; } // If storing the image in a file system
         public DateTime PublicationDate { get; set; }  // Date when the book was published
         public int PageCount { get; set; }  // Number of pages
 

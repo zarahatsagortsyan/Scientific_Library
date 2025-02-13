@@ -5,7 +5,7 @@ namespace ScientificLibraryBack.Services.PublisherService
 {
     public interface IPublisherService
     {
-        Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest book); // Returns response with the ID of the newly created book
+        Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest bookRequest, IFormFile coverImage, IFormFile pdfFile); // Returns response with the ID of the newly created book
         Task<ApiResponse<Guid>> UpdateBookAsync(Guid id, BookCreateRequest book); // Response indicating success or failure of update
         Task<ApiResponse<bool>> DeleteBookAsync(Guid bookId); // Response indicating success or failure of deletion
         Task<ApiResponse<IEnumerable<Book>>> GetPublishedBooksAsync(string publisherId); // Response with a collection of all books

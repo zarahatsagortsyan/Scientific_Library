@@ -1,0 +1,9 @@
+/* App.css or main container CSS */
+.main-content {
+    margin-left: 230px; /* Width of the sidebar */
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-width: 100vh;
+    
+  }

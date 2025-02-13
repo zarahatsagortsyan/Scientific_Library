@@ -8,6 +8,11 @@ import RegisterReader from "../Pages/RegisterPage/RegisterReader";
 import RegisterPublisher from "../Pages/RegisterPage/RegisterPublisher";
 import SidebarMenu from "../Components/Sidebar/Sidebar";
 import ResetPassword from "../Pages/ResetPasswordPage/ResetPassword";
+import AddBookPage from "../Pages/BookCreationPage/AddBookPage";
+import PendingBooksPage from "../Pages/Publisher/PendingBooksPage";
+import ApprovedBooksPage from "../Pages/Publisher/PublishedBooksPage";
+import RejectedBooksPage from "../Pages/Publisher/RejectedBooksPage";
+import "../App.css";
 
 const books = [
   {
@@ -62,6 +67,11 @@ const AppRoutes: React.FC = () => {
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register/reader" element={<RegisterReader />} />
             <Route path="/register/publisher" element={<RegisterPublisher />} />
+            <Route path="/pending" element={<PendingBooksPage />} />{" "}
+            <Route path="/rejected" element={<RejectedBooksPage />} />{" "}
+            <Route path="/published" element={<ApprovedBooksPage />} />{" "}
+            {/* ✅ New Route */}
+            <Route path="/add-book" element={<AddBookPage />} />
           </Routes>
         </div>
       </div>

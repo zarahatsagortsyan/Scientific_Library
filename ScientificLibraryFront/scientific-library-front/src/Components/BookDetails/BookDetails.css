@@ -1,0 +1,58 @@
+.book-details {
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 40%;
+    max-height: 70%;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    padding: 20px;
+  }
+  
+  .book-details .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .book-details .close-button:hover {
+    background-color: #c0392b;
+  }
+  
+  .book-details-content {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .book-details-image {
+    width: 150px;
+    height: 200px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  
+  .book-details-info {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .book-details-info p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
+  .book-details-info h2 {
+    margin-bottom: 10px;
+    color: #007BFF;
+  }
+  

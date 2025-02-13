@@ -49,7 +49,7 @@ namespace ScientificLibraryBack.Services.BookService
                     Description = bookRequest.Description,
                     ISBN = bookRequest.ISBN,
                     CoverImage = bookRequest.CoverImage,
-                    CoverImageUrl = bookRequest.CoverImageUrl,
+                    //CoverImageUrl = bookRequest.CoverImageUrl,
                     PublicationDate = bookRequest.PublicationDate,
                     PageCount = bookRequest.PageCount,
                     Language = bookRequest.Language,
@@ -272,8 +272,8 @@ namespace ScientificLibraryBack.Services.BookService
                 if (updateRequest.CoverImage != null && !updateRequest.CoverImage.SequenceEqual(existingBook.CoverImage ?? Array.Empty<byte>()))
                     existingBook.CoverImage = updateRequest.CoverImage;
 
-                if (!string.Equals(existingBook.CoverImageUrl, updateRequest.CoverImageUrl, StringComparison.OrdinalIgnoreCase))
-                    existingBook.CoverImageUrl = updateRequest.CoverImageUrl;
+                //if (!string.Equals(existingBook.CoverImageUrl, updateRequest.CoverImageUrl, StringComparison.OrdinalIgnoreCase))
+                //    existingBook.CoverImageUrl = updateRequest.CoverImageUrl;
 
                 if (updateRequest.PublicationDate != existingBook.PublicationDate && updateRequest.PublicationDate != DateTime.MinValue)
                     existingBook.PublicationDate = updateRequest.PublicationDate;
@@ -418,7 +418,7 @@ namespace ScientificLibraryBack.Services.BookService
 
                 // Wrap the result in ApiResponse
                 response.Success = true;
-                response.Message = "Books retrieved successfully.";
+                response.Message = "Genres retrieved successfully.";
                 response.Data = genres; // Assign the books to the Data property
             }
             catch (Exception ex)
