@@ -62,7 +62,7 @@ const AppRoutes: React.FC = () => {
         <div style={{ flex: 1, padding: "20px" }}>
           <Routes>
             <Route path="/" element={<BookListPage />} />
-            <Route path="/book/:id" element={<BookPage />} />
+            <Route path="/book/:bookId" element={<BookPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register/reader" element={<RegisterReader />} />

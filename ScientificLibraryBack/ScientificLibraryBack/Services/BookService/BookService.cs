@@ -97,6 +97,16 @@ namespace ScientificLibraryBack.Services.BookService
                     .Include(b => b.Reviews)
                     .Where(b => b.Status == ApprovalStatus.Approved).ToListAsync();
 
+                // Convert CoverImage to Base64 directly
+
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
@@ -124,15 +134,22 @@ namespace ScientificLibraryBack.Services.BookService
             try
             {
                 // Fetch books with related entities
-                var books = await _context.Books
+                var book = await _context.Books
                             .Include(b => b.Publisher)
                             .Include(b => b.Reviews)  // Optionally include related entities like Reviews
                             .FirstOrDefaultAsync(b => b.Id == bookId);
 
+                // Convert CoverImage to Base64 directly
+
+                if (book.CoverImage != null && book.CoverImage.Length > 0)
+                {
+                    var base64Image = Convert.ToBase64String(book.CoverImage);
+                    book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                }
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
-                response.Data = books; // Assign the books to the Data property
+                response.Data = book; // Assign the books to the Data property
             }
             catch (Exception ex)
             {

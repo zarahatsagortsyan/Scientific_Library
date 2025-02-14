@@ -43,30 +43,30 @@
   color: #333;
 }
 
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  justify-content: center;
-}
-
-.details-button,
-.open-button,
-.download-button,
-.availability-button {
-  margin-top: 5px;
-  background-color: #007BFF;
+.details-button {
+  margin-top: 10px;
+  background-color: #28a745;
   color: #fff;
   border: none;
-  padding: 5px 8px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-  font-size: 0.85em;
 }
 
 .details-button:hover {
   background-color: #218838;
+}
+
+.open-button {
+  margin-top: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .open-button:hover {
@@ -74,19 +74,18 @@
 }
 
 .download-button {
+  margin-top: 10px;
   background-color: #ffc107;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .download-button:hover {
   background-color: #e0a800;
-}
-
-.availability-button {
-  background-color: #6c757d;
-}
-
-.availability-button:hover {
-  background-color: #5a6268;
 }
 
 .loader {

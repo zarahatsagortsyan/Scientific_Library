@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ScientificLibraryBack.Models;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
@@ -16,7 +17,7 @@ namespace ScientificLibraryBack.Controllers
             _bookService = bookService;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("info/{id}")]
         public async Task<IActionResult> GetBookById(Guid id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
@@ -30,7 +31,7 @@ namespace ScientificLibraryBack.Controllers
         }
 
         //[HttpGet("books")]
-        [HttpGet]
+        [HttpGet("allBooks")]
         public async Task<IActionResult> GetAllBooks()
         {
             var booksResponse = await _bookService.GetAllBooksAsync();
@@ -41,6 +42,19 @@ namespace ScientificLibraryBack.Controllers
             }
 
             return Ok(booksResponse);
+        }
+
+        [HttpGet("reviews/{id}")]
+        public async Task<IActionResult> GetBookReviews(Guid id)
+        {
+            var book = await _bookService.GetReviewsForBookAsync(id);
+
+            if (book == null)
+            {
+                return NotFound(book);
+            }
+
+            return Ok(book);
         }
 
         [HttpGet("genres")]
@@ -55,6 +69,44 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(genreResponse);
         }
+
+        [HttpGet("open/{bookId}")]
+        public async Task<IActionResult> OpenBookPdf(Guid bookId)
+        {
+            var book = await _bookService.GetBookByIdAsync(bookId);
+            if (book == null || book.Data.PdfFile == null)
+            {
+                return NotFound(new { success = false, message = "Book or PDF not found." });
+            }
+
+            var fileName = book.Data.PdfFileName ?? "book.pdf";
+            var contentType = "application/pdf";
+
+            return File(book.Data.PdfFile, contentType, fileName);
+        }
+
+        [HttpGet("download/{bookId}")]
+        public async Task<IActionResult> DownloadBookPdf(Guid bookId)
+        {
+            var book = await _bookService.GetBookByIdAsync(bookId);
+            if (book == null || book.Data.PdfFile == null)
+            {
+                return NotFound(new { success = false, message = "Book or PDF not found." });
+            }
+
+            var fileName = book.Data.PdfFileName ?? "book.pdf";
+            var contentType = "application/pdf";
+
+            var contentDisposition = new System.Net.Mime.ContentDisposition
+            {
+                FileName = fileName,
+                Inline = false  // This forces the browser to download the file
+            };
+
+            Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+            return File(book.Data.PdfFile, contentType, fileName);
+        }
+
     }
 
 }

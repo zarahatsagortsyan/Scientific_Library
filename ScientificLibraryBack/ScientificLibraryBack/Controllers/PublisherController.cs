@@ -142,7 +142,14 @@ namespace ScientificLibraryBack.Controllers
         [HttpPatch("books/availability")]
         public async Task<IActionResult> ChangeBookAvailability([FromBody] BookChangeAvailabilityRequest bookChangeAvailability)
         {
-            return Ok();
+            var result = await _publisherService.ChangeAvailability(bookChangeAvailability);
+
+            if (result == null)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
         }
     }
 }

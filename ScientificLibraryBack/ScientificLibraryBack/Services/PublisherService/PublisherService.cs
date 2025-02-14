@@ -16,9 +16,55 @@ namespace ScientificLibraryBack.Services.PublisherService
             _context = context;
         }
 
-        public Task<ApiResponse<bool>> ChangeAvailibility(bool available)
+        public async Task<ApiResponse<Book>> ChangeAvailability(BookChangeAvailabilityRequest bookChangeAvailability)
         {
-            throw new NotImplementedException();
+            var response = new ApiResponse<Book>();
+
+            try
+            {
+                // Retrieve the existing book from the database
+                var existingBook = await _context.Books.FindAsync(bookChangeAvailability.PublisherId);
+                if (existingBook == null)
+                {
+                    response.Success = false;
+                    response.Message = "Book not found.";
+                    response.Data = null;
+                    return response;
+                }
+
+                if (existingBook.PublisherId != bookChangeAvailability.PublisherId)
+                {
+                    response.Success = false;
+                    response.Message = "Permission denied";
+                    response.Data = null;
+                    return response;
+                }
+                
+
+                if (bookChangeAvailability.Abailability != existingBook.IsAvailable)
+                    existingBook.IsAvailable = bookChangeAvailability.Abailability;
+
+                //if (existingBook.PublisherId != updateRequest.PublisherId)
+                //    existingBook.PublisherId = updateRequest.PublisherId;
+
+
+                existingBook.State = State.Edited;
+
+                // Save changes to the database
+                _context.Books.Update(existingBook); // This ensures only modified fields are persisted
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Message = "Book updated successfully.";
+                response.Data = existingBook;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
         }
 
         public async Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest bookRequest, IFormFile coverImage, IFormFile pdfFile)
@@ -196,6 +242,16 @@ namespace ScientificLibraryBack.Services.PublisherService
                 var books = await _context.Books
                              .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
 
+                // Convert CoverImage to Base64 directly
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
+
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
@@ -280,6 +336,15 @@ namespace ScientificLibraryBack.Services.PublisherService
                 var books = await _context.Books
                             .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected).ToListAsync();
 
+                // Convert CoverImage to Base64 directly
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
