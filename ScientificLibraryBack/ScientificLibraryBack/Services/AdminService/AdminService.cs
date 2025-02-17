@@ -192,5 +192,40 @@ namespace ScientificLibraryBack.Services.AdminService
             }
             return apiResponse;
         }
+
+        public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooks()
+        {
+            var response = new ApiResponse<IEnumerable<Book>>();
+
+            try
+            {
+                var books = await _context.Books
+                    .Where(b => b.Status == ApprovalStatus.Pending)
+                    .Include(b => b.Publisher)
+                    .ToListAsync();
+
+                // Convert CoverImage to Base64 directly
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
+
+                response.Success = true;
+                response.Message = "Pending books retrieved successfully.";
+                response.Data = books;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+
+        }
     }
 }

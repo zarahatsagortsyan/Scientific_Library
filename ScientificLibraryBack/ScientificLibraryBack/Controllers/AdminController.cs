@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Services.AdminService;
 
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class AdminController : Controller
     {
@@ -81,5 +83,19 @@ namespace ScientificLibraryBack.Controllers
 
             return BadRequest(respone);
         }
+
+        [HttpGet("books/pending")]
+        public async Task<IActionResult> GetPendingBooks()
+        {
+            var books = await _adminService.GetPendingBooks();
+
+            if (books == null)
+            {
+                return NotFound(books);
+            }
+
+            return Ok(books);
+        }
+
     }
 }

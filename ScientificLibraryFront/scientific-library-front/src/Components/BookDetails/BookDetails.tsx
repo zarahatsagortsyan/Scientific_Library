@@ -33,7 +33,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
     const fetchBookDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8001/api/Book/${bookId}`
+          `http://localhost:8001/api/Book/info/${bookId}`
         );
         if (response.status === 200) {
           setBook(response.data.data);

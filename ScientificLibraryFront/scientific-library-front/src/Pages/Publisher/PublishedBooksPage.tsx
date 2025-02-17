@@ -154,9 +154,13 @@ const MaterialCardGrid: React.FC = () => {
   //     navigate(`/book/${bookId}`);
   //   }
   // };
+  // const handleImageClick = (book: Book) => {
+  //   navigate(`/book/${book.id}`, { state: { book } });
+  // };
   const handleImageClick = (book: Book) => {
-    navigate(`/book/${book.id}`, { state: { book } });
+    navigate(`/book/${book.id}`); // Navigate without passing the state
   };
+
   const handleToggleAvailability = async (book: Book) => {
     const updatedBook = await toggleBookAvailability(book);
     if (updatedBook) {

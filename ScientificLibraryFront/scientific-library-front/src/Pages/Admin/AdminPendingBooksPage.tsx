@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import "./PublisherBooks.css";
+import "./AdminBooks.css";
 import BookDetails from "../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
+import { useNavigate } from "react-router-dom";
+import { Book } from "../../Models/Book";
+import { handleBookApprove } from "../../Utils/RejectBook";
 
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  description: string;
-  publicationDate: string;
-  coverImageUrl: string;
-  status: number;
-}
-
-const MaterialCardGrid: React.FC = () => {
+const AdminPendingPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleViewDetails = (bookId: string) => {
-    setSelectedBookId(bookId);
+    if (bookId) {
+      console.log(bookId);
+      setSelectedBookId(bookId);
+    }
+  };
+
+  const handleImageClick = (book: Book) => {
+    navigate(`/book/${book.id}`, { state: { book } });
   };
 
   const handleCloseDetails = () => {
@@ -46,7 +46,7 @@ const MaterialCardGrid: React.FC = () => {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
         const response = await axios.get(
-          `http://localhost:8001/api/Publisher/books/pending?publisherId=${userId}`,
+          `http://localhost:8001/api/Admin/books/pending`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -88,12 +88,14 @@ const MaterialCardGrid: React.FC = () => {
             src={book.coverImageUrl || "https://via.placeholder.com/200"}
             alt={book.title}
             className="book-image"
+            onClick={() => handleImageClick(book)}
+            style={{ cursor: "pointer" }}
           />
           <div className="card__content">
             <h3 className="card__title">{book.title}</h3>
-            <p className="card__author">👤 {book.author}</p>
-            <p className="card__genre">📖 {book.genre}</p>
-            <p className="card__status">{getStatusLabel(book.status)}</p>
+            {/* <p className="card__author">👤 {book.author}</p> */}
+            {/* <p className="card__genre">📖 {book.genre}</p> */}
+            {/* <p className="card__status">{getStatusLabel(book.status)}</p> */}
             <button
               className="details-button"
               onClick={() => handleViewDetails(book.id)}
@@ -101,14 +103,29 @@ const MaterialCardGrid: React.FC = () => {
               👁️ View Details
             </button>
             <button className="open-button" onClick={() => openPdf(book.id)}>
-              📥 Open PDF
+              Open
             </button>
             <button
               className="download-button"
               onClick={() => downloadPdf(book.id)}
             >
-              📥 Download PDF
+              📥 Download
             </button>
+
+            <div className="approvereject">
+              <button
+                className="reject-button"
+                onClick={() => downloadPdf(book.id)}
+              >
+                Reject
+              </button>
+              <button
+                className="approve-button"
+                onClick={() => handleBookApprove(book.id)}
+              >
+                Approve
+              </button>
+            </div>
           </div>
         </div>
       ))}
@@ -120,4 +137,4 @@ const MaterialCardGrid: React.FC = () => {
   );
 };
 
-export default MaterialCardGrid;
+export default AdminPendingPage;

@@ -43,15 +43,24 @@
   color: #333;
 }
 
-.details-button {
-  margin-top: 10px;
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
+/* Buttons Styling */
+.details-button,
+.open-button,
+.download-button,
+.reject-button,
+.approve-button {
+  padding: 6px 12px;            /* Reduced padding for a more compact look */
+  font-size: 14px;              /* Slightly smaller font size */
+  margin: 5px;                  /* Adds space between buttons */
   border-radius: 5px;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+}
+
+.details-button {
+  background-color: #28a745;
+  color: white;
 }
 
 .details-button:hover {
@@ -59,14 +68,8 @@
 }
 
 .open-button {
-  margin-top: 10px;
   background-color: #007BFF;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  color: white;
 }
 
 .open-button:hover {
@@ -74,18 +77,61 @@
 }
 
 .download-button {
-  margin-top: 10px;
   background-color: #ffc107;
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  color: white;
 }
 
 .download-button:hover {
   background-color: #e0a800;
+}
+
+.reject-button {
+  background-color: #ff0000;
+  color: white;
+}
+
+.reject-button:hover {
+  background-color: #cc0000;
+}
+
+.approve-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.approve-button:hover {
+  background-color: #45a049;
+}
+
+.approve-button:active {
+  background-color: #3e8e41;
+}
+
+/* Flexbox for approve/reject buttons */
+.approvereject {
+  display: flex;
+  justify-content: space-between;  /* Adds space between approve and reject buttons */
+  align-items: center;            /* Ensures the buttons are vertically centered */
+  width: 100%;                    /* Ensures the div takes up full width */
+  gap: 10px;                      /* Adds consistent space between buttons */
+}
+
+/* Responsive Design for Buttons */
+@media (max-width: 768px) {
+  .approvereject {
+    flex-direction: column;      /* Stack buttons vertically on smaller screens */
+    gap: 10px;                   /* Adds space between stacked buttons */
+    align-items: center;         /* Centers buttons */
+  }
+
+  .details-button,
+  .open-button,
+  .download-button,
+  .reject-button,
+  .approve-button {
+    width: 100%;                 /* Makes buttons full width on smaller screens */
+    margin: 5px 0;               /* Vertical space between buttons */
+  }
 }
 
 .loader {
