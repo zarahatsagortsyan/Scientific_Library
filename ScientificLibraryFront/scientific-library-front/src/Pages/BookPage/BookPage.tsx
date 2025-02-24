@@ -209,8 +209,8 @@ import { useParams } from "react-router-dom"; // useParams to access the bookId 
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
 import { toggleBookAvailability } from "../../Utils/BookAvailability";
 import "./BookPage.css";
+import { handleBookApprove } from "../../Utils/ApproveRejectBook";
 import { Book } from "../../Models/Book";
-import { handleBookApprove } from "../../Utils/RejectBook";
 
 interface Review {
   userId: string;
@@ -218,6 +218,21 @@ interface Review {
   reviewText: string;
   rating: number;
 }
+// interface Book {
+//   id: string;
+//   title: string;
+//   author: string;
+//   genre: string;
+//   description: string;
+//   isbn: string;
+//   coverImageUrl?: string;
+//   publicationDate: string;
+//   pageCount: number;
+//   language: string;
+//   format: string;
+//   keywords: string;
+//   isAvailable: boolean;
+// }
 
 const BookPage: React.FC = () => {
   const { bookId } = useParams<{ bookId: string }>(); // Get the book ID from the URL
@@ -370,7 +385,22 @@ const BookPage: React.FC = () => {
       <p>
         <strong>Publication Date:</strong> {book.publicationDate}
       </p>
-
+      <p>
+        <strong>🗂️ Pages:</strong> {book.pageCount}
+      </p>
+      <p>
+        <strong>🌐 Language:</strong> {book.language}
+      </p>
+      <p>
+        <strong>📑 Format:</strong> {book.format}
+      </p>
+      <p>
+        <strong>🔍 Keywords:</strong> {book.keywords}
+      </p>
+      <p>
+        <strong>✅ Availability:</strong>{" "}
+        {book.isAvailable ? "Available" : "Not Available"}
+      </p>
       <div className="button-group">
         <button className="open-button" onClick={() => openPdf(book.id)}>
           📖 Open PDF

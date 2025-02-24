@@ -17,6 +17,7 @@ using ScientificLibraryBack.Services.UserService;
 using System.Data;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using User.Management.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,7 +80,8 @@ builder.Services.AddCors(options =>
         builder => builder
             .WithOrigins("http://localhost:5173") // React app's origin
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
@@ -92,6 +94,14 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+
+// Add services to the container.
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 
@@ -144,6 +154,7 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(user, "Admin");
     }
 }
+
 
 app.UseCors("AllowReactApp");
 app.Run();

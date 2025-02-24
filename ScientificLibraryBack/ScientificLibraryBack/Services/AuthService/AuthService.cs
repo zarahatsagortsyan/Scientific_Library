@@ -134,6 +134,7 @@ namespace ScientificLibraryBack.Services.AuthService
         }
 
         public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterUser user)
+        
         {
             try
             {
@@ -146,6 +147,7 @@ namespace ScientificLibraryBack.Services.AuthService
                     Type = UserType.Reader,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
+                    Banned = false,
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);
@@ -198,6 +200,7 @@ namespace ScientificLibraryBack.Services.AuthService
                     Type = UserType.Publisher,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
+                    Banned = false,
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);

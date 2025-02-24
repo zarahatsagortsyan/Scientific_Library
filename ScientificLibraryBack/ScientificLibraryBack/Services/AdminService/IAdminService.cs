@@ -11,6 +11,10 @@ namespace ScientificLibraryBack.Services.AdminService
         Task<ApiResponse<bool>> DeleteGenre(int id);
         Task<ApiResponse<bool>> UpdateGenre(UpdateGenreRequest genreRequest);
         Task<ApiResponse<IEnumerable<Book>>> GetPendingBooks();
+        Task<ApiResponse<IEnumerable<Book>>> GetRejectedBooks();
+        Task<ApiResponse<IEnumerable<Book>>> GetApprovedBooks();
+
+
 
     }
 }

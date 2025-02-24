@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./BookDetails.css";
+import { Book } from "../../Models/Book";
 
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  description: string;
-  isbn: string;
-  coverImageUrl?: string;
-  publicationDate: string;
-  pageCount: number;
-  language: string;
-  format: string;
-  keywords: string;
-  isAvailable: boolean;
-  status: string;
-  state: string;
-}
+// interface Book {
+//   id: string;
+//   title: string;
+//   author: string;
+//   genre: string;
+//   description: string;
+//   isbn: string;
+//   coverImageUrl?: string;
+//   publicationDate: string;
+//   pageCount: number;
+//   language: string;
+//   format: string;
+//   keywords: string;
+//   isAvailable: boolean;
+// }
 
 interface BookDetailsProps {
   bookId: string;
@@ -97,12 +96,6 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
           <p>
             <strong>✅ Availability:</strong>{" "}
             {book.isAvailable ? "Available" : "Not Available"}
-          </p>
-          <p>
-            <strong>🚦 Status:</strong> {book.status}
-          </p>
-          <p>
-            <strong>🔄 State:</strong> {book.state}
           </p>
           <p>
             <strong>📝 Description:</strong> {book.description}

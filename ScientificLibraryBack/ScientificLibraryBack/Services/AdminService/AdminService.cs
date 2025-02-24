@@ -227,5 +227,73 @@ namespace ScientificLibraryBack.Services.AdminService
             return response;
 
         }
+        public async Task<ApiResponse<IEnumerable<Book>>> GetRejectedBooks()
+        {
+            var response = new ApiResponse<IEnumerable<Book>>();
+
+            try
+            {
+                var books = await _context.Books
+                    .Where(b => b.Status == ApprovalStatus.Rejected)
+                    .Include(b => b.Publisher)
+                    .ToListAsync();
+
+                // Convert CoverImage to Base64 directly
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
+
+                response.Success = true;
+                response.Message = "Rejected books retrieved successfully.";
+                response.Data = books;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+
+        }
+        public async Task<ApiResponse<IEnumerable<Book>>> GetApprovedBooks()
+        {
+            var response = new ApiResponse<IEnumerable<Book>>();
+
+            try
+            {
+                var books = await _context.Books
+                    .Where(b => b.Status == ApprovalStatus.Approved)
+                    .Include(b => b.Publisher)
+                    .ToListAsync();
+
+                // Convert CoverImage to Base64 directly
+                foreach (var book in books)
+                {
+                    if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    {
+                        var base64Image = Convert.ToBase64String(book.CoverImage);
+                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+                    }
+                }
+
+                response.Success = true;
+                response.Message = "Approved books retrieved successfully.";
+                response.Data = books;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+
+        }
     }
 }

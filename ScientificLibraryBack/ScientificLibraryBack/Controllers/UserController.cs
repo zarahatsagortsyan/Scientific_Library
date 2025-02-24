@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models;
 using ScientificLibraryBack.Services.UserService;
 
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/users")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -81,6 +83,32 @@ namespace ScientificLibraryBack.Controllers
             {
                 return StatusCode(500, new { error = ex.Message });
             }
+        }
+
+        [HttpPut("ban")]
+        public async Task<IActionResult> BanUser(string userId)
+        {
+            var result = await _userService.BanUser(userId);
+
+            if (result.Success == false)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPut("unban")]
+        public async Task<IActionResult> UnBanUser(string userId)
+        {
+            var result = await _userService.UnBanUser(userId);
+
+            if (result.Success == false)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }

@@ -13,7 +13,10 @@ import PendingBooksPage from "../Pages/Publisher/PendingBooksPage";
 import ApprovedBooksPage from "../Pages/Publisher/PublishedBooksPage";
 import RejectedBooksPage from "../Pages/Publisher/RejectedBooksPage";
 import "../App.css";
-import AdminPendingPage from "../Pages/Admin/AdminPendingBooksPage";
+import AdminPendingPage from "../Pages/Admin/Books/AdminPendingBooksPage";
+import PublishersListPage from "../Pages/Admin/Users/PublishersListPage";
+import AdminRejectedBooksPage from "../Pages/Admin/Books/AdminRejectedBooksPage";
+import AdminApprovedBooksPage from "../Pages/Admin/Books/AdminApprovedBooksPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -37,6 +40,15 @@ const AppRoutes: React.FC = () => {
             <Route path="/rejected" element={<RejectedBooksPage />} />{" "}
             <Route path="/published" element={<ApprovedBooksPage />} />{" "}
             <Route path="/pending-approval" element={<AdminPendingPage />} />{" "}
+            <Route path="/publishers-list" element={<PublishersListPage />} />{" "}
+            <Route
+              path="/admin-rejected"
+              element={<AdminRejectedBooksPage />}
+            />{" "}
+            <Route
+              path="/admin-approved"
+              element={<AdminApprovedBooksPage />}
+            />{" "}
             {/* ✅ New Route */}
             <Route path="/add-book" element={<AddBookPage />} />
           </Routes>

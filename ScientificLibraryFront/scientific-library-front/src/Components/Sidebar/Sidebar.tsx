@@ -69,10 +69,10 @@ const SidebarMenu: React.FC = () => {
           {/* Admin Links */}
           {userRole?.includes("Admin") && (
             <>
-              <MenuItem component={<Link to="/approved" />}>
+              <MenuItem component={<Link to="/admin-approved" />}>
                 ✔️ Approved Books
               </MenuItem>
-              <MenuItem component={<Link to="/rejected" />}>
+              <MenuItem component={<Link to="/admin-rejected" />}>
                 ❌ Rejected Books
               </MenuItem>
               <MenuItem component={<Link to="/pending-approval" />}>
@@ -81,7 +81,7 @@ const SidebarMenu: React.FC = () => {
               <MenuItem component={<Link to="/readers" />}>
                 👥 Active Readers
               </MenuItem>
-              <MenuItem component={<Link to="/publishers" />}>
+              <MenuItem component={<Link to="/publishers-list" />}>
                 🖋️ Active Publishers
               </MenuItem>
             </>

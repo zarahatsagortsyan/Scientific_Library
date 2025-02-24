@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "./AdminBooks.css";
-import BookDetails from "../../Components/BookDetails/BookDetails";
-import { downloadPdf, openPdf } from "../../Utils/Pdf";
+import BookDetails from "../../../Components/BookDetails/BookDetails";
+import { downloadPdf, openPdf } from "../../../Utils/Pdf";
 import { useNavigate } from "react-router-dom";
-import { Book } from "../../Models/Book";
-import { handleBookApprove } from "../../Utils/RejectBook";
+import { Book } from "../../../Models/Book";
 
-const AdminPendingPage: React.FC = () => {
+const AdminRejectedBooksPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +16,6 @@ const AdminPendingPage: React.FC = () => {
 
   const handleViewDetails = (bookId: string) => {
     if (bookId) {
-      console.log(bookId);
       setSelectedBookId(bookId);
     }
   };
@@ -46,7 +44,7 @@ const AdminPendingPage: React.FC = () => {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
         const response = await axios.get(
-          `http://localhost:8001/api/Admin/books/pending`,
+          `${import.meta.env.VITE_API_URL}/Admin/books/rejected`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -111,21 +109,6 @@ const AdminPendingPage: React.FC = () => {
             >
               📥 Download
             </button>
-
-            <div className="approvereject">
-              <button
-                className="reject-button"
-                onClick={() => downloadPdf(book.id)}
-              >
-                Reject
-              </button>
-              <button
-                className="approve-button"
-                onClick={() => handleBookApprove(book.id)}
-              >
-                Approve
-              </button>
-            </div>
           </div>
         </div>
       ))}
@@ -137,4 +120,4 @@ const AdminPendingPage: React.FC = () => {
   );
 };
 
-export default AdminPendingPage;
+export default AdminRejectedBooksPage;

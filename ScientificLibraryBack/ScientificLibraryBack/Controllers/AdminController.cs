@@ -6,8 +6,8 @@ using ScientificLibraryBack.Services.AdminService;
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
@@ -16,57 +16,63 @@ namespace ScientificLibraryBack.Controllers
             _adminService = adminService;
         }
 
-        [HttpPatch("books/{bookId}/approve")]
+        [HttpPatch("books/approve")]
         public async Task<IActionResult> ApproveBook(Guid bookId)
         {
-            var respone = await _adminService.ApproveBook(bookId);
 
-            if (respone.Success)
+            if (!User.Identity.IsAuthenticated)
             {
-                return Ok(respone);
+                Console.WriteLine("User not authenticated");
+                return Unauthorized(new ApiResponse<string> { Success = false, Message = "User not authenticated" });
+            }
+            var response = await _adminService.ApproveBook(bookId);
+
+            if (response.Success)
+            {
+                return Ok(response);
             }
 
-            return BadRequest(respone);
+            return BadRequest(response);
         }
 
 
         [HttpPatch("books/{bookId}/reject")]
         public async Task<IActionResult> RejectBook(Guid bookId)
         {
-            var respone = await _adminService.RejectBook(bookId);
+            var response = await _adminService.RejectBook(bookId);
 
-            if (respone.Success)
+            if (response.Success)
             {
-                return Ok(respone);
+                return Ok(response);
             }
 
-            return BadRequest(respone);
+            return BadRequest(response);
         }
 
         [HttpPost("genres")]
         public async Task<IActionResult> CreateGenre(CreateGenreRequest genreRequest)
         {
-            var respone = await _adminService.CreateGenre(genreRequest);
+            var response = await _adminService.CreateGenre(genreRequest);
 
-            if (respone.Success)
+            if (response.Success)
             {
-                return Ok(respone);
+                return Ok(response);
             }
 
-            return BadRequest(respone);
+            return BadRequest(response);
         }
 
         [HttpDelete("genres/{id}")]
         public async Task<IActionResult> DeleteGenre(int id)
         {
-            var respone = await _adminService.DeleteGenre(id);
+            var response = await _adminService.DeleteGenre(id);
 
-            if (respone.Success)
+            if (response.Success)
             {
-                return Ok(respone);
+                return Ok(response);
             }
 
-            return BadRequest(respone);
+            return BadRequest(response);
         }
 
         [HttpPatch("genres/{id}")]
@@ -74,14 +80,14 @@ namespace ScientificLibraryBack.Controllers
         {
             updateGenre.genreId = id;
 
-            var respone = await _adminService.UpdateGenre(updateGenre);
+            var response = await _adminService.UpdateGenre(updateGenre);
 
-            if (respone.Success)
+            if (response.Success)
             {
-                return Ok(respone);
+                return Ok(response);
             }
 
-            return BadRequest(respone);
+            return BadRequest(response);
         }
 
         [HttpGet("books/pending")]
@@ -97,5 +103,30 @@ namespace ScientificLibraryBack.Controllers
             return Ok(books);
         }
 
+        [HttpGet("books/rejected")]
+        public async Task<IActionResult> GetRejectedBooks()
+        {
+            var books = await _adminService.GetRejectedBooks();
+
+            if (books == null)
+            {
+                return NotFound(books);
+            }
+
+            return Ok(books);
+        }
+
+        [HttpGet("books/approved")]
+        public async Task<IActionResult> GetApprovedBooks()
+        {
+            var books = await _adminService.GetApprovedBooks();
+
+            if (books == null)
+            {
+                return NotFound(books);
+            }
+
+            return Ok(books);
+        }
     }
 }

@@ -72,6 +72,7 @@ const BookListPage: React.FC = () => {
           setError(response.data.message || "Failed to fetch books");
         }
       } catch (error) {
+        console.log(22);
         console.error("Error fetching books:", error);
         setError("Failed to load books");
       } finally {

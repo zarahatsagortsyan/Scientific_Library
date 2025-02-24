@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ScientificLibraryBack.Models.DB;
 using System.Collections;
 using ScientificLibraryBack.Services.AuthService;
+using ScientificLibraryBack.DTO;
 
 namespace ScientificLibraryBack.Services.UserService
 {
@@ -37,14 +38,108 @@ namespace ScientificLibraryBack.Services.UserService
 
         }
 
-        public async Task<IEnumerable<ExtendedIdentityUser>> GetActiveReadersAsync()
+        //public async Task<IEnumerable<ExtendedIdentityUser>> GetActiveReadersAsync()
+        //{
+
+        //    return await _userManager.Users.Where(u => u.Type == UserType.Reader && u.IsActive == true).ToListAsync();
+        //}
+        //public async Task<ApiResponse<IEnumerable<ExtendedIdentityUser>>> GetActiveReadersAsync()
+        //{
+
+
+        //    var activeReaders = await _userManager.Users
+        //        .Where(u => u.Type == UserType.Reader && u.IsActive == true)
+        //        .ToListAsync();
+
+        //    return new ApiResponse<IEnumerable<ExtendedIdentityUser>>
+        //    {
+        //        Success = true,
+        //        Message = "Active readers retrieved successfully.",
+        //        Data = activeReaders
+        //    };
+        //}
+
+        public async Task<ApiResponse<IEnumerable<UserDTO>>> GetActiveReadersAsync()
         {
-            return await _userManager.Users.Where(u => u.Type == UserType.Reader && u.IsActive == true).ToListAsync();
+            var activeReaders = await _userManager.Users
+                .Where(u => u.Type == UserType.Reader && u.IsActive == true)
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    Type = u.Type,
+                    Banned = u.Banned,
+                    CreatedDate = u.CreatedAt,
+                    BirthDate = u.DateOfBirth
+                })
+                .ToListAsync();
+
+            return new ApiResponse<IEnumerable<UserDTO>>
+            {
+                Success = true,
+                Message = "Active readers retrieved successfully.",
+                Data = activeReaders
+            };
         }
 
-        public async Task<IEnumerable<ExtendedIdentityUser>> GetActivePublishersAsync()
+        public async Task<ApiResponse<IEnumerable<UserDTO>>> GetActivePublishersAsync()
         {
-            return await _userManager.Users.Where(u => u.Type == UserType.Publisher && u.IsActive == true).ToListAsync();
+            var activeReaders = await _userManager.Users
+                .Where(u => u.Type == UserType.Publisher && u.IsActive == true)
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    Type = u.Type,
+                    Banned = u.Banned,
+                    CreatedDate = u.CreatedAt,
+                    BirthDate = u.DateOfBirth
+                })
+                .ToListAsync();
+
+            return new ApiResponse<IEnumerable<UserDTO>>
+            {
+                Success = true,
+                Message = "Active publishers retrieved successfully.",
+                Data = activeReaders
+            };
+        }
+        //public async Task<IEnumerable<ExtendedIdentityUser>> GetActivePublishersAsync()
+        //{
+        //    return await _userManager.Users.Where(u => u.Type == UserType.Publisher && u.IsActive == true).ToListAsync();
+        //}
+
+
+        public async Task<ApiResponse<bool>> BanUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return new ApiResponse<bool> { Success = false, Message = "User not found", Data = false };
+
+            user.Banned = true;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+                return new ApiResponse<bool> { Success = true, Message = "User banned successfully", Data = true };
+
+            return new ApiResponse<bool> { Success = false, Message = "Failed to ban user", Data = false };
+        }
+
+        public async Task<ApiResponse<bool>> UnBanUser(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return new ApiResponse<bool> { Success = false, Message = "User not found", Data = false };
+
+            user.Banned = false;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+                return new ApiResponse<bool> { Success = true, Message = "User unbanned successfully", Data = true };
+
+            return new ApiResponse<bool> { Success = false, Message = "Failed to ban user", Data = false };
         }
     }
 }
