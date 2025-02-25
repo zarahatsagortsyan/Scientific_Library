@@ -358,10 +358,20 @@ const PublishersListPage: React.FC = () => {
     fetchPublishers();
   }, []);
 
+  const token = localStorage.getItem("jwtToken");
+  if (!token) {
+    setError("Authentication required.");
+    setLoading(false);
+    return;
+  }
   const handleBanUser = async (userId: string) => {
     try {
       await api.put(
-        `${import.meta.env.VITE_API_URL}/users/ban?userId=${userId}`
+        `${import.meta.env.VITE_API_URL}/users/ban?userId=${userId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setPublishers((prev) =>
         prev.map((user) =>
@@ -376,7 +386,11 @@ const PublishersListPage: React.FC = () => {
   const handleUnbanUser = async (userId: string) => {
     try {
       await api.put(
-        `${import.meta.env.VITE_API_URL}/users/unban?userId=${userId}`
+        `${import.meta.env.VITE_API_URL}/users/unban?userId=${userId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setPublishers((prev) =>
         prev.map((user) =>
@@ -399,7 +413,7 @@ const PublishersListPage: React.FC = () => {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">Active Publishers Management</h1>
+      <h1 className="mb-4">Publishers Management</h1>
 
       <div className="mb-3">
         <input

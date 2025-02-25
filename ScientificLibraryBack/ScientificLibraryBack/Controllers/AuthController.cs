@@ -100,7 +100,7 @@ namespace ScientificLibraryBack.Controllers
                     return Ok(loginResult);
                 }
 
-                return Unauthorized();
+                return Unauthorized(loginResult);
             }
             catch (Exception excp)
             {

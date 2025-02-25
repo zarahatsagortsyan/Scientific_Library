@@ -251,5 +251,26 @@ namespace ScientificLibraryBack.Services.BookService
             }
             return response;
         }
+
+        public async Task<ApiResponse<ReadingStatus?>> GetUserBookStatusAsync(string userId, Guid bookId)
+        {
+            var userBook = await _context.UserBooks
+                .FirstOrDefaultAsync(ub => ub.UserId == userId && ub.BookId == bookId);
+
+            if (userBook == null)
+            {
+                return new ApiResponse<ReadingStatus?>
+                {
+                    Success = true,
+                    Message = "No reading status found for this book and user."
+                };
+            }
+
+            return new ApiResponse<ReadingStatus?>
+            {
+                Success = true,
+                Data = userBook.ReadingStatus
+            };
+        }
     }
 }

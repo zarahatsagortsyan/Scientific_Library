@@ -1,8 +1,14 @@
 // import React, { useEffect, useState } from "react";
-// import { useLocation } from "react-router-dom";
+// import { useParams } from "react-router-dom"; // useParams to access the bookId in the URL
 // import { downloadPdf, openPdf } from "../../Utils/Pdf";
 // import { toggleBookAvailability } from "../../Utils/BookAvailability";
 // import "./BookPage.css";
+// import {
+//   handleBookApprove,
+//   handleBookReject,
+// } from "../../Utils/ApproveRejectBook";
+// import { Book } from "../../Models/Book";
+// import BookStatusManager from "../../Components/BookStatusManager/BookStatusManager";
 
 // interface Review {
 //   userId: string;
@@ -12,12 +18,13 @@
 // }
 
 // const BookPage: React.FC = () => {
-//   const location = useLocation();
-//   const { book } = location.state || {};
+//   const { bookId } = useParams<{ bookId: string }>(); // Get the book ID from the URL
+//   const [book, setBook] = useState<Book>(); // Book state to store book details
 //   const [reviews, setReviews] = useState<Review[]>([]);
 //   const [newReview, setNewReview] = useState("");
 //   const [rating, setRating] = useState<number>(5);
 //   const [userRole, setUserRole] = useState<string | null>(null);
+//   const [userId, setUserId] = useState<string | null>(null);
 
 //   useEffect(() => {
 //     const token = localStorage.getItem("jwtToken");
@@ -27,13 +34,37 @@
 //         decodedToken[
 //           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
 //         ];
+//       const userId =
+//         decodedToken[
+//           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+//         ];
 //       setUserRole(role);
+//       setUserId(userId);
 //     }
 
+//     const fetchBookDetails = async () => {
+//       if (!bookId) return;
+//       try {
+//         const response = await fetch(
+//           `http://localhost:8001/api/book/info/${bookId}`
+//         );
+//         const bookData = await response.json();
+//         console.log("Fetched Book Data:", bookData); // Log the fetched data
+//         if (bookData.success) {
+//           setBook(bookData.data); // Store the book data in the state
+//         } else {
+//           console.error("Failed to retrieve book data:", bookData.message);
+//         }
+//       } catch (error) {
+//         console.error("Failed to fetch book details", error);
+//       }
+//     };
+
 //     const fetchReviews = async () => {
+//       if (!bookId) return;
 //       try {
 //         const reviewsResponse = await fetch(
-//           `http://localhost:8001/api/Book/reviews/${book.id}`
+//           `http://localhost:8001/api/book/reviews/${bookId}` // Use bookId to fetch reviews
 //         );
 //         const reviewsData = await reviewsResponse.json();
 //         setReviews(reviewsData || []);
@@ -42,16 +73,20 @@
 //       }
 //     };
 
-//     if (book?.id) {
+//     if (bookId) {
+//       fetchBookDetails();
 //       fetchReviews();
 //     }
-//   }, [book]);
+//   }, [bookId]);
 
 //   const handleToggleAvailability = async () => {
 //     if (book) {
 //       const updatedBook = await toggleBookAvailability(book);
 //       if (updatedBook) {
-//         book.isAvailable = updatedBook.isAvailable;
+//         setBook((prev: any) => ({
+//           ...prev,
+//           isAvailable: updatedBook.isAvailable,
+//         }));
 //       }
 //     }
 //   };
@@ -74,7 +109,7 @@
 //         },
 //         body: JSON.stringify({
 //           UserId: userId,
-//           BookId: book.id,
+//           BookId: book?.id,
 //           ReviewText: newReview,
 //           Rating: rating,
 //         }),
@@ -91,23 +126,15 @@
 //     }
 //   };
 
-//   const handleApproveBook = async () => {
-//     // Logic for approving the book
-//     console.log("Book Approved");
-//   };
-
-//   const handleRejectBook = async () => {
-//     // Logic for rejecting the book
-//     console.log("Book Rejected");
-//   };
-
 //   if (!book) {
 //     return <div className="loader">Book details not available.</div>;
 //   }
-
 //   return (
 //     <div className="book-page">
-//       <h2>{book.title}</h2>
+//       {userRole === "Reader" && (
+//         <BookStatusManager bookId={book.id} userId={userId ?? ""} />
+//       )}
+//       ;<h2>{book.title}</h2>
 //       <img
 //         src={book.coverImageUrl || "https://via.placeholder.com/200"}
 //         alt={book.title}
@@ -125,7 +152,22 @@
 //       <p>
 //         <strong>Publication Date:</strong> {book.publicationDate}
 //       </p>
-
+//       <p>
+//         <strong>🗂️ Pages:</strong> {book.pageCount}
+//       </p>
+//       <p>
+//         <strong>🌐 Language:</strong> {book.language}
+//       </p>
+//       <p>
+//         <strong>📑 Format:</strong> {book.format}
+//       </p>
+//       <p>
+//         <strong>🔍 Keywords:</strong> {book.keywords}
+//       </p>
+//       <p>
+//         <strong>✅ Availability:</strong>{" "}
+//         {book.isAvailable ? "Available" : "Not Available"}
+//       </p>
 //       <div className="button-group">
 //         <button className="open-button" onClick={() => openPdf(book.id)}>
 //           📖 Open PDF
@@ -136,26 +178,32 @@
 //         >
 //           ⬇️ Download PDF
 //         </button>
-//         <button
-//           className="availability-button"
-//           onClick={handleToggleAvailability}
-//         >
-//           {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}
-//         </button>
+//         {userRole === "Publisher" && (
+//           <button
+//             className="availability-button"
+//             onClick={handleToggleAvailability}
+//           >
+//             {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}
+//           </button>
+//         )}
 //       </div>
-
 //       {/* Admin Controls (Approve / Reject buttons) */}
-//       {userRole === "Admin" && (
+//       {userRole === "Admin" && book.status === "Pending" && (
 //         <div className="approvereject">
-//           <button className="approve-button" onClick={handleApproveBook}>
+//           <button
+//             className="approve-button"
+//             onClick={() => handleBookApprove(book.id)}
+//           >
 //             Approve
 //           </button>
-//           <button className="reject-button" onClick={handleRejectBook}>
+//           <button
+//             className="reject-button"
+//             onClick={() => handleBookReject(book.id)}
+//           >
 //             Reject
 //           </button>
 //         </div>
 //       )}
-
 //       <div className="reviews-section">
 //         <h3>Reviews</h3>
 //         {reviews.length > 0 ? (
@@ -203,14 +251,17 @@
 // };
 
 // export default BookPage;
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // useParams to access the bookId in the URL
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
 import { toggleBookAvailability } from "../../Utils/BookAvailability";
 import "./BookPage.css";
-import { handleBookApprove } from "../../Utils/ApproveRejectBook";
+import {
+  handleBookApprove,
+  handleBookReject,
+} from "../../Utils/ApproveRejectBook";
 import { Book } from "../../Models/Book";
+import BookStatusManager from "../../Components/BookStatusManager/BookStatusManager";
 
 interface Review {
   userId: string;
@@ -218,21 +269,6 @@ interface Review {
   reviewText: string;
   rating: number;
 }
-// interface Book {
-//   id: string;
-//   title: string;
-//   author: string;
-//   genre: string;
-//   description: string;
-//   isbn: string;
-//   coverImageUrl?: string;
-//   publicationDate: string;
-//   pageCount: number;
-//   language: string;
-//   format: string;
-//   keywords: string;
-//   isAvailable: boolean;
-// }
 
 const BookPage: React.FC = () => {
   const { bookId } = useParams<{ bookId: string }>(); // Get the book ID from the URL
@@ -241,6 +277,8 @@ const BookPage: React.FC = () => {
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState<number>(5);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -250,25 +288,16 @@ const BookPage: React.FC = () => {
         decodedToken[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ];
+      const userId =
+        decodedToken[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+        ];
       setUserRole(role);
+      setUserId(userId);
     }
-
-    // const fetchBookDetails = async () => {
-    //   if (!bookId) return;
-    //   try {
-    //     const response = await fetch(
-    //       `http://localhost:8001/api/book/info/${bookId}` // Use the bookId to fetch data
-    //     );
-    //     const bookData = await response.json();
-    //     console.log(bookData);
-    //     setBook(bookData); // Store the fetched book data
-    //     console.log(book);
-    //   } catch (error) {
-    //     console.error("Failed to fetch book details", error);
-    //   }
-    // };
     const fetchBookDetails = async () => {
       if (!bookId) return;
+      setLoading(true); // Start loading
       try {
         const response = await fetch(
           `http://localhost:8001/api/book/info/${bookId}`
@@ -282,6 +311,8 @@ const BookPage: React.FC = () => {
         }
       } catch (error) {
         console.error("Failed to fetch book details", error);
+      } finally {
+        setLoading(false); // End loading
       }
     };
 
@@ -351,23 +382,20 @@ const BookPage: React.FC = () => {
     }
   };
 
-  const handleApproveBook = async () => {
-    // Logic for approving the book
-    console.log("Book Approved");
-  };
-
-  const handleRejectBook = async () => {
-    // Logic for rejecting the book
-    console.log("Book Rejected");
-  };
+  if (loading) {
+    return <div className="loader">⏳ Loading book details...</div>;
+  }
 
   if (!book) {
-    return <div className="loader">Book details not available.</div>;
+    return <div className="loader">❌ Book details not available.</div>;
   }
 
   return (
     <div className="book-page">
-      <h2>{book.title}</h2>
+      {userRole === "Reader" && (
+        <BookStatusManager bookId={book.id} userId={userId ?? ""} />
+      )}
+      ;<h2>{book.title}</h2>
       <img
         src={book.coverImageUrl || "https://via.placeholder.com/200"}
         alt={book.title}
@@ -411,16 +439,17 @@ const BookPage: React.FC = () => {
         >
           ⬇️ Download PDF
         </button>
-        <button
-          className="availability-button"
-          onClick={handleToggleAvailability}
-        >
-          {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}
-        </button>
+        {userRole === "Publisher" && (
+          <button
+            className="availability-button"
+            onClick={handleToggleAvailability}
+          >
+            {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}
+          </button>
+        )}
       </div>
-
       {/* Admin Controls (Approve / Reject buttons) */}
-      {userRole === "Admin" && (
+      {userRole === "Admin" && book.status === "Pending" && (
         <div className="approvereject">
           <button
             className="approve-button"
@@ -428,12 +457,14 @@ const BookPage: React.FC = () => {
           >
             Approve
           </button>
-          <button className="reject-button" onClick={handleRejectBook}>
+          <button
+            className="reject-button"
+            onClick={() => handleBookReject(book.id)}
+          >
             Reject
           </button>
         </div>
       )}
-
       <div className="reviews-section">
         <h3>Reviews</h3>
         {reviews.length > 0 ? (

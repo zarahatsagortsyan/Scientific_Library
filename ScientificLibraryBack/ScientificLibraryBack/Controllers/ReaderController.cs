@@ -105,6 +105,19 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(response);  // Return the reviews
         }
+
+        [HttpGet("user-books/{userId}/{bookId}")]
+        public async Task<IActionResult> GetUserBookStatus(string userId, Guid bookId)
+        {
+            var response = await _readerService.GetUserBookStatusAsync(userId, bookId);
+            if (!response.Success)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+
     }
 
 }

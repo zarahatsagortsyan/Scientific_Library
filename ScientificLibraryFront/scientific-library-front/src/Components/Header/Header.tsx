@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 const Header: React.FC = () => {
@@ -7,9 +7,11 @@ const Header: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
+    navigate(`/`);
     window.location.reload();
   };
 
@@ -18,7 +20,7 @@ const Header: React.FC = () => {
       <div className="nav-container">
         <Link className="navbar-brand" to="/">
           <img className="navbar-logo" src="/logo.jpg" alt="SciHub Logo" />
-          <span className="logo-text">Scientific Library</span>
+          <span className="logo-text">SciHub</span>
         </Link>
 
         <ul className="nav-links">
@@ -31,7 +33,7 @@ const Header: React.FC = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/register/reader">
-                  🧑‍🏫 Register Reader
+                  🧑 Register Reader
                 </Link>
               </li>
               <li className="nav-item">

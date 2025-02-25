@@ -44,6 +44,8 @@ export interface Book {
     format: string;
     keywords: string;
     isAvailable: boolean;
+    status: string;
+
   }
 
 // export type { Review };

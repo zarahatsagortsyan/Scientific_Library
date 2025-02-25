@@ -2,6 +2,7 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AddBookPage.css";
+import { FaRegFilePdf } from "react-icons/fa";
 
 // Define Genre type
 interface Genre {
@@ -217,7 +218,7 @@ const AddBookPage = () => {
             {/* PDF File */}
             <div className="file-input">
               <label htmlFor="pdfFile" className="file-label">
-                📄 Upload Book File (PDF)
+                📄 Upload Book File (PDF) <FaRegFilePdf />
               </label>
               <input
                 type="file"

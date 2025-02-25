@@ -7,7 +7,7 @@ using Azure;
 
 namespace ScientificLibraryBack.Services.AdminService
 {
-    public class AdminService:IAdminService
+    public class AdminService : IAdminService
     {
         private readonly ApplicationDbContext _context;
         public AdminService(IUserService userService, ApplicationDbContext context)
@@ -83,13 +83,13 @@ namespace ScientificLibraryBack.Services.AdminService
         }
 
         public async Task<ApiResponse<bool>> CreateGenre(CreateGenreRequest genreRequest)
-        { 
-        
+        {
+
             ApiResponse<bool> apiResponse = new ApiResponse<bool>();
 
             try
             {
-                var genres = await _context.Genres.Where(g=>g.Name == genreRequest.Name).ToListAsync();
+                var genres = await _context.Genres.Where(g => g.Name == genreRequest.Name).ToListAsync();
                 if (genres.Count > 0)
                 {
                     apiResponse.Success = false;
@@ -174,7 +174,11 @@ namespace ScientificLibraryBack.Services.AdminService
                     return apiResponse;
                 }
 
-                genre.Description = genreRequest.genreDescription;
+                if (genreRequest.genreDescription != genre.Description)
+                    genre.Description = genreRequest.genreDescription;
+
+                if (genreRequest.name != genre.Name)
+                    genre.Name = genreRequest.name;
 
                 _context.Genres.Update(genre);
                 await _context.SaveChangesAsync();

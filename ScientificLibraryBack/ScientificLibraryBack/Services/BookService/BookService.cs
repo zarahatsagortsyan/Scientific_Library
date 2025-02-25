@@ -93,19 +93,23 @@ namespace ScientificLibraryBack.Services.BookService
             {
                 // Fetch books with related entities
                 var books = await _context.Books
-                    .Include(b => b.Publisher)
-                    .Include(b => b.Reviews)
+                    //.Include(b => b.Publisher)
+                    //.Include(b => b.Reviews)
                     .Where(b => b.Status == ApprovalStatus.Approved).ToListAsync();
 
                 // Convert CoverImage to Base64 directly
 
                 foreach (var book in books)
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
+                    //if (book.CoverImage != null && book.CoverImage.Length > 0)
+                    //{
+                    //    //var base64Image = Convert.ToBase64String(book.CoverImage);
+                    //    //book.CoverImageUrl = "";//$"data:image/jpeg;base64,{base64Image}";
+                    //    //book.CoverImage = null;
+                book.CoverImage = null;
+                    book.PdfFile = null;
+                    book.Publisher = null;
+                    //}
                 }
                 // Wrap the result in ApiResponse
                 response.Success = true;

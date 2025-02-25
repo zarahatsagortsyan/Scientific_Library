@@ -42,6 +42,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./BookList.css";
 import { Book } from "../../Models/Book";
+import api from "../../api/api";
 
 // interface Book {
 //   id: string;
@@ -60,7 +61,7 @@ const BookListPage: React.FC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           "http://localhost:8001/api/Book/allBooks"
         );
         if (response.status === 200 && response.data.success) {
@@ -72,7 +73,6 @@ const BookListPage: React.FC = () => {
           setError(response.data.message || "Failed to fetch books");
         }
       } catch (error) {
-        console.log(22);
         console.error("Error fetching books:", error);
         setError("Failed to load books");
       } finally {
@@ -92,7 +92,7 @@ const BookListPage: React.FC = () => {
 
   return (
     <div className="BookListPage">
-      <h1>Book List</h1>
+      <h1>Publications</h1>
       <div className="BookList">
         {books.map((book) => (
           <div
@@ -100,11 +100,18 @@ const BookListPage: React.FC = () => {
             className="BookItem"
             onClick={() => handleBookClick(book)}
           >
-            <img
+            {/* <img
               src={book.coverImageUrl || "https://via.placeholder.com/200"}
               alt={book.title}
               className="book-image"
               style={{ cursor: "pointer" }}
+            /> */}
+
+            <img
+              src={`http://localhost:8001/api/book/cover/${book.id}`}
+              alt={book.title}
+              className="book-image"
+              loading="lazy"
             />
             {/* <img
               src={book.coverImageUrl || "default-cover.jpg"}

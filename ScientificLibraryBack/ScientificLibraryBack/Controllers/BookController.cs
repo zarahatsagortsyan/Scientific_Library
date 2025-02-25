@@ -106,7 +106,18 @@ namespace ScientificLibraryBack.Controllers
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
             return File(book.Data.PdfFile, contentType, fileName);
         }
+        [HttpGet("cover/{id}")]
+        public async Task<IActionResult> GetBookCoverImage(Guid id)
+        {
+            var book = await _bookService.GetBookByIdAsync(id);
+            if (book == null || book.Data.CoverImage == null)
+            {
+                return NotFound("Image not found");
+            }
 
+            // Return image as a file
+            return File(book.Data.CoverImage, "image/jpeg");
+        }
     }
 
 }

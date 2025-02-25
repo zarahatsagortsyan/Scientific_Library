@@ -3,6 +3,7 @@ import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import "./Sidebar.css";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
 
 // Utility function to get user roles
 const getUserRoles = (): string[] | null => {
@@ -78,12 +79,14 @@ const SidebarMenu: React.FC = () => {
               <MenuItem component={<Link to="/pending-approval" />}>
                 ⏳ Pending Approval
               </MenuItem>
-              <MenuItem component={<Link to="/readers" />}>
-                👥 Active Readers
+              <MenuItem component={<Link to="/readers-list" />}>
+                👥 Readers
               </MenuItem>
               <MenuItem component={<Link to="/publishers-list" />}>
-                🖋️ Active Publishers
+                🖋️ Publishers
               </MenuItem>
+
+              <MenuItem component={<Link to="/genre-list" />}><MdOutlinePlaylistAdd />Genres</MenuItem>
             </>
           )}
         </Menu>

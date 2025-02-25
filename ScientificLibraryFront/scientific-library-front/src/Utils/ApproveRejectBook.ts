@@ -32,7 +32,7 @@ export const handleBookApprove = async (id:any) => {
   }
 };
 
-export const handleBookReject = async (id:string) => {
+export const handleBookReject = async (id:any) => {
 
   console.log(id)
 try {

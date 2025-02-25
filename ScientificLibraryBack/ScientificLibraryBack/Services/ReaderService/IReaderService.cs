@@ -18,6 +18,8 @@ namespace ScientificLibraryBack.Services.BookService
         Task<ApiResponse<Review>> AddReviewAsync(string userId, Guid bookId, string reviewText, int rating);
         Task<ApiResponse<bool>> DeleteReviewAsync(string userId, Guid bookId);
         Task<ApiResponse<IEnumerable<Review>>> GetUserReviewedBooksAsync(string userId);
+        Task<ApiResponse<ReadingStatus?>> GetUserBookStatusAsync(string userId, Guid bookId);
+
     }
 
 }

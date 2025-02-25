@@ -97,23 +97,63 @@ namespace ScientificLibraryBack.Services.AuthService
             string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
             return tokenString;
         }
+        //public async Task<LoginResponse> Login(LoginUser user)
+        //{
+        //    var response = new LoginResponse();
+        //    var identityUser = await _userManager.FindByEmailAsync(user.Email);
+
+
+        //    if (identityUser == null || await _userManager.CheckPasswordAsync(identityUser, user.Password) == false)
+        //    {
+        //        return response;
+        //    }
+
+        //    response.IsLogedIn = true;
+        //    //response.JwtToken = GenerateTokenString(identityUser.Email);
+        //    response.JwtToken = GenerateTokenString(identityUser);
+
+        //    response.RefreshToken = GenerateRefreshTokenString();
+
+
+        //    identityUser.RefreshToken = response.RefreshToken;
+        //    identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
+        //    await _userManager.UpdateAsync(identityUser);
+
+        //    return response;
+        //}
         public async Task<LoginResponse> Login(LoginUser user)
         {
             var response = new LoginResponse();
             var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
-
-            if (identityUser == null || await _userManager.CheckPasswordAsync(identityUser, user.Password) == false)
+            if (identityUser == null || !await _userManager.CheckPasswordAsync(identityUser, user.Password))
             {
+                response.Errors = new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Invalid email or password.",
+                    Data = false
+                };
+                return response;
+            }
+
+            if (identityUser.Banned)
+            {
+                response.IsLogedIn = false;
+                response.JwtToken = string.Empty;
+                response.RefreshToken = string.Empty;
+                response.Errors = new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "User is banned.",
+                    Data = false
+                };
                 return response;
             }
 
             response.IsLogedIn = true;
-            //response.JwtToken = GenerateTokenString(identityUser.Email);
             response.JwtToken = GenerateTokenString(identityUser);
-
             response.RefreshToken = GenerateRefreshTokenString();
-
 
             identityUser.RefreshToken = response.RefreshToken;
             identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
@@ -121,7 +161,6 @@ namespace ScientificLibraryBack.Services.AuthService
 
             return response;
         }
-
         private string GenerateRefreshTokenString()
         {
             var randomNumber = new byte[64];
