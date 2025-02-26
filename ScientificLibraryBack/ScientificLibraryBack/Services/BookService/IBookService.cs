@@ -12,7 +12,11 @@ namespace ScientificLibraryBack.Services.BookService
         //Task<ApiResponse<Guid>> UpdateBookAsync(Guid id, BookCreateRequest book); // Response indicating success or failure of update
         //Task<ApiResponse<bool>> DeleteBookAsync(Guid bookId); // Response indicating success or failure of deletion
 
-        Task<ApiResponse<Book>> GetBookByIdAsync(Guid bookId); // Response containing the book details
+        Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId); // Response containing the book details
+        Task<ApiResponse<byte[]>> GetBookCoverImage(Guid bookId);
+        Task<ApiResponse<PDFDTO>> GetBookPDF(Guid bookId);
+
+
         Task<ApiResponse<IEnumerable<Book>>> GetAllBooksAsync(); // Response with a collection of all books
         //Task<ApiResponse<IEnumerable<Book>>> GetPublishedBooksAsync(string publisherId); // Response with a collection of all books
         ////Task<IEnumerable<Book>> GetMySavedBooksAsync(string readerId); // Response with a collection of all books

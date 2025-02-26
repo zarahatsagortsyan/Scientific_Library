@@ -79,43 +79,47 @@ const AdminApprovedBooksPage: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="material-card-grid">
-      {books.map((book) => (
-        <div className="card" key={book.id}>
-          <img
-            src={book.coverImageUrl || "https://via.placeholder.com/200"}
-            alt={book.title}
-            className="book-image"
-            onClick={() => handleImageClick(book)}
-            style={{ cursor: "pointer" }}
-          />
-          <div className="card__content">
-            <h3 className="card__title">{book.title}</h3>
-            {/* <p className="card__author">👤 {book.author}</p> */}
-            {/* <p className="card__genre">📖 {book.genre}</p> */}
-            {/* <p className="card__status">{getStatusLabel(book.status)}</p> */}
-            <button
-              className="details-button"
-              onClick={() => handleViewDetails(book.id)}
-            >
-              👁️ View Details
-            </button>
-            <button className="open-button" onClick={() => openPdf(book.id)}>
-              Open
-            </button>
-            <button
-              className="download-button"
-              onClick={() => downloadPdf(book.id)}
-            >
-              📥 Download
-            </button>
+    <div>
+      <h1>Pending</h1>
+      <br></br>
+      <div className="material-card-grid">
+        {books.map((book) => (
+          <div className="card" key={book.id}>
+            <img
+              src={`http://localhost:8001/api/book/cover/${book.id}`}
+              alt={book.title}
+              className="book-image"
+              onClick={() => handleImageClick(book)}
+              style={{ cursor: "pointer" }}
+            />
+            <div className="card__content">
+              <h3 className="card__title">{book.title}</h3>
+              {/* <p className="card__author">👤 {book.author}</p> */}
+              {/* <p className="card__genre">📖 {book.genre}</p> */}
+              {/* <p className="card__status">{getStatusLabel(book.status)}</p> */}
+              <button
+                className="details-button"
+                onClick={() => handleViewDetails(book.id)}
+              >
+                👁️ View Details
+              </button>
+              <button className="open-button" onClick={() => openPdf(book.id)}>
+                Open
+              </button>
+              <button
+                className="download-button"
+                onClick={() => downloadPdf(book.id)}
+              >
+                📥 Download
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {selectedBookId && (
-        <BookDetails bookId={selectedBookId} onClose={handleCloseDetails} />
-      )}
+        {selectedBookId && (
+          <BookDetails bookId={selectedBookId} onClose={handleCloseDetails} />
+        )}
+      </div>
     </div>
   );
 };

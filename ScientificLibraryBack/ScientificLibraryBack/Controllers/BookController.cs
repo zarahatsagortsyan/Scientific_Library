@@ -73,28 +73,28 @@ namespace ScientificLibraryBack.Controllers
         [HttpGet("open/{bookId}")]
         public async Task<IActionResult> OpenBookPdf(Guid bookId)
         {
-            var book = await _bookService.GetBookByIdAsync(bookId);
-            if (book == null || book.Data.PdfFile == null)
+            var book = await _bookService.GetBookPDF(bookId);
+            if (book == null || book.Data == null)
             {
                 return NotFound(new { success = false, message = "Book or PDF not found." });
             }
 
-            var fileName = book.Data.PdfFileName ?? "book.pdf";
+            var fileName = book.Data.pdfFileName ?? "book.pdf";
             var contentType = "application/pdf";
 
-            return File(book.Data.PdfFile, contentType, fileName);
+            return File(book.Data.pdfFile, contentType, fileName);
         }
 
         [HttpGet("download/{bookId}")]
         public async Task<IActionResult> DownloadBookPdf(Guid bookId)
         {
-            var book = await _bookService.GetBookByIdAsync(bookId);
-            if (book == null || book.Data.PdfFile == null)
+            var book = await _bookService.GetBookPDF(bookId);
+            if (book == null || book.Data.pdfFile == null)
             {
                 return NotFound(new { success = false, message = "Book or PDF not found." });
             }
 
-            var fileName = book.Data.PdfFileName ?? "book.pdf";
+            var fileName = book.Data.pdfFileName ?? "book.pdf";
             var contentType = "application/pdf";
 
             var contentDisposition = new System.Net.Mime.ContentDisposition
@@ -104,19 +104,19 @@ namespace ScientificLibraryBack.Controllers
             };
 
             Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
-            return File(book.Data.PdfFile, contentType, fileName);
+            return File(book.Data.pdfFile, contentType, fileName);
         }
         [HttpGet("cover/{id}")]
         public async Task<IActionResult> GetBookCoverImage(Guid id)
         {
-            var book = await _bookService.GetBookByIdAsync(id);
-            if (book == null || book.Data.CoverImage == null)
+            var book = await _bookService.GetBookCoverImage(id);
+            if (book == null || book.Data == null || book.Data.Length == 0)
             {
                 return NotFound("Image not found");
             }
 
-            // Return image as a file
-            return File(book.Data.CoverImage, "image/jpeg");
+            // Return image as a raw file with correct MIME type
+            return File(book.Data, "image/jpeg");
         }
     }
 

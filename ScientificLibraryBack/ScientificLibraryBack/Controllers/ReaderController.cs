@@ -56,7 +56,7 @@ namespace ScientificLibraryBack.Controllers
         {
             var response = await _readerService.GetUserBooksAsync(userId, status);
 
-            if (!response.Success || response.Data == null || !response.Data.Any())
+            if (!response.Success)
             {
                 return NotFound(response);  // Return not found if no books are retrieved
             }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScientificLibraryBack.DTO
 {
-    public class BookGetResponse
+    public class BookDTO
     {
 
         public Guid Id { get; set; }
@@ -18,9 +18,9 @@ namespace ScientificLibraryBack.DTO
 
         public string? ISBN { get; set; }  // ISBN of the book
 
-        public string? CoverImageUrl { get; set; } // If storing the image in a file system
+        //public string? CoverImageUrl { get; set; } // If storing the image in a file system
 
-        public string? PdfFileName { get; set; } // ✅ To store the original file name
+        //public string? PdfFileName { get; set; } // ✅ To store the original file name
 
         public DateTime PublicationDate { get; set; }
         public int PageCount { get; set; }
@@ -41,7 +41,7 @@ namespace ScientificLibraryBack.DTO
         //public ExtendedIdentityUser Publisher { get; set; }
 
         // Navigation property for Reviews
-        public virtual ICollection<Review> Reviews { get; set; }
+        //public virtual ICollection<Review> Reviews { get; set; }
     }
 
 }

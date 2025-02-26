@@ -27,29 +27,43 @@ namespace ScientificLibraryBack.Services.BookService
 
             try
             {
-                var exists = await _context.UserBooks.AnyAsync(ub => ub.BookId == bookId && ub.UserId == userId);
-                if (exists)
+                var exists = _context.UserBooks.Where(ub => ub.BookId == bookId && ub.UserId == userId).First();
+
+                if (exists != null && exists.ReadingStatus == status)
                 {
                     response.Success = false;
                     response.Message = "This book is already in the user's list.";
                     return response;
                 }
 
-                var userBook = new UserBook
+                if (exists == null)
                 {
-                    Id = Guid.NewGuid(),
-                    BookId = bookId,
-                    UserId = userId,
-                    ReadingStatus = status,
-                    FinishedDate = status == ReadingStatus.Read ? DateTime.UtcNow : (DateTime?)null
-                };
+                    var userBook = new UserBook
+                    {
+                        Id = Guid.NewGuid(),
+                        BookId = bookId,
+                        UserId = userId,
+                        ReadingStatus = status,
+                        FinishedDate = status == ReadingStatus.Read ? DateTime.UtcNow : (DateTime?)null
+                    };
 
-                _context.UserBooks.Add(userBook);
-                await _context.SaveChangesAsync();
+                    _context.UserBooks.Add(userBook);
+                    await _context.SaveChangesAsync();
+                    response.Success = true;
+                    response.Message = "Book added to user list successfully.";
+                    response.Data = userBook.Id;
+                }
 
-                response.Success = true;
-                response.Message = "Book added to user list successfully.";
-                response.Data = userBook.Id;
+                if (exists != null && exists.ReadingStatus != status)
+                {
+                    exists.ReadingStatus = status;
+                    _context.UserBooks.Update(exists);
+                    await _context.SaveChangesAsync();
+
+                    response.Success = true;
+                    response.Message = "Changed book list successfully.";
+                    response.Data = exists.Id;
+                }
 
                 return response;
             }
@@ -128,7 +142,7 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
-       
+
 
         public async Task<ApiResponse<IEnumerable<UserBook>>> GetUserBooksAsync(string userId, ReadingStatus? status = null)
         {

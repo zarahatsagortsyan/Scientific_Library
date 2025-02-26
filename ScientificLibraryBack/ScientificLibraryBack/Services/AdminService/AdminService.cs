@@ -197,9 +197,44 @@ namespace ScientificLibraryBack.Services.AdminService
             return apiResponse;
         }
 
-        public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooks()
+        //public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooks()
+        //{
+        //    var response = new ApiResponse<IEnumerable<Book>>();
+
+        //    try
+        //    {
+        //        var books = await _context.Books
+        //            .Where(b => b.Status == ApprovalStatus.Pending)
+        //            .Include(b => b.Publisher)
+        //            .ToListAsync();
+
+        //        // Convert CoverImage to Base64 directly
+        //        foreach (var book in books)
+        //        {
+        //            if (book.CoverImage != null && book.CoverImage.Length > 0)
+        //            {
+        //                var base64Image = Convert.ToBase64String(book.CoverImage);
+        //                book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+        //            }
+        //        }
+
+        //        response.Success = true;
+        //        response.Message = "Pending books retrieved successfully.";
+        //        response.Data = books;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+
+        //}
+
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks()
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -208,19 +243,29 @@ namespace ScientificLibraryBack.Services.AdminService
                     .Include(b => b.Publisher)
                     .ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                // Map Books to BookDTOs with CoverImage conversion to Base64
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
 
                 response.Success = true;
                 response.Message = "Pending books retrieved successfully.";
-                response.Data = books;
+                response.Data = bookDTOs;
             }
             catch (Exception ex)
             {
@@ -229,11 +274,10 @@ namespace ScientificLibraryBack.Services.AdminService
             }
 
             return response;
-
         }
-        public async Task<ApiResponse<IEnumerable<Book>>> GetRejectedBooks()
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks()
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -242,19 +286,30 @@ namespace ScientificLibraryBack.Services.AdminService
                     .Include(b => b.Publisher)
                     .ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                // Map Books to BookDTOs with CoverImage conversion to Base64
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
+
 
                 response.Success = true;
                 response.Message = "Rejected books retrieved successfully.";
-                response.Data = books;
+                response.Data = bookDTOs;
             }
             catch (Exception ex)
             {
@@ -265,9 +320,9 @@ namespace ScientificLibraryBack.Services.AdminService
             return response;
 
         }
-        public async Task<ApiResponse<IEnumerable<Book>>> GetApprovedBooks()
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks()
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -276,19 +331,29 @@ namespace ScientificLibraryBack.Services.AdminService
                     .Include(b => b.Publisher)
                     .ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
+
 
                 response.Success = true;
                 response.Message = "Approved books retrieved successfully.";
-                response.Data = books;
+                response.Data = bookDTOs;
             }
             catch (Exception ex)
             {

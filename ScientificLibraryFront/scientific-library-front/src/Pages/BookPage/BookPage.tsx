@@ -262,6 +262,7 @@ import {
 } from "../../Utils/ApproveRejectBook";
 import { Book } from "../../Models/Book";
 import BookStatusManager from "../../Components/BookStatusManager/BookStatusManager";
+import { useBookReviews } from "../../Utils/ReviewOper";
 
 interface Review {
   userId: string;
@@ -273,12 +274,18 @@ interface Review {
 const BookPage: React.FC = () => {
   const { bookId } = useParams<{ bookId: string }>(); // Get the book ID from the URL
   const [book, setBook] = useState<Book>(); // Book state to store book details
-  const [reviews, setReviews] = useState<Review[]>([]);
+  // const [reviews, setReviews] = useState<Review[]>([]);
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState<number>(5);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  // Use the custom hook to get book reviews
+  const {
+    reviews,
+    loading: loadingReviews,
+    error: reviewsError,
+  } = useBookReviews(bookId || "");
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -316,22 +323,23 @@ const BookPage: React.FC = () => {
       }
     };
 
-    const fetchReviews = async () => {
-      if (!bookId) return;
-      try {
-        const reviewsResponse = await fetch(
-          `http://localhost:8001/api/book/reviews/${bookId}` // Use bookId to fetch reviews
-        );
-        const reviewsData = await reviewsResponse.json();
-        setReviews(reviewsData || []);
-      } catch (error) {
-        console.error("Failed to fetch book reviews", error);
-      }
-    };
+    // const fetchReviews = async () => {
+    //   getBookReviews(bookId);
+    //   // if (!bookId) return;
+    //   // try {
+    //   //   const reviewsResponse = await fetch(
+    //   //     `http://localhost:8001/api/book/reviews/${bookId}` // Use bookId to fetch reviews
+    //   //   );
+    //   //   const reviewsData = await reviewsResponse.json();
+    //   //   setReviews(reviewsData || []);
+    //   // } catch (error) {
+    //   //   console.error("Failed to fetch book reviews", error);
+    //   // }
+    // };
 
     if (bookId) {
       fetchBookDetails();
-      fetchReviews();
+      // getBookReviews(bookId);
     }
   }, [bookId]);
 
@@ -373,7 +381,7 @@ const BookPage: React.FC = () => {
 
       if (response.ok) {
         const newReviewData = await response.json();
-        setReviews((prev) => [...prev, newReviewData]);
+        // setReviews((prev) => [...prev, newReviewData]);
         setNewReview("");
         setRating(5);
       }
@@ -397,7 +405,7 @@ const BookPage: React.FC = () => {
       )}
       ;<h2>{book.title}</h2>
       <img
-        src={book.coverImageUrl || "https://via.placeholder.com/200"}
+        src={`http://localhost:8001/api/book/cover/${book.id}`}
         alt={book.title}
         className="book-cover"
       />

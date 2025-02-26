@@ -19,6 +19,7 @@ import AdminRejectedBooksPage from "../Pages/Admin/Books/AdminRejectedBooksPage"
 import AdminApprovedBooksPage from "../Pages/Admin/Books/AdminApprovedBooksPage";
 import ReadersListPage from "../Pages/Admin/Users/ReadersListPage";
 import GenresListPage from "../Pages/Admin/Genres/GenreListPage";
+import ReaderToReadList from "../Pages/Reader/ToReadListPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -44,6 +45,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/pending-approval" element={<AdminPendingPage />} />{" "}
             <Route path="/publishers-list" element={<PublishersListPage />} />{" "}
             <Route path="/readers-list" element={<ReadersListPage />} />{" "}
+            <Route path="/to-read" element={<ReaderToReadList />} />{" "}
             <Route
               path="/admin-rejected"
               element={<AdminRejectedBooksPage />}

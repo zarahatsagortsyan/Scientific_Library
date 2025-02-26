@@ -232,9 +232,9 @@ namespace ScientificLibraryBack.Services.PublisherService
         //}
 
       
-        public async Task<ApiResponse<IEnumerable<Book>>> GetPublishedBooksAsync(string publisherId)
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPublishedBooksAsync(string publisherId)
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -242,20 +242,29 @@ namespace ScientificLibraryBack.Services.PublisherService
                 var books = await _context.Books
                              .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
 
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
-                response.Data = books; // Assign the books to the Data property
+                response.Data = bookDTOs; // Assign the books to the Data property
             }
             catch (Exception ex)
             {
@@ -290,9 +299,9 @@ namespace ScientificLibraryBack.Services.PublisherService
         //    return response;
         //}
 
-        public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooksAsync(string publisherId)
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -302,19 +311,29 @@ namespace ScientificLibraryBack.Services.PublisherService
                     .Include(b => b.Reviews)
                     .ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
+
 
                 response.Success = true;
                 response.Message = "Pending books retrieved successfully.";
-                response.Data = books;
+                response.Data = bookDTOs;
             }
             catch (Exception ex)
             {
@@ -326,9 +345,9 @@ namespace ScientificLibraryBack.Services.PublisherService
         }
 
 
-        public async Task<ApiResponse<IEnumerable<Book>>> GetRejectedBooksAsync(string publisherId)
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
@@ -336,19 +355,29 @@ namespace ScientificLibraryBack.Services.PublisherService
                 var books = await _context.Books
                             .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected).ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-                foreach (var book in books)
+                var bookDTOs = books.Select(book => new BookDTO
                 {
-                    if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    {
-                        var base64Image = Convert.ToBase64String(book.CoverImage);
-                        book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                    }
-                }
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.Genre,
+                    Keywords = book.Keywords,
+                    PublisherName = book.Publisher?.UserName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language,
+                }).ToList();
+
                 // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
-                response.Data = books; // Assign the books to the Data property
+                response.Data = bookDTOs; // Assign the books to the Data property
             }
             catch (Exception ex)
             {

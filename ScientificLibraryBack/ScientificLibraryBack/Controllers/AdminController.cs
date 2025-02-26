@@ -36,7 +36,7 @@ namespace ScientificLibraryBack.Controllers
         }
 
 
-        [HttpPatch("books/{bookId}/reject")]
+        [HttpPatch("books/reject")]
         public async Task<IActionResult> RejectBook(Guid bookId)
         {
             var response = await _adminService.RejectBook(bookId);

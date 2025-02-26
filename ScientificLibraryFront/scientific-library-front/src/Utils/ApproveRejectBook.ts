@@ -42,7 +42,7 @@ try {
   }
 
   const response = await api.patch(
-    import.meta.env.VITE_API_URL +`/Admin/books/approve?bookId=${id}`,
+    import.meta.env.VITE_API_URL +`/Admin/books/reject?bookId=${id}`,
     {},
     {
       headers: {
