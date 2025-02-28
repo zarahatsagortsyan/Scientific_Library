@@ -32,7 +32,8 @@ namespace ScientificLibraryBack.Services.BookService
         Task<IEnumerable<Book>> GetBooksByGenreAsync(string genre); // Response filtered by genre
         Task<ApiResponse<IEnumerable<Book>>> SearchBooksAsync(string keyword); // Response for keyword search
 
-        Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId);
+        //Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId);
+        Task<ApiResponse<IEnumerable<ReviewDTO>>> GetReviewsForBookAsync(Guid bookId);
         Task<ApiResponse<IEnumerable<Genre>>> GetGenresAsync();
 
 

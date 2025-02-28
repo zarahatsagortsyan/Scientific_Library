@@ -79,10 +79,10 @@ namespace ScientificLibraryBack.Controllers
         }
 
         // Delete a review for a book
-        [HttpDelete("delete-review/{bookId}")]
-        public async Task<IActionResult> DeleteReviewAsync(string userId, Guid bookId)
+        [HttpDelete("delete-review/{reviewId}")]
+        public async Task<IActionResult> DeleteReviewAsync(string userId, Guid reviewId)
         {
-            var response = await _readerService.DeleteReviewAsync(userId, bookId);
+            var response = await _readerService.DeleteReviewAsync(userId, reviewId);
 
             if (!response.Success)
             {
@@ -105,6 +105,19 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(response);  // Return the reviews
         }
+        //// Remove review by the user
+        //[HttpDelete("user-reviews/{userId}/{reviewId}")]
+        //public async Task<IActionResult> DeleteUserReviewe(string userId, Guid reviewId)
+        //{
+        //    var response = await _readerService.RemoveUserReview(userId, reviewId);
+
+        //    if (!response.Success)
+        //    {
+        //        return NotFound(response);  
+        //    }
+
+        //    return Ok(response);  // Return the reviews
+        //}
 
         [HttpGet("user-books/{userId}/{bookId}")]
         public async Task<IActionResult> GetUserBookStatus(string userId, Guid bookId)

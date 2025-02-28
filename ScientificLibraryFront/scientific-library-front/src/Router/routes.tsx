@@ -20,6 +20,9 @@ import AdminApprovedBooksPage from "../Pages/Admin/Books/AdminApprovedBooksPage"
 import ReadersListPage from "../Pages/Admin/Users/ReadersListPage";
 import GenresListPage from "../Pages/Admin/Genres/GenreListPage";
 import ReaderToReadList from "../Pages/Reader/ToReadListPage";
+import ReaderReadingList from "../Pages/Reader/ReadingListPage";
+import ReaderReadList from "../Pages/Reader/ReadListPage";
+import ReaderReviewsPage from "../Pages/Reader/ReviewsPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -46,6 +49,9 @@ const AppRoutes: React.FC = () => {
             <Route path="/publishers-list" element={<PublishersListPage />} />{" "}
             <Route path="/readers-list" element={<ReadersListPage />} />{" "}
             <Route path="/to-read" element={<ReaderToReadList />} />{" "}
+            <Route path="/reading" element={<ReaderReadingList />} />{" "}
+            <Route path="/read" element={<ReaderReadList />} />{" "}
+            <Route path="/my-reviews" element={<ReaderReviewsPage />} />{" "}
             <Route
               path="/admin-rejected"
               element={<AdminRejectedBooksPage />}

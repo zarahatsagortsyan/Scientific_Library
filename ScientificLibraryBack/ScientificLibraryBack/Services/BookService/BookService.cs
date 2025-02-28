@@ -8,6 +8,7 @@ using ScientificLibraryBack.Services.UserService;
 
 
 using System.Net;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace ScientificLibraryBack.Services.BookService
 {
@@ -150,26 +151,36 @@ namespace ScientificLibraryBack.Services.BookService
                 //    var base64Image = Convert.ToBase64String(book.CoverImage);
                 //    book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
                 //}
-                bookResponse.Id = book.Id;
-                bookResponse.Author = book.Author;
-                bookResponse.ISBN = book.ISBN;
-                bookResponse.Status = book.Status;
-                bookResponse.Format = book.Format;
-                bookResponse.Genre = book.Genre;
-                bookResponse.Keywords = book.Keywords;
-                bookResponse.PublisherName = book.Publisher.UserName;
-                bookResponse.Description = book.Description;
-                bookResponse.Title = book.Title;
-                bookResponse.PageCount = book.PageCount;
-                bookResponse.IsAvailable = book.IsAvailable;
-                bookResponse.PublicationDate = book.PublicationDate;
-                bookResponse.State = book.State;
-                bookResponse.Language = book.Language;
+                if (book != null)
+                {
+                    bookResponse.Id = book.Id;
+                    bookResponse.Author = book.Author;
+                    bookResponse.ISBN = book.ISBN;
+                    bookResponse.Status = book.Status;
+                    bookResponse.Format = book.Format;
+                    bookResponse.Genre = book.Genre;
+                    bookResponse.Keywords = book.Keywords;
+                    bookResponse.PublisherName = book.Publisher.UserName;
+                    bookResponse.Description = book.Description;
+                    bookResponse.Title = book.Title;
+                    bookResponse.PageCount = book.PageCount;
+                    bookResponse.IsAvailable = book.IsAvailable;
+                    bookResponse.PublicationDate = book.PublicationDate;
+                    bookResponse.State = book.State;
+                    bookResponse.Language = book.Language;
 
-                // Wrap the result in ApiResponse
-                response.Success = true;
-                response.Message = "Books retrieved successfully.";
-                response.Data = bookResponse; // Assign the books to the Data property
+                    // Wrap the result in ApiResponse
+                    response.Success = true;
+                    response.Message = "Books retrieved successfully.";
+                    response.Data = bookResponse; // Assign the books to the Data property
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Book not found.";
+                    response.Data = bookResponse; // Assign the books to the Data property
+
+                }
             }
             catch (Exception ex)
             {
@@ -243,14 +254,14 @@ namespace ScientificLibraryBack.Services.BookService
             string pdf = "";
             try
             {
-                var bookPdf = _context.Books.Where(u => u.Id == bookId).Select(u => new { u.PdfFile, u.PdfFileName}).First();
+                var bookPdf = _context.Books.Where(u => u.Id == bookId).Select(u => new { u.PdfFile, u.PdfFileName }).First();
 
                 if (bookPdf != null)
                 {
 
                     response.Success = true;
                     response.Message = "Books retrieved successfully.";
-                    response.Data = new PDFDTO{ pdfFile = bookPdf.PdfFile, pdfFileName = bookPdf.PdfFileName }; // Assign the books to the Data property
+                    response.Data = new PDFDTO { pdfFile = bookPdf.PdfFile, pdfFileName = bookPdf.PdfFileName }; // Assign the books to the Data property
                     return response;
                 }
 
@@ -513,19 +524,49 @@ namespace ScientificLibraryBack.Services.BookService
             return response;
         }
 
-        public async Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId)
+        //public async Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<Review>>();
+
+        //    // Retrieve reviews for the given book
+        //    var reviews = await _context.Reviews
+        //        .Where(r => r.BookId == bookId)
+        //        .Include(r => r.User)  // You can include user info if needed
+        //        .ToListAsync();
+
+        //    response.Success = true;
+        //    response.Message = "Reviews fetched successfully.";
+        //    response.Data = reviews;
+
+        //    return response;
+        //}
+
+        public async Task<ApiResponse<IEnumerable<ReviewDTO>>> GetReviewsForBookAsync(Guid bookId)
         {
-            var response = new ApiResponse<IEnumerable<Review>>();
+            var response = new ApiResponse<IEnumerable<ReviewDTO>>();
 
             // Retrieve reviews for the given book
             var reviews = await _context.Reviews
                 .Where(r => r.BookId == bookId)
                 .Include(r => r.User)  // You can include user info if needed
-                .ToListAsync();
+            .ToListAsync();
+
+            var reviewsDTOs = reviews.Select(review => new ReviewDTO
+            {
+                Id = review.Id,
+                BookId = review.BookId,
+                CreatedAt = review.CreatedAt,
+                Rating = review.Rating,
+                ReviewText = review.ReviewText,
+                UserId = review.UserId,
+                UserName = review.User.UserName!,
+
+            }).ToList();
+
 
             response.Success = true;
             response.Message = "Reviews fetched successfully.";
-            response.Data = reviews;
+            response.Data = reviewsDTOs;
 
             return response;
         }

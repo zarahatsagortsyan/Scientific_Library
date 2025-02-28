@@ -1,0 +1,119 @@
+.reviews-table-container {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reviews-table th, 
+/* .reviews-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+} */
+
+.sortable {
+    cursor: pointer;
+}
+
+.review-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.page-button {
+    margin: 0 3px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e0e0e0;
+}
+
+.page-button.active,
+.page-button:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.review-text {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.review-text:hover {
+    color: #1976d2;
+    text-decoration: underline;
+}
+
+.reviews-table td {
+    max-width: 200px;
+    word-break: break-word;
+    white-space: normal;
+}
+
+/* Button Styles */
+.see-book-button,
+.delete-button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* See Book Button */
+.see-book-button {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+.see-book-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Delete Button */
+.delete-button {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+.delete-button:hover {
+    background-color: #d32f2f;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Improve Button Spacing */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
