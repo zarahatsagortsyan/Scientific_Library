@@ -16,11 +16,13 @@ namespace ScientificLibraryBack.Services.BookService
         private readonly IBookService _bookService;
         private readonly IUserService _userService;
         private readonly ApplicationDbContext _context;
-        public ReaderService(IUserService userService, IBookService bookService, ApplicationDbContext context)
+        private readonly UserManager<ExtendedIdentityUser> _userManager;
+        public ReaderService(IUserService userService, IBookService bookService, ApplicationDbContext context, UserManager<ExtendedIdentityUser> userManager)
         {
             _userService = userService;
             _context = context;
             _bookService = bookService;
+            _userManager = userManager;
         }
 
         public async Task<ApiResponse<Guid>> AddBookToUserListAsync(Guid bookId, string userId, ReadingStatus status)
@@ -427,5 +429,40 @@ namespace ScientificLibraryBack.Services.BookService
                 Data = userBook.ReadingStatus
             };
         }
+        public async Task<ApiResponse<ReaderProfileDTO>> GetReaderProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new ApiResponse<ReaderProfileDTO> { Success = false, Message = "User not found" };
+
+            var userProfile = new ReaderProfileDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user.PhoneNumber
+            };
+
+            return new ApiResponse<ReaderProfileDTO> { Success = true, Data = userProfile };
+        }
+
+        // ✅ Update Reader Profile
+        public async Task<ApiResponse<string>> UpdateReaderProfileAsync(string userId, ReaderProfileDTO profile)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new ApiResponse<string> { Success = false, Message = "User not found" };
+
+            if (!string.IsNullOrEmpty(profile.FirstName)) user.FirstName = profile.FirstName;
+            if (!string.IsNullOrEmpty(profile.LastName)) user.LastName = profile.LastName;
+            if (!string.IsNullOrEmpty(profile.Phone)) user.PhoneNumber = profile.Phone;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded
+                ? new ApiResponse<string> { Success = true, Message = "Profile updated successfully" }
+                : new ApiResponse<string> { Success = false, Message = "Failed to update profile" };
+        }
+
     }
 }

@@ -12,6 +12,7 @@ using ScientificLibraryBack.Services.EmailService;
 using ScientificLibraryBack.Services.EmailService.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Principal;
+using System.Web;
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
@@ -30,8 +31,13 @@ namespace ScientificLibraryBack.Controllers
         }
 
         [HttpPost("register/reader")]
-        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterReader([FromBody] RegisterUser user)
+        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterReader([FromBody] RegisterReader user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var response = await _authService.RegisterReader(user);
 
             if (response.Success)
@@ -44,8 +50,12 @@ namespace ScientificLibraryBack.Controllers
 
 
         [HttpPost("register/publisher")]
-        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterPublisher([FromBody] RegisterUser user)
+        public async Task<ActionResult<ApiResponse<IdentityResult>>> RegisterPublisher([FromBody] RegisterPublisher user)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             var response = await _authService.RegisterPublisher(user);
 
@@ -180,5 +190,27 @@ namespace ScientificLibraryBack.Controllers
             //}
             //return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Token))
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid email or token." });
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid email or token." });
+
+            var decodedToken = HttpUtility.UrlDecode(request.Token); // ✅ Decode the token before usage
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
+            if (result.Succeeded)
+                return Ok(new ApiResponse<string> { Success = true, Message = "Email confirmed successfully." });
+
+            return BadRequest(new ApiResponse<string> { Success = false, Message = "Email confirmation failed." });
+        }
+
+
     }
 }

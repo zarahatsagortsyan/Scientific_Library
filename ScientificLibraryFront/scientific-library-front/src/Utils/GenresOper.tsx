@@ -13,7 +13,7 @@ export const useGenres = () => {
         const response = await api.get(
           import.meta.env.VITE_API_URL + "/book/genres"
         );
-
+        console.log(response.data);
         if (response.data.success) {
           setGenres(response.data.data);
         } else {

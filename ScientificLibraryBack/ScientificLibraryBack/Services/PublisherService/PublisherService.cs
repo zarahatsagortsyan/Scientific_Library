@@ -3,6 +3,7 @@ using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.UserService;
 using Microsoft.EntityFrameworkCore;
 using ScientificLibraryBack.DTO;
+using Microsoft.AspNetCore.Identity;
 
 namespace ScientificLibraryBack.Services.PublisherService
 {
@@ -10,10 +11,12 @@ namespace ScientificLibraryBack.Services.PublisherService
     {
         private readonly IUserService _userService;
         private readonly ApplicationDbContext _context;
-        public PublisherService(IUserService userService, ApplicationDbContext context)
+        private readonly UserManager<ExtendedIdentityUser> _userManager;
+        public PublisherService(IUserService userService, ApplicationDbContext context, UserManager<ExtendedIdentityUser> userManager)
         {
             _userService = userService;
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<ApiResponse<Book>> ChangeAvailability(BookChangeAvailabilityRequest bookChangeAvailability)
@@ -503,5 +506,39 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
+        // ✅ Get Publisher Profile
+        public async Task<ApiResponse<PublisherProfileDTO>> GetPublisherProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new ApiResponse<PublisherProfileDTO> { Success = false, Message = "User not found" };
+
+            var userProfile = new PublisherProfileDTO
+            {
+                CompanyName = user.CompanyName,
+                Email = user.Email,
+                Phone = user.PhoneNumber
+            };
+
+            return new ApiResponse<PublisherProfileDTO> { Success = true, Data = userProfile };
+        }
+
+        // ✅ Update Publisher Profile
+        public async Task<ApiResponse<string>> UpdatePublisherProfileAsync(string userId, PublisherProfileDTO profile)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return new ApiResponse<string> { Success = false, Message = "User not found" };
+
+            if (!string.IsNullOrEmpty(profile.CompanyName)) user.CompanyName = profile.CompanyName;
+            if (!string.IsNullOrEmpty(profile.Phone)) user.PhoneNumber = profile.Phone;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            return result.Succeeded
+                ? new ApiResponse<string> { Success = true, Message = "Profile updated successfully" }
+                : new ApiResponse<string> { Success = false, Message = "Failed to update profile" };
+        }
+
     }
 }

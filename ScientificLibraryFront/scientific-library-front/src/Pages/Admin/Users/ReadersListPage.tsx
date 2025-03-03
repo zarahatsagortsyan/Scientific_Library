@@ -87,7 +87,8 @@ const ReadersListPage: React.FC = () => {
 
   const filteredReaders = readers.filter(
     (reader) =>
-      reader.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reader.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reader.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -102,7 +103,7 @@ const ReadersListPage: React.FC = () => {
         <input
           type="text"
           className="form-control"
-          placeholder="Search by Name or Email"
+          placeholder="Search by First/Last name or Email"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -111,7 +112,8 @@ const ReadersListPage: React.FC = () => {
       <table className="table table-striped table-bordered">
         <thead className="table-dark">
           <tr>
-            <th>Name</th>
+            <th>First Name</th>
+            <th>Last Name</th>
             <th>Email</th>
             <th>Type</th>
             <th>Status</th>
@@ -121,7 +123,8 @@ const ReadersListPage: React.FC = () => {
         <tbody>
           {filteredReaders.map((reader) => (
             <tr key={reader.id}>
-              <td>{reader.userName}</td>
+              <td>{reader.firstName}</td>
+              <td>{reader.lastName}</td>
               <td>{reader.email}</td>
               <td>{reader.type}</td>
               <td>{reader.banned ? "Banned" : "Active"}</td>

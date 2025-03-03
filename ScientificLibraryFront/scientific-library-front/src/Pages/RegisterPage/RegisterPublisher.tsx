@@ -35,10 +35,12 @@ const RegisterPublisher: React.FC = () => {
     // Prepare the payload
     const payload = {
       email,
-      userName: companyName,
+      // userName: companyName,
       password,
-      birthDate: new Date(dateOfEstablishment).toISOString(),
+      EstablishDate: new Date(dateOfEstablishment).toISOString(),
+      companyName: companyName,
       phone: phoneNumber,
+      clientUri: `${window.location.origin}/confirm-email`, // ✅ Frontend confirmation page
     };
 
     try {
@@ -56,7 +58,7 @@ const RegisterPublisher: React.FC = () => {
       if (response.ok && data.success && data.data.succeeded) {
         // Registration successful
         setError("");
-        setSuccessMessage("Registration successful! You may now log in.");
+        setSuccessMessage(data.message);
         setTimeout(() => navigate("/login"), 3000);
       } else {
         // If errors are present

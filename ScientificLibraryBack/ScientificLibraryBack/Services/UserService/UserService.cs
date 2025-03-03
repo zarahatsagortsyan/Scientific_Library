@@ -66,7 +66,10 @@ namespace ScientificLibraryBack.Services.UserService
                 .Select(u => new UserDTO
                 {
                     Id = u.Id,
-                    UserName = u.UserName,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    CompanyName = "",
+                    //UserName = u.UserName,
                     Email = u.Email,
                     Type = u.Type,
                     Banned = u.Banned,
@@ -90,7 +93,8 @@ namespace ScientificLibraryBack.Services.UserService
                 .Select(u => new UserDTO
                 {
                     Id = u.Id,
-                    UserName = u.UserName,
+                    //UserName = u.UserName,
+                    CompanyName= u.CompanyName,
                     Email = u.Email,
                     Type = u.Type,
                     Banned = u.Banned,

@@ -5,7 +5,9 @@ import PhoneInput from "react-phone-number-input";
 import { useNavigate } from "react-router-dom";
 
 const RegisterReader: React.FC = () => {
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -18,7 +20,7 @@ const RegisterReader: React.FC = () => {
     e.preventDefault();
 
     // Check if all required fields are filled
-    if (!name || !email || !password || !dateOfBirth || !phoneNumber) {
+    if (!firstName || !email || !password || !dateOfBirth || !phoneNumber) {
       setError("All fields are required.");
       return;
     }
@@ -29,12 +31,15 @@ const RegisterReader: React.FC = () => {
     // Prepare the payload
     const payload = {
       email,
-      userName: name,
+      // userName: name,
       password,
+      firstName: firstName,
+      lastName: lastName,
       birthDate: new Date(dateOfBirth).toISOString(),
       phone: phoneNumber,
+      clientUri: `${window.location.origin}/confirm-email`, // ✅ Frontend confirmation page
     };
-
+    console.log(payload);
     try {
       const apiUrl = import.meta.env.VITE_API_URL; // Ensure your env variable is set
       const response = await fetch(`${apiUrl}/Auth/register/reader`, {
@@ -50,7 +55,7 @@ const RegisterReader: React.FC = () => {
       if (response.ok && data.success && data.data.succeeded) {
         // Registration successful
         setError("");
-        setSuccessMessage("Registration successful! You may now log in.");
+        setSuccessMessage(data.message);
         setTimeout(() => navigate("/login"), 3000);
       } else {
         // If errors are present
@@ -72,12 +77,22 @@ const RegisterReader: React.FC = () => {
         {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">First Name</label>
             <input
               type="text"
               id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">Last Name</label>
+            <input
+              type="text"
+              id="name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               placeholder="Enter your full name"
             />
           </div>

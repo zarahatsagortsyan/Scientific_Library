@@ -62,7 +62,7 @@ namespace ScientificLibraryBack.Controllers
         {
             var genreResponse = await _bookService.GetGenresAsync();
 
-            if (!genreResponse.Success || genreResponse.Data == null || !genreResponse.Data.Any())
+            if (!genreResponse.Success)
             {
                 return NotFound(genreResponse);
             }

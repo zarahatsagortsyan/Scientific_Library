@@ -46,6 +46,7 @@ const SidebarMenu: React.FC = () => {
               <MenuItem component={<Link to="/my-reviews" />}>
                 📝 My Reviews
               </MenuItem>
+              <MenuItem component={<Link to="/profile" />}>Profile</MenuItem>
             </>
           )}
 
@@ -64,6 +65,7 @@ const SidebarMenu: React.FC = () => {
               <MenuItem component={<Link to="/pending" />}>
                 🕒 Pending Approval
               </MenuItem>
+              <MenuItem component={<Link to="/profile" />}>Profile</MenuItem>
             </>
           )}
 
@@ -86,7 +88,10 @@ const SidebarMenu: React.FC = () => {
                 🖋️ Publishers
               </MenuItem>
 
-              <MenuItem component={<Link to="/genre-list" />}><MdOutlinePlaylistAdd />Genres</MenuItem>
+              <MenuItem component={<Link to="/genre-list" />}>
+                <MdOutlinePlaylistAdd />
+                Genres
+              </MenuItem>
             </>
           )}
         </Menu>

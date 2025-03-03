@@ -317,7 +317,6 @@
 
 // export default PublishersListPage;
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { User } from "../../../Models/User";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../../api/api";
@@ -404,7 +403,7 @@ const PublishersListPage: React.FC = () => {
 
   const filteredPublishers = publishers.filter(
     (reader) =>
-      reader.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reader.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -428,7 +427,7 @@ const PublishersListPage: React.FC = () => {
       <table className="table table-striped table-bordered">
         <thead className="table-dark">
           <tr>
-            <th>Name</th>
+            <th>Company Name</th>
             <th>Email</th>
             <th>Type</th>
             <th>Status</th>
@@ -438,7 +437,7 @@ const PublishersListPage: React.FC = () => {
         <tbody>
           {filteredPublishers.map((reader) => (
             <tr key={reader.id}>
-              <td>{reader.userName}</td>
+              <td>{reader.companyName}</td>
               <td>{reader.email}</td>
               <td>{reader.type}</td>
               <td>{reader.banned ? "Banned" : "Active"}</td>

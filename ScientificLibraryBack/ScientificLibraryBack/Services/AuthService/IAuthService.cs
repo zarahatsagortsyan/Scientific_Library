@@ -16,8 +16,8 @@ namespace ScientificLibraryBack.Services.AuthService
         Task<LogoutResponse> Logout(string userEmail);
 
 
-        Task<ApiResponse<IdentityResult>> RegisterReader(RegisterUser user);
-        Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterUser user);
+        Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user);
+        Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user);
         IEnumerable<string> GetUserRole(string userEmail);
         Task<ApiResponse<IdentityResult>> ResetPassword(Models.ResetPasswordRequest resetPassword); // Reset Password method
         //Task<TokenDto> GenerateTokenString(bool populateExp);

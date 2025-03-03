@@ -10,7 +10,7 @@ using ScientificLibraryBack.Services.UserService;
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/users")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace ScientificLibraryBack.Controllers
         }
 
         // Delete a specific user by ID (Admin only)
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(string userId)
         {

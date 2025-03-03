@@ -52,9 +52,9 @@ const Header: React.FC = () => {
               />
               {showDropdown && (
                 <div className="dropdown-menu show">
-                  <Link className="dropdown-item" to="/profile">
+                  {/* <Link className="dropdown-item" to="/profile">
                     👤 Profile
-                  </Link>
+                  </Link> */}
                   <button className="dropdown-item" onClick={handleLogout}>
                     🚪 Logout
                   </button>

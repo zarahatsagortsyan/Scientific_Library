@@ -23,6 +23,8 @@ import ReaderToReadList from "../Pages/Reader/ToReadListPage";
 import ReaderReadingList from "../Pages/Reader/ReadingListPage";
 import ReaderReadList from "../Pages/Reader/ReadListPage";
 import ReaderReviewsPage from "../Pages/Reader/ReviewsPage";
+import ConfirmEmail from "../Pages/ConfirmEmailPage/EmailConfirmation";
+import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -40,6 +42,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/book/:bookId" element={<BookPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/confirm-email" element={<ConfirmEmail />} />
             <Route path="/register/reader" element={<RegisterReader />} />
             <Route path="/register/publisher" element={<RegisterPublisher />} />
             <Route path="/pending" element={<PendingBooksPage />} />{" "}
@@ -52,6 +55,7 @@ const AppRoutes: React.FC = () => {
             <Route path="/reading" element={<ReaderReadingList />} />{" "}
             <Route path="/read" element={<ReaderReadList />} />{" "}
             <Route path="/my-reviews" element={<ReaderReviewsPage />} />{" "}
+            <Route path="/profile" element={<ProfilePage />} />{" "}
             <Route
               path="/admin-rejected"
               element={<AdminRejectedBooksPage />}

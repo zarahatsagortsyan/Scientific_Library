@@ -22,7 +22,8 @@ namespace ScientificLibraryBack.Services.BookService
         Task<ApiResponse<IEnumerable<ReviewDTO>>> GetUserReviewedBooksAsync(string userId);
         //Task<ApiResponse<bool>> RemoveUserReview(string userId, Guid reviewId);
         Task<ApiResponse<ReadingStatus?>> GetUserBookStatusAsync(string userId, Guid bookId);
-
+        Task<ApiResponse<ReaderProfileDTO>> GetReaderProfileAsync(string userId);
+        Task<ApiResponse<string>> UpdateReaderProfileAsync(string userId, ReaderProfileDTO profile);
     }
 
 }

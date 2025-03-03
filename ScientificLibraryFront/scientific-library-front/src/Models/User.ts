@@ -7,7 +7,10 @@
 
   export interface User {
   id: string;
-  userName: string;
+  // userName: string;
+  companyName:string;
+  firstName: string;
+  lastName:string;
   email: string;
   type: string; // 'Reader' or 'Publisher' or 'Admin'
   banned: boolean;

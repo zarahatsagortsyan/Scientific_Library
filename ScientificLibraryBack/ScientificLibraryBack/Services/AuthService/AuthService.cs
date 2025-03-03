@@ -3,15 +3,21 @@ using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
+using ScientificLibraryBack.Services.EmailService;
+using ScientificLibraryBack.Services.EmailService.Models;
 using ScientificLibraryBack.Shared;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
+using User.Management.Service.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ScientificLibraryBack.Services.AuthService
@@ -20,11 +26,14 @@ namespace ScientificLibraryBack.Services.AuthService
     {
         private readonly UserManager<ExtendedIdentityUser> _userManager;
         private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
 
-        public AuthService(UserManager<ExtendedIdentityUser> userManager, IConfiguration config)
+        public AuthService(UserManager<ExtendedIdentityUser> userManager, IConfiguration config, IEmailService emailService)
         {
             _userManager = userManager;
             _config = config;
+            _emailService = emailService;
+
         }
 
         //public string GenerateTokenString(string userName)
@@ -172,34 +181,97 @@ namespace ScientificLibraryBack.Services.AuthService
             }
         }
 
-        public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterUser user)
-        
+        //public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user)
+        //{
+        //    try
+        //    {
+        //        var identityUser = new ExtendedIdentityUser
+        //        {
+        //            UserName = user.Email,
+        //            FirstName = user.FirstName!,
+        //            LastName = user.LastName!,
+        //            Email = user.Email,
+        //            PhoneNumber = user.Phone,
+        //            DateOfBirth = user.BirthDate,
+        //            Type = UserType.Reader,
+        //            IsActive = true,
+        //            CreatedAt = DateTime.Now,
+        //            Banned = false,
+        //        };
+
+        //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
+
+        //        if (result.Succeeded)
+        //        {
+        //            await _userManager.AddToRoleAsync(identityUser, "Reader");
+        //        }
+
+        //        return new ApiResponse<IdentityResult>
+        //        {
+        //            Success = result.Succeeded,
+        //            Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+        //            Data = result
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ApiResponse<IdentityResult>
+        //        {
+        //            Success = false,
+        //            Message = $"An error occurred: {ex.Message}",
+        //            Data = null
+        //        };
+        //    }
+        //}
+        public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user)
         {
             try
             {
                 var identityUser = new ExtendedIdentityUser
                 {
-                    UserName = user.UserName,
+                    UserName = user.Email,
                     Email = user.Email,
                     PhoneNumber = user.Phone,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
                     DateOfBirth = user.BirthDate,
                     Type = UserType.Reader,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     Banned = false,
+                    EmailConfirmed = false 
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "Reader");
+                    return new ApiResponse<IdentityResult>
+                    {
+                        Success = false,
+                        Message = "Registration failed.",
+                        Data = result
+                    };
                 }
 
+                // Add user to Publisher role
+                await _userManager.AddToRoleAsync(identityUser, "Reader");
+
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                var encodedToken = HttpUtility.UrlEncode(token);
+                var param = new Dictionary<string, string?>
+                                {
+                                    { "token", encodedToken },
+                                    { "email", user.Email }
+                                };
+
+                var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+                var message = new Message([user.Email!], "Confirm your email", callbackUrl);
+                _emailService.SendEmail(message);
                 return new ApiResponse<IdentityResult>
                 {
-                    Success = result.Succeeded,
-                    Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+                    Success = true,
+                    Message = "Registration successful. Please check your email for verification.",
                     Data = result
                 };
             }
@@ -214,7 +286,6 @@ namespace ScientificLibraryBack.Services.AuthService
             }
         }
 
-
         public IEnumerable<string>? GetUserRole(string userEmail)
         {
             var identityUser = _userManager.FindByEmailAsync(userEmail).Result; // Get the user synchronously
@@ -226,33 +297,97 @@ namespace ScientificLibraryBack.Services.AuthService
             return _userManager.GetRolesAsync(identityUser).Result; // Get roles synchronously
         }
 
-        public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterUser user)
+        //public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
+        //{
+        //    try
+        //    {
+        //        var identityUser = new ExtendedIdentityUser
+        //        {
+        //            UserName = user.Email,
+        //            Email = user.Email,
+        //            PhoneNumber = user.Phone,
+        //            CompanyName = user.CompanyName,
+        //            DateOfBirth = user.EstablishDate,
+        //            Type = UserType.Publisher,
+        //            IsActive = true,
+        //            CreatedAt = DateTime.Now,
+        //            Banned = false,
+        //        };
+
+        //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
+
+        //        if (result.Succeeded)
+        //        {
+        //            await _userManager.AddToRoleAsync(identityUser, "Publisher");
+        //        }
+
+        //        return new ApiResponse<IdentityResult>
+        //        {
+        //            Success = result.Succeeded,
+        //            Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+        //            Data = result
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new ApiResponse<IdentityResult>
+        //        {
+        //            Success = false,
+        //            Message = $"An error occurred: {ex.Message}",
+        //            Data = null
+        //        };
+        //    }
+        //}
+
+
+        public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
         {
             try
             {
                 var identityUser = new ExtendedIdentityUser
                 {
-                    UserName = user.UserName,
+                    UserName = user.Email, // ✅ Use email as username
                     Email = user.Email,
                     PhoneNumber = user.Phone,
-                    DateOfBirth = user.BirthDate,
+                    CompanyName = user.CompanyName,
+                    DateOfBirth = user.EstablishDate,
                     Type = UserType.Publisher,
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     Banned = false,
+                    EmailConfirmed = false // ❌ Ensure email is not confirmed until verified
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(identityUser, "Publisher");
+                    return new ApiResponse<IdentityResult>
+                    {
+                        Success = false,
+                        Message = "Registration failed.",
+                        Data = result
+                    };
                 }
 
+                // Add user to Publisher role
+                await _userManager.AddToRoleAsync(identityUser, "Publisher");
+
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                var encodedToken = HttpUtility.UrlEncode(token);
+                var param = new Dictionary<string, string?>
+                                {
+                                    { "token", encodedToken },
+                                    { "email", user.Email }
+                                };
+
+                var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+                var message = new Message([user.Email!], "Confirm your email", callbackUrl);
+                _emailService.SendEmail(message);
                 return new ApiResponse<IdentityResult>
                 {
-                    Success = result.Succeeded,
-                    Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+                    Success = true,
+                    Message = "Registration successful. Please check your email for verification.",
                     Data = result
                 };
             }

@@ -151,5 +151,21 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("profile/{userId}")]
+        public async Task<IActionResult> GetPublisherProfile(string userId)
+        {
+            var response = await _publisherService.GetPublisherProfileAsync(userId);
+            return response.Success ? Ok(response) : NotFound(response);
+        }
+
+        [HttpPut("profile/update")]
+        public async Task<IActionResult> UpdatePublisherProfile([FromBody] PublisherProfileDTO profile)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _publisherService.UpdatePublisherProfileAsync(userId, profile);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
     }
 }

@@ -11,8 +11,9 @@ namespace ScientificLibraryBack.Models.DB
     }
     public class ExtendedIdentityUser : IdentityUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? CompanyName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public UserType Type { get; set; }
         public DateTime CreatedAt { get; set; }

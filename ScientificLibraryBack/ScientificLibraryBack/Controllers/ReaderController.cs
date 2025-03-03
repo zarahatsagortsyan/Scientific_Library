@@ -2,6 +2,7 @@
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
+using System.Security.Claims;
 
 namespace ScientificLibraryBack.Controllers
 {
@@ -128,6 +129,21 @@ namespace ScientificLibraryBack.Controllers
                 return NotFound(response);
             }
             return Ok(response);
+        }
+
+        [HttpGet("profile/{userId}")]
+        public async Task<IActionResult> GetReaderProfile(string userId)
+        {
+            var response = await _readerService.GetReaderProfileAsync(userId);
+            return response.Success ? Ok(response) : NotFound(response);
+        }
+
+        [HttpPut("profile/update")]
+        public async Task<IActionResult> UpdateReaderProfile([FromBody] ReaderProfileDTO profile)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _readerService.UpdateReaderProfileAsync(userId, profile);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
 
