@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ScientificLibraryBack.Contextes;
@@ -9,6 +10,7 @@ using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.AdminService;
 using ScientificLibraryBack.Services.AuthService;
 using ScientificLibraryBack.Services.BookService;
+using ScientificLibraryBack.Services.DBService;
 using ScientificLibraryBack.Services.EmailService;
 using ScientificLibraryBack.Services.EmailService.Models;
 using ScientificLibraryBack.Services.PublisherService;
@@ -123,38 +125,54 @@ app.UseAuthorization();
 app.MapControllers();
 
 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+//    var roles = new[] { "Admin", "Publisher", "Reader" };
+
+//    foreach (var role in roles)
+//    {
+//        if (!await roleManager.RoleExistsAsync(role))
+//            await roleManager.CreateAsync(new IdentityRole(role));
+//    }
+//}
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ExtendedIdentityUser>>();
+
+//    string email = "admin@admin.com";
+//    string password = "Test123!@#";
+
+//    if (await userManager.FindByEmailAsync(email) == null)
+//    {
+//        var user = new ExtendedIdentityUser();
+//        user.Type = UserType.Admin;
+//        user.Email = email;
+//        user.UserName = email;
+//        user.EmailConfirmed = true;
+//        await userManager.CreateAsync(user, password);
+//        await userManager.AddToRoleAsync(user, "Admin");
+//    }
+//}
+
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    var roles = new[] { "Admin", "Publisher", "Reader" };
-
-    foreach (var role in roles)
+    var services = scope.ServiceProvider;
+    try
     {
-        if (!await roleManager.RoleExistsAsync(role))
-            await roleManager.CreateAsync(new IdentityRole(role));
+        // Ensure roles, keywords, and languages are seeded
+        await DatabaseInitializer.SeedRoles(services);
+        await DatabaseInitializer.SeedKeywords(services);
+        await DatabaseInitializer.SeedLanguages(services);
+        await DatabaseInitializer.CreateAdmin(services);
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error during database seeding: {ex.Message}");
     }
 }
-
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ExtendedIdentityUser>>();
-
-    string email = "admin@admin.com";
-    string password = "Test123!@#";
-
-    if (await userManager.FindByEmailAsync(email) == null)
-    {
-        var user = new ExtendedIdentityUser();
-        user.Type = UserType.Admin;
-        user.Email = email;
-        user.UserName = email;
-        user.EmailConfirmed = true;
-        await userManager.CreateAsync(user, password);
-        await userManager.AddToRoleAsync(user, "Admin");
-    }
-}
-
-
 app.UseCors("AllowReactApp");
 app.Run();

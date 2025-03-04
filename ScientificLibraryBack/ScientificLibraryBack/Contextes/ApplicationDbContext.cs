@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Hosting;
 using ScientificLibraryBack.Models.DB;
+using ScientificLibraryBack.Services.DBService;
 
 namespace ScientificLibraryBack.Contextes
 {
@@ -53,6 +54,20 @@ namespace ScientificLibraryBack.Contextes
             modelBuilder.Entity<UserBook>()
                          .HasIndex(ub => new { ub.BookId, ub.UserId })
                          .IsUnique();
+
+            // Many-to-Many: Book <-> Keyword
+            modelBuilder.Entity<BookKeyword>()
+                .HasOne(bk => bk.Book)
+                .WithMany(b => b.BookKeywords)
+                .HasForeignKey(bk => bk.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<BookKeyword>()
+                .HasOne(bk => bk.Keyword)
+                .WithMany(k => k.BookKeywords)
+                .HasForeignKey(bk => bk.KeywordId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
         //public DbSet<ExtendedIdentityUser> Users { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -60,8 +75,9 @@ namespace ScientificLibraryBack.Contextes
         public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<Genre> Genres{ get; set; }
 
-
-
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<Keyword> Keywords { get; set; }
+        public DbSet<BookKeyword> BookKeywords { get; set; }
 
 
     }

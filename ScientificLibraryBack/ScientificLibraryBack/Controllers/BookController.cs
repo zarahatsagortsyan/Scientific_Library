@@ -70,6 +70,33 @@ namespace ScientificLibraryBack.Controllers
             return Ok(genreResponse);
         }
 
+        [HttpGet("languages")]
+        public async Task<IActionResult> GetAllLangauges()
+        {
+            var langResponse = await _bookService.GetLanguagesAsync();
+
+            if (!langResponse.Success)
+            {
+                return NotFound(langResponse);
+            }
+
+            return Ok(langResponse);
+        }
+
+        [HttpGet("keywords")]
+        public async Task<IActionResult> GetAllKeywords()
+        {
+            var keywordResponse = await _bookService.GetKeywordsAsync();
+
+            if (!keywordResponse.Success)
+            {
+                return NotFound(keywordResponse);
+            }
+
+            return Ok(keywordResponse);
+        }
+
+
         [HttpGet("open/{bookId}")]
         public async Task<IActionResult> OpenBookPdf(Guid bookId)
         {

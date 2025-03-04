@@ -35,8 +35,8 @@ namespace ScientificLibraryBack.Services.BookService
         //Task<ApiResponse<IEnumerable<Review>>> GetReviewsForBookAsync(Guid bookId);
         Task<ApiResponse<IEnumerable<ReviewDTO>>> GetReviewsForBookAsync(Guid bookId);
         Task<ApiResponse<IEnumerable<Genre>>> GetGenresAsync();
-
-
+        Task<ApiResponse<IEnumerable<Language>>> GetLanguagesAsync();
+        Task<ApiResponse<IEnumerable<Keyword>>> GetKeywordsAsync();
         //Task<ApiResponse<bool>> ApproveBook(Guid bookId);
         //Task<ApiResponse<bool>> RejectBook(Guid bookId);
 

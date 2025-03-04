@@ -4,6 +4,8 @@ using ScientificLibraryBack.Contextes;
 using ScientificLibraryBack.Services.UserService;
 using ScientificLibraryBack.DTO;
 using Azure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ScientificLibraryBack.Services.AdminService
 {
@@ -363,6 +365,48 @@ namespace ScientificLibraryBack.Services.AdminService
 
             return response;
 
+
+        }
+
+
+        public async Task<ApiResponse<bool>> AddKeyword([FromBody] string keywordName)
+        {
+
+            ApiResponse<bool> apiResponse = new ApiResponse<bool>();
+
+            try
+            {
+                var exists = await _context.Keywords.AnyAsync(k => k.Name == keywordName);
+                if (exists)
+                {
+                    apiResponse.Success = false;
+                    apiResponse.Data = false;
+                    apiResponse.Message = "That keyword already exists";
+
+                    return apiResponse;
+                }
+
+                Keyword newKeyword = new Keyword()
+                {
+                    Name = keywordName
+                };
+
+                _context.Keywords.Add(newKeyword);
+                await _context.SaveChangesAsync();
+
+                apiResponse.Success = true;
+                apiResponse.Message = "Keyword created successfully.";
+                apiResponse.Data = true;
+
+            }
+            catch (Exception ex)
+            {
+                apiResponse.Success = false;
+                apiResponse.Message = $"An error occurred: {ex.Message}";
+
+                return apiResponse;
+            }
+            return apiResponse;
         }
     }
 }

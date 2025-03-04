@@ -128,5 +128,19 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(books);
         }
+        [HttpPost("genres")]
+        public async Task<IActionResult> CreateKeyword(string keywordName)
+        {
+            var response = await _adminService.AddKeyword(keywordName);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
+
+
     }
 }

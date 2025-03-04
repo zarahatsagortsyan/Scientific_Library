@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AddBookPage.css";
 import { FaRegFilePdf } from "react-icons/fa";
+import { useGenres } from "../../Utils/GenresOper";
+import { useLanguages } from "../../Utils/GetLanguages";
+import { useKeywords } from "../../Utils/KeywordOper";
+import KeywordSelection from "../../Components/KeywordSelection/KeywordSelection";
 
 // Define Genre type
 interface Genre {
@@ -17,39 +21,32 @@ const AddBookPage = () => {
     title: "",
     author: "",
     genre: "",
+    language: "",
     description: "",
     isbn: "",
     publicationDate: "",
     pageCount: 0,
-    language: "",
-    format: "",
-    keywords: "",
+    // format: "",
+    keywords: [] as string[], // ✅ Change to an array
     isAvailable: true,
   });
 
-  const [genres, setGenres] = useState<Genre[]>([]);
+  // const [genres, setGenres] = useState<Genre[]>([]);
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const { genres, loading, error } = useGenres();
+  const { languages, langLoading, langError } = useLanguages();
+  const { keywords, keyLoading, keyError } = useKeywords();
+  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
 
-  // Fetch genres from the API when the component mounts
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8001/api/Book/genres"
-        );
-        if (response.data.success) {
-          setGenres(response.data.data);
-        } else {
-          alert("Failed to fetch genres");
-        }
-      } catch (error) {
-        console.error("Error fetching genres:", error);
-      }
-    };
-
-    fetchGenres();
-  }, []);
+  const handleKeywordChange = (keyword: string) => {
+    setSelectedKeywords(
+      (prevKeywords) =>
+        prevKeywords.includes(keyword)
+          ? prevKeywords.filter((k) => k !== keyword) // Remove if already selected
+          : [...prevKeywords, keyword] // Add new selection
+    );
+  };
 
   // Handle text input changes
   const handleInputChange = (
@@ -71,7 +68,45 @@ const AddBookPage = () => {
     }
   };
 
-  // Handle form submission
+  // // Handle form submission
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+
+  //   const token = localStorage.getItem("jwtToken");
+  //   if (!token) {
+  //     alert("Unauthorized. Please log in.");
+  //     return;
+  //   }
+
+  //   const formDataToSend = new FormData();
+  //   // Add text fields
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     formDataToSend.append(key, value.toString());
+  //   });
+  //   // Add files
+  //   if (coverImage) formDataToSend.append("coverImage", coverImage);
+  //   if (pdfFile) formDataToSend.append("pdfFile", pdfFile);
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8001/api/publisher/books",
+  //       formDataToSend,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     if (response.status === 201) {
+  //       alert("Book submitted for approval!");
+  //       navigate("/");
+  //     } else {
+  //       alert("Failed to create book.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating book:", error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -82,11 +117,14 @@ const AddBookPage = () => {
     }
 
     const formDataToSend = new FormData();
-    // Add text fields
+
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value.toString());
     });
-    // Add files
+
+    // Add selected keywords as an array
+    formDataToSend.append("keywords", JSON.stringify(selectedKeywords));
+
     if (coverImage) formDataToSend.append("coverImage", coverImage);
     if (pdfFile) formDataToSend.append("pdfFile", pdfFile);
 
@@ -176,24 +214,69 @@ const AddBookPage = () => {
               required
               onChange={handleInputChange}
             />
-            <input
+            {/* <input
               type="text"
               name="language"
               placeholder="Language"
               required
               onChange={handleInputChange}
-            />
-            <input
+            /> */}
+            {/* Genre Dropdown */}
+            <select
+              name="language"
+              value={formData.language}
+              required
+              onChange={handleInputChange}
+              className="genre-select"
+            >
+              <option value="">Select Language</option>
+              {languages.map((languages) => (
+                <option key={languages.id} value={languages.name}>
+                  {languages.name}
+                </option>
+              ))}
+            </select>
+            {/* <input
               type="text"
               name="format"
               placeholder="Format (eBook, Audiobook, etc.)"
               onChange={handleInputChange}
-            />
-            <input
+            /> */}
+            {/* <input
               type="text"
               name="keywords"
               placeholder="Keywords (comma-separated)"
               onChange={handleInputChange}
+            /> */}
+            {/* 
+            <div className="keywords-container">
+              <label>Select Keywords:</label>
+              {keyLoading ? (
+                <p>Loading keywords...</p>
+              ) : keyError ? (
+                <p className="error">{keyError}</p>
+              ) : (
+                keywords.map((keyword) => (
+                  <label key={keyword.id} className="keyword-checkbox">
+                    <input
+                      type="checkbox"
+                      value={keyword.name} // ✅ Use keyword.name as the value
+                      checked={selectedKeywords.includes(keyword.name)}
+                      onChange={() => handleKeywordChange(keyword.name)}
+                    />
+                    {keyword.name}
+                  </label>
+                ))
+              )}
+            </div> */}
+
+            {/* 📌 Keyword Selection */}
+            <KeywordSelection
+              keywords={keywords}
+              selectedKeywords={selectedKeywords}
+              handleKeywordChange={handleKeywordChange}
+              keyLoading={keyLoading}
+              keyError={keyError}
             />
           </div>
 

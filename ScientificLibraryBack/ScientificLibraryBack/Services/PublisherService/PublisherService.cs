@@ -69,7 +69,6 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
-
         public async Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest bookRequest, IFormFile coverImage, IFormFile pdfFile)
         {
             var response = new ApiResponse<Guid>();
@@ -118,7 +117,22 @@ namespace ScientificLibraryBack.Services.PublisherService
                     pdfFileBytes = pdfStream.ToArray();
                 }
 
-                // 5️⃣ Create and save the book
+                // 5️⃣ Validate Keywords (Only Allow Predefined Ones)
+                var existingKeywords = await _context.Keywords
+                    .Where(k => bookRequest.Keywords.Contains(k.Name))
+                    .ToListAsync();
+
+                // If any keyword does not exist in the DB, reject the request
+                if (existingKeywords.Count != bookRequest.Keywords.Count)
+                {
+                    return new ApiResponse<Guid>
+                    {
+                        Success = false,
+                        Message = "Invalid keywords selected. Please choose from the available options."
+                    };
+                }
+
+                // 6️⃣ Create and save the book
                 var book = new Book
                 {
                     Id = Guid.NewGuid(),
@@ -128,24 +142,29 @@ namespace ScientificLibraryBack.Services.PublisherService
                     Description = bookRequest.Description,
                     ISBN = bookRequest.ISBN,
                     CoverImage = coverImageBytes,
-                    //CoverImageUrl = bookRequest.CoverImageUrl,
                     PublicationDate = bookRequest.PublicationDate,
                     PageCount = bookRequest.PageCount,
                     Language = bookRequest.Language,
                     Format = bookRequest.Format,
-                    Keywords = bookRequest.Keywords,
                     IsAvailable = bookRequest.IsAvailable,
                     Status = ApprovalStatus.Pending,
                     State = State.New,
                     PublisherId = bookRequest.PublisherId,
-                    PdfFile = pdfFileBytes, // Add PDF file bytes
+                    PdfFile = pdfFileBytes,
                     PdfFileName = pdfFile.FileName
                 };
 
                 _context.Books.Add(book);
                 await _context.SaveChangesAsync();
 
-                // 6️⃣ Return success response
+                // 7️⃣ Assign Keywords to the Book
+                book.BookKeywords = existingKeywords
+                    .Select(k => new BookKeyword { BookId = book.Id, KeywordId = k.Id })
+                    .ToList();
+
+                await _context.SaveChangesAsync();
+
+                // 8️⃣ Return success response
                 response.Success = true;
                 response.Message = "Book created successfully.";
                 response.Data = book.Id;
@@ -158,6 +177,121 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
+
+        //public async Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest bookRequest, IFormFile coverImage, IFormFile pdfFile)
+        //{
+        //    var response = new ApiResponse<Guid>();
+
+        //    try
+        //    {
+        //        // 1️⃣ Check if ISBN already exists
+        //        bool isbnExists = await _context.Books.AnyAsync(b => b.ISBN == bookRequest.ISBN);
+        //        if (isbnExists)
+        //        {
+        //            return new ApiResponse<Guid>
+        //            {
+        //                Success = false,
+        //                Message = "A book with the same ISBN already exists."
+        //            };
+        //        }
+
+        //        // 2️⃣ Validate required fields
+        //        if (string.IsNullOrWhiteSpace(bookRequest.Title) ||
+        //            string.IsNullOrWhiteSpace(bookRequest.Author) ||
+        //            string.IsNullOrWhiteSpace(bookRequest.Genre) ||
+        //            string.IsNullOrWhiteSpace(bookRequest.ISBN))
+        //        {
+        //            return new ApiResponse<Guid>
+        //            {
+        //                Success = false,
+        //                Message = "Missing required fields: Title, Author, Genre, or ISBN."
+        //            };
+        //        }
+
+        //        // 3️⃣ Handle Cover Image
+        //        byte[] coverImageBytes = null;
+        //        if (coverImage != null)
+        //        {
+        //            using var imageStream = new MemoryStream();
+        //            await coverImage.CopyToAsync(imageStream);
+        //            coverImageBytes = imageStream.ToArray();
+        //        }
+
+        //        // 4️⃣ Handle PDF File
+        //        byte[] pdfFileBytes = null;
+        //        if (pdfFile != null)
+        //        {
+        //            using var pdfStream = new MemoryStream();
+        //            await pdfFile.CopyToAsync(pdfStream);
+        //            pdfFileBytes = pdfStream.ToArray();
+        //        }
+
+        //        // 5️⃣ Create and save the book
+        //        var book = new Book
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            Title = bookRequest.Title,
+        //            Author = bookRequest.Author,
+        //            Genre = bookRequest.Genre,
+        //            Description = bookRequest.Description,
+        //            ISBN = bookRequest.ISBN,
+        //            CoverImage = coverImageBytes,
+        //            //CoverImageUrl = bookRequest.CoverImageUrl,
+        //            PublicationDate = bookRequest.PublicationDate,
+        //            PageCount = bookRequest.PageCount,
+        //            Language = bookRequest.Language,
+        //            Format = bookRequest.Format,
+        //            //Keywords = bookRequest.Keywords,
+        //            IsAvailable = bookRequest.IsAvailable,
+        //            Status = ApprovalStatus.Pending,
+        //            State = State.New,
+        //            PublisherId = bookRequest.PublisherId,
+        //            PdfFile = pdfFileBytes, // Add PDF file bytes
+        //            PdfFileName = pdfFile.FileName
+        //        };
+
+        //        _context.Books.Add(book);
+        //        await _context.SaveChangesAsync();
+
+        //        // Handle Keywords: Fetch existing ones & add new ones
+        //        var existingKeywords = await _context.Keywords
+        //            .Where(k => bookRequest.Keywords.Contains(k.Name))
+        //            .ToListAsync();
+
+        //        var newKeywords = existingKeywords
+        //            .Select(name => name.ToString()) // Ensure it's a string
+        //            .Where(name => !existingKeywords.Any(k => k.Name == name))
+        //            .Select(name => new Keyword { Id = Guid.NewGuid(), Name = name })
+        //            .ToList();
+
+        //        if (newKeywords.Any())
+        //        {
+        //            await _context.Keywords.AddRangeAsync(newKeywords);
+        //            await _context.SaveChangesAsync();
+        //            existingKeywords.AddRange(newKeywords);
+        //        }
+
+        //        // Assign keywords to the book
+        //        book.BookKeywords = existingKeywords
+        //            .Select(k => new BookKeyword { BookId = book.Id, KeywordId = k.Id })
+        //            .ToList();
+
+        //        await _context.SaveChangesAsync();
+
+
+        //        // 6️⃣ Return success response
+        //        response.Success = true;
+        //        response.Message = "Book created successfully.";
+        //        response.Data = book.Id;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred while creating the book: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
 
         //public async Task<ApiResponse<Guid>> CreateBookAsync(BookCreateRequest bookRequest)
         //{
@@ -447,8 +581,8 @@ namespace ScientificLibraryBack.Services.PublisherService
                 if (!string.Equals(existingBook.Format, updateRequest.Format, StringComparison.OrdinalIgnoreCase))
                     existingBook.Format = updateRequest.Format;
 
-                if (!string.Equals(existingBook.Keywords, updateRequest.Keywords, StringComparison.OrdinalIgnoreCase))
-                    existingBook.Keywords = updateRequest.Keywords;
+                //if (!string.Equals(existingBook.Keywords, updateRequest.Keywords, StringComparison.OrdinalIgnoreCase))
+                //    existingBook.Keywords = updateRequest.Keywords;
 
                 if (updateRequest.IsAvailable != existingBook.IsAvailable)
                     existingBook.IsAvailable = updateRequest.IsAvailable;

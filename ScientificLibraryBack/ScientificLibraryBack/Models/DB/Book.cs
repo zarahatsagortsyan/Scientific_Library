@@ -49,8 +49,8 @@ namespace ScientificLibraryBack.Models.DB
         [Required(ErrorMessage = "Language is required.")]
         public string Language { get; set; }
 
-        public string Format { get; set; }
-        public string Keywords { get; set; }
+        public string? Format { get; set; }
+        public string? Keywords { get; set; }
         public bool IsAvailable { get; set; }
 
         public State State { get; set; }
@@ -62,6 +62,7 @@ namespace ScientificLibraryBack.Models.DB
 
         // Navigation property for Reviews
         public virtual ICollection<Review> Reviews { get; set; }
+        public ICollection<BookKeyword> BookKeywords { get; set; } = new List<BookKeyword>();
     }
 
 }

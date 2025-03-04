@@ -1,0 +1,53 @@
+.keywords-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .keywords-container label {
+    font-weight: bold;
+    font-size: 14px; /* Smaller font size */
+  }
+  
+  .keyword-search {
+    padding: 6px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px; /* Reduce font size */
+  }
+  
+  .keyword-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 140px; /* Adjust height */
+    overflow-y: auto;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+    font-size: 14px; /* Reduce font size */
+  }
+  
+  .keyword-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    background: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px; /* Slightly smaller font */
+  }
+  
+  .keyword-checkbox:hover {
+    background: #e0e0e0;
+  }
+  
+  .keyword-checkbox input {
+    accent-color: #007bff; /* Make checkbox blue */
+    transform: scale(1.1); /* Reduce scale */
+  }

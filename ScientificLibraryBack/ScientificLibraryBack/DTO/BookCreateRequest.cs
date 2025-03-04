@@ -30,9 +30,10 @@ namespace ScientificLibraryBack.DTO
         public string Language { get; set; }  // Language of the book
 
         public string Format { get; set; }  // eBook, Audiobook, etc.
-        public string Keywords { get; set; }  // In the database, this will be stored as nvarchar
+        //public string Keywords { get; set; }  // In the database, this will be stored as nvarchar
         public bool IsAvailable { get; set; }  // Availability status
         public string? PublisherId { get; set; }  // Foreign Key to AspNetUsers
+        public List<string> Keywords { get; set; } = new(); // List of keyword names
 
     }
 }

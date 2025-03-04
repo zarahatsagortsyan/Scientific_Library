@@ -156,7 +156,18 @@ const ProfilePage: React.FC = () => {
         </>
       ) : (
         <p>
-          <strong>Company Name:</strong> {profile?.companyName}
+          <strong>Company Name:</strong> {""}
+          {editing ? (
+            <input
+              type="text"
+              value={profile?.companyName || ""}
+              onChange={(e) =>
+                setProfile({ ...profile!, companyName: e.target.value })
+              }
+            />
+          ) : (
+            profile?.companyName
+          )}
         </p>
       )}
       <p>
