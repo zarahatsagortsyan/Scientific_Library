@@ -3,22 +3,6 @@ import axios from "axios";
 import "./BookDetails.css";
 import { Book } from "../../Models/Book";
 
-// interface Book {
-//   id: string;
-//   title: string;
-//   author: string;
-//   genre: string;
-//   description: string;
-//   isbn: string;
-//   coverImageUrl?: string;
-//   publicationDate: string;
-//   pageCount: number;
-//   language: string;
-//   format: string;
-//   keywords: string;
-//   isAvailable: boolean;
-// }
-
 interface BookDetailsProps {
   bookId: string;
   onClose: () => void;
@@ -91,8 +75,12 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
             <strong>📑 Format:</strong> {book.format}
           </p>
           <p>
-            <strong>🔍 Keywords:</strong> {book.keywords}
+            <strong>🔍 Keywords:</strong>{" "}
+            {book.keywords && Array.isArray(book.keywords)
+              ? book.keywords.join(", ")
+              : "No keywords available"}
           </p>
+
           <p>
             <strong>✅ Availability:</strong>{" "}
             {book.isAvailable ? "Available" : "Not Available"}

@@ -70,11 +70,11 @@ const AdminPendingPage: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const getStatusLabel = (status: number): string => {
-    const statusMap: Record<number, string> = {
-      0: "🟡 Pending",
-      1: "🟢 Approved",
-      2: "🔴 Rejected",
+  const getStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      Pending: "🟡 Pending",
+      Approved: "🟢 Approved",
+      Rejected: "🔴 Rejected",
     };
     return statusMap[status] || "❓ Unknown";
   };

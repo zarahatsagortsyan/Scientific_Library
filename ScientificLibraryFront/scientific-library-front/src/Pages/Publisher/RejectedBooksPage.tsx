@@ -134,9 +134,9 @@ const RejuectedCardGrid: React.FC = () => {
     setSelectedBookId(null);
   };
 
-  const handleImageClick = (book: Book) => {
-    navigate(`/book/${book.id}`); // Navigate without passing the state
-  };
+  // const handleImageClick = (book: Book) => {
+  //   navigate(`/book/${book.id}`); // Navigate without passing the state
+  // };
 
   const handleToggleAvailability = async (book: Book) => {
     const updatedBook = await toggleBookAvailability(book);
@@ -204,7 +204,7 @@ const RejuectedCardGrid: React.FC = () => {
               src={`http://localhost:8001/api/book/cover/${book.id}`}
               alt={book.title}
               className="book-image"
-              onClick={() => handleImageClick(book)}
+              // onClick={() => handleImageClick(book)}
               style={{ cursor: "pointer" }}
             />
             <div className="card__content">
@@ -226,12 +226,12 @@ const RejuectedCardGrid: React.FC = () => {
               >
                 📥 Download PDF
               </button>
-              <button
+              {/* <button
                 className="availability-button"
                 onClick={() => handleToggleAvailability(book)}
               >
                 {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

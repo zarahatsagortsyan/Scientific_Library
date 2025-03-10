@@ -29,7 +29,9 @@ namespace ScientificLibraryBack.DTO
         public string Language { get; set; }
 
         public string Format { get; set; }
-        public string Keywords { get; set; }
+        //public string Keywords { get; set; }
+        public List<string> Keywords { get; set; } = new(); // List of keyword names
+
         public bool IsAvailable { get; set; }
 
         public State State { get; set; }

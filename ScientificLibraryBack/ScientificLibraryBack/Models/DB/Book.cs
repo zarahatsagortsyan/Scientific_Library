@@ -29,7 +29,10 @@ namespace ScientificLibraryBack.Models.DB
         public string Author { get; set; }
 
         [Required(ErrorMessage = "Genre is required.")]
-        public string Genre { get; set; }
+        // ✅ Genre Relationship (Foreign Key)
+        public int GenreId { get; set; }  // Store the Genre ID
+        public Genre Genre { get; set; }  // Navigation Property
+        //public string Genre { get; set; }
 
         [Required(ErrorMessage = "Description is required.")]
         public string? Description { get; set; }
@@ -50,7 +53,7 @@ namespace ScientificLibraryBack.Models.DB
         public string Language { get; set; }
 
         public string? Format { get; set; }
-        public string? Keywords { get; set; }
+        //public string? Keywords { get; set; }
         public bool IsAvailable { get; set; }
 
         public State State { get; set; }

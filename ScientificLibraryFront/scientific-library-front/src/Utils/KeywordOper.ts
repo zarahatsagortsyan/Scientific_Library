@@ -32,3 +32,42 @@ export const useKeywords = () => {
 
   return { keywords, keyLoading, keyError };
 };
+
+export const handleKeywordEdit = async (
+  keywordId: string,
+  name?: string,
+) => {
+  try {
+    const token = localStorage.getItem("jwtToken");
+    if (!token) {
+      throw new Error("Authentication required.");
+    }
+
+    const payload = {
+      keywordId,
+      name: name || null,
+    };
+
+    const response = await api.patch(
+      `${import.meta.env.VITE_API_URL}/Admin/keywords/${keywordId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200 && response.data.success) {
+      console.log("Genre updated successfully:", response.data);
+      return true;
+    } else {
+      console.error("Failed to update keyword:", response.data);
+      return false;
+    }
+  } catch (error) {
+    console.error("Error updating keyword:", error);
+    return false;
+  }
+};

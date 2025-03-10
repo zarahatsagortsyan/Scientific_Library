@@ -1,56 +1,8 @@
-// import React from "react";
-// import { useNavigate } from "react-router-dom";
-// import { mockBooks } from "../../Shared/MockData"; // Import the mock data
-// import "./BookList.css";
-
-// const BookListPage: React.FC = () => {
-//   const navigate = useNavigate();
-
-//   const handleBookClick = (id: string) => {
-//     navigate(`/book/${id}`);
-//   };
-
-//   return (
-//     <div className="BookListPage">
-//       <h1>Book List</h1>
-//       <div className="BookList">
-//         {mockBooks.map((book) => (
-//           <div
-//             key={book.Id}
-//             className="BookItem"
-//             onClick={() => handleBookClick(book.Id)}
-//           >
-//             <img
-//               src={book.CoverImageUrl || "default-cover.jpg"}
-//               alt={book.Title}
-//               className="BookThumbnail"
-//             />
-//             <div className="BookDetails">
-//               <h2>{book.Title}</h2>
-//               <p>by {book.Author}</p>
-//               <p>Genre: {book.Genre}</p>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./BookList.css";
 import { Book } from "../../Models/Book";
 import api from "../../api/api";
-
-// interface Book {
-//   id: string;
-//   title: string;
-//   author: string;
-//   genre: string;
-//   coverImageUrl: string;
-// }
 
 const BookListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -100,24 +52,13 @@ const BookListPage: React.FC = () => {
             className="BookItem"
             onClick={() => handleBookClick(book)}
           >
-            {/* <img
-              src={book.coverImageUrl || "https://via.placeholder.com/200"}
-              alt={book.title}
-              className="book-image"
-              style={{ cursor: "pointer" }}
-            /> */}
-
             <img
               src={`http://localhost:8001/api/book/cover/${book.id}`}
               alt={book.title}
               className="book-image"
               loading="lazy"
             />
-            {/* <img
-              src={book.coverImageUrl || "default-cover.jpg"}
-              alt={book.title}
-              className="BookThumbnail"
-            /> */}
+
             <div className="BookDetails">
               <h2>{book.title}</h2>
               <p>by {book.author}</p>

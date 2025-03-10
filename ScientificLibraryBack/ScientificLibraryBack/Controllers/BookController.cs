@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
@@ -36,7 +37,7 @@ namespace ScientificLibraryBack.Controllers
         {
             var booksResponse = await _bookService.GetAllBooksAsync();
 
-            if (!booksResponse.Success || booksResponse.Data == null || !booksResponse.Data.Any())
+            if (!booksResponse.Success)
             {
                 return NotFound(booksResponse);
             }
@@ -145,6 +146,20 @@ namespace ScientificLibraryBack.Controllers
             // Return image as a raw file with correct MIME type
             return File(book.Data, "image/jpeg");
         }
+
+        [HttpPost("filter")]
+        public async Task<IActionResult> FilterBooks([FromBody] BookFilterRequest filterRequest)
+        {
+            var response = await _bookService.FilterBooksAsync(filterRequest);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
+
     }
 
 }

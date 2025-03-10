@@ -11,8 +11,8 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
-    navigate(`/`);
     window.location.reload();
+    navigate(`/`);
   };
 
   return (

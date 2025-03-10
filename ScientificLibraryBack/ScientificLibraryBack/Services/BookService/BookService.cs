@@ -86,36 +86,77 @@ namespace ScientificLibraryBack.Services.BookService
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<IEnumerable<Book>>> GetAllBooksAsync()
+        //public async Task<ApiResponse<IEnumerable<Book>>> GetAllBooksAsync()
+        //{
+        //    var response = new ApiResponse<IEnumerable<Book>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //            //.Include(b => b.Publisher)
+        //            //.Include(b => b.Reviews)
+        //            .Where(b => b.Status == ApprovalStatus.Approved).ToListAsync();
+
+        //        // Convert CoverImage to Base64 directly
+
+        //        foreach (var book in books)
+        //        {
+        //            //if (book.CoverImage != null && book.CoverImage.Length > 0)
+        //            //{
+        //            //    //var base64Image = Convert.ToBase64String(book.CoverImage);
+        //            //    //book.CoverImageUrl = "";//$"data:image/jpeg;base64,{base64Image}";
+        //            //    //book.CoverImage = null;
+        //            book.CoverImage = null;
+        //            book.PdfFile = null;
+        //            book.Publisher = null;
+        //            //}
+        //        }
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Books retrieved successfully.";
+        //        response.Data = books; // Assign the books to the Data property
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetAllBooksAsync()
         {
-            var response = new ApiResponse<IEnumerable<Book>>();
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
-                // Fetch books with related entities
+                // Fetch books with only necessary fields using projection
                 var books = await _context.Books
-                    //.Include(b => b.Publisher)
-                    //.Include(b => b.Reviews)
-                    .Where(b => b.Status == ApprovalStatus.Approved).ToListAsync();
+                    .Where(b => b.Status == ApprovalStatus.Approved)
+                    .Select(b => new BookDTO
+                    {
+                        Id = b.Id,
+                        Author = b.Author,
+                        ISBN = b.ISBN,
+                        Status = b.Status,
+                        Format = b.Format,
+                        Genre = b.Genre.Name, // ✅ Get Genre Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords
+                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
+                        Description = b.Description,
+                        Title = b.Title,
+                        PageCount = b.PageCount,
+                        IsAvailable = b.IsAvailable,
+                        PublicationDate = b.PublicationDate,
+                        State = b.State,
+                        Language = b.Language,
+                    })
+                    .ToListAsync();
 
-                // Convert CoverImage to Base64 directly
-
-                foreach (var book in books)
-                {
-                    //if (book.CoverImage != null && book.CoverImage.Length > 0)
-                    //{
-                    //    //var base64Image = Convert.ToBase64String(book.CoverImage);
-                    //    //book.CoverImageUrl = "";//$"data:image/jpeg;base64,{base64Image}";
-                    //    //book.CoverImage = null;
-                    book.CoverImage = null;
-                    book.PdfFile = null;
-                    book.Publisher = null;
-                    //}
-                }
-                // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Books retrieved successfully.";
-                response.Data = books; // Assign the books to the Data property
+                response.Data = books;
             }
             catch (Exception ex)
             {
@@ -132,55 +173,190 @@ namespace ScientificLibraryBack.Services.BookService
         //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
         //}
 
+        //public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
+        //{
+        //    var response = new ApiResponse<BookDTO>();
+        //    BookDTO bookResponse = new BookDTO();
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var book = await _context.Books
+        //                    .Include(b => b.Publisher)
+        //                    //.Include(b => b.Reviews)  // Optionally include related entities like Reviews
+        //                    .FirstOrDefaultAsync(b => b.Id == bookId);
+
+        //        // Convert CoverImage to Base64 directly
+
+        //        //if (book.CoverImage != null && book.CoverImage.Length > 0)
+        //        //{
+        //        //    var base64Image = Convert.ToBase64String(book.CoverImage);
+        //        //    book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+        //        //}
+        //        if (book != null)
+        //        {
+        //            bookResponse.Id = book.Id;
+        //            bookResponse.Author = book.Author;
+        //            bookResponse.ISBN = book.ISBN;
+        //            bookResponse.Status = book.Status;
+        //            bookResponse.Format = book.Format;
+        //            bookResponse.Genre = book.Genre;
+        //            bookResponse.Keywords = book.Keywords;
+        //            bookResponse.PublisherName = book.Publisher.UserName;
+        //            bookResponse.Description = book.Description;
+        //            bookResponse.Title = book.Title;
+        //            bookResponse.PageCount = book.PageCount;
+        //            bookResponse.IsAvailable = book.IsAvailable;
+        //            bookResponse.PublicationDate = book.PublicationDate;
+        //            bookResponse.State = book.State;
+        //            bookResponse.Language = book.Language;
+
+        //            // Wrap the result in ApiResponse
+        //            response.Success = true;
+        //            response.Message = "Books retrieved successfully.";
+        //            response.Data = bookResponse; // Assign the books to the Data property
+        //        }
+        //        else
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            response.Data = bookResponse; // Assign the books to the Data property
+
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+
+        //public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
+        //{
+        //    var response = new ApiResponse<BookDTO>();
+
+        //    try
+        //    {
+        //        // Fetch book with related entities
+        //        var book = await _context.Books
+        //            .Include(b => b.Publisher) // ✅ Ensure Publisher is loaded
+        //            .Include(b => b.Genre) // ✅ Ensure Genre is loaded
+        //            .Include(b => b.BookKeywords) // ✅ Ensure Keywords are loaded
+        //                .ThenInclude(bk => bk.Keyword)
+        //            .FirstOrDefaultAsync(b => b.Id == bookId);
+
+        //        if (book == null)
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            return response;
+        //        }
+
+        //        //// ✅ Convert CoverImage to Base64 (if applicable)
+        //        //string? coverImageUrl = null;
+        //        //if (book.CoverImage != null && book.CoverImage.Length > 0)
+        //        //{
+        //        //    var base64Image = Convert.ToBase64String(book.CoverImage);
+        //        //    coverImageUrl = $"data:image/jpeg;base64,{base64Image}";
+        //        //}
+
+        //        // ✅ Convert Keywords from many-to-many relationship
+        //        var keywordList = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList() ?? new List<string>();
+
+        //        // ✅ Create BookDTO
+        //        var bookResponse = new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Use Genre name instead of string
+        //            Keywords = keywordList, // ✅ Use list of keyword names
+        //            PublisherName = book.Publisher?.UserName ?? "Unknown", // ✅ Handle null Publisher
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //            //CoverImageUrl = coverImageUrl // ✅ Include CoverImage URL
+        //        };
+
+        //        response.Success = true;
+        //        response.Message = "Book retrieved successfully.";
+        //        response.Data = bookResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+
         public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
         {
             var response = new ApiResponse<BookDTO>();
-            BookDTO bookResponse = new BookDTO();
+
             try
             {
-                // Fetch books with related entities
-                var book = await _context.Books
-                            .Include(b => b.Publisher)
-                            //.Include(b => b.Reviews)  // Optionally include related entities like Reviews
-                            .FirstOrDefaultAsync(b => b.Id == bookId);
+                // Fetch the book with only necessary related data
+                var bookData = await _context.Books
+                    .Where(b => b.Id == bookId)
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.Title,
+                        b.Author,
+                        b.ISBN,
+                        b.Status,
+                        b.Format,
+                        GenreName = b.Genre.Name,
+                        PublisherName = b.Publisher.UserName,
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
+                        b.Description,
+                        b.PageCount,
+                        b.IsAvailable,
+                        b.PublicationDate,
+                        b.State,
+                        b.Language
+                    })
+                    .FirstOrDefaultAsync();
 
-                // Convert CoverImage to Base64 directly
-
-                //if (book.CoverImage != null && book.CoverImage.Length > 0)
-                //{
-                //    var base64Image = Convert.ToBase64String(book.CoverImage);
-                //    book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-                //}
-                if (book != null)
-                {
-                    bookResponse.Id = book.Id;
-                    bookResponse.Author = book.Author;
-                    bookResponse.ISBN = book.ISBN;
-                    bookResponse.Status = book.Status;
-                    bookResponse.Format = book.Format;
-                    bookResponse.Genre = book.Genre;
-                    bookResponse.Keywords = book.Keywords;
-                    bookResponse.PublisherName = book.Publisher.UserName;
-                    bookResponse.Description = book.Description;
-                    bookResponse.Title = book.Title;
-                    bookResponse.PageCount = book.PageCount;
-                    bookResponse.IsAvailable = book.IsAvailable;
-                    bookResponse.PublicationDate = book.PublicationDate;
-                    bookResponse.State = book.State;
-                    bookResponse.Language = book.Language;
-
-                    // Wrap the result in ApiResponse
-                    response.Success = true;
-                    response.Message = "Books retrieved successfully.";
-                    response.Data = bookResponse; // Assign the books to the Data property
-                }
-                else
+                if (bookData == null)
                 {
                     response.Success = false;
                     response.Message = "Book not found.";
-                    response.Data = bookResponse; // Assign the books to the Data property
-
+                    return response;
                 }
+
+                // ✅ Map fetched data to DTO
+                var bookResponse = new BookDTO
+                {
+                    Id = bookData.Id,
+                    Title = bookData.Title,
+                    Author = bookData.Author,
+                    ISBN = bookData.ISBN,
+                    Status = bookData.Status,
+                    Format = bookData.Format,
+                    Genre = bookData.GenreName,
+                    Keywords = bookData.Keywords,
+                    PublisherName = bookData.PublisherName ?? "Unknown",
+                    Description = bookData.Description,
+                    PageCount = bookData.PageCount,
+                    IsAvailable = bookData.IsAvailable,
+                    PublicationDate = bookData.PublicationDate,
+                    State = bookData.State,
+                    Language = bookData.Language
+                };
+
+                response.Success = true;
+                response.Message = "Book retrieved successfully.";
+                response.Data = bookResponse;
             }
             catch (Exception ex)
             {
@@ -190,6 +366,8 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
+
+
         //public async Task<ApiResponse<string>> GetBookCoverImage(Guid bookId)
         //{
         //    var response = new ApiResponse<string>();
@@ -277,11 +455,20 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
-        public async Task<IEnumerable<Book>> GetBooksByGenreAsync(string genre)
+        //public async Task<IEnumerable<Book>> GetBooksByGenreAsync(string genre)
+        //{
+        //    return await _context.Books
+        //    .Where(b => b.Genre == genre && b.Status == ApprovalStatus.Approved).ToListAsync();
+        //}
+
+        public async Task<IEnumerable<Book>> GetBooksByGenreAsync(string genreName)
         {
             return await _context.Books
-            .Where(b => b.Genre == genre && b.Status == ApprovalStatus.Approved).ToListAsync();
+                .Include(b => b.Genre) // ✅ Ensure Genre is included
+                .Where(b => b.Genre.Name == genreName && b.Status == ApprovalStatus.Approved)
+                .ToListAsync();
         }
+
 
         public async Task<ApiResponse<IEnumerable<Book>>> GetPublishedBooksAsync(string publisherId)
         {
@@ -638,5 +825,60 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
+
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
+        {
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+            try
+            {
+                var query = _context.Books
+                    .Include(b => b.Genre)
+                    .Include(b => b.BookKeywords)
+                        .ThenInclude(bk => bk.Keyword)
+                    .AsQueryable();
+
+                // Apply filters dynamically
+                if (!string.IsNullOrEmpty(filter.Title))
+                    query = query.Where(b => b.Title.ToLower().Contains(filter.Title.ToLower()));
+
+                if (!string.IsNullOrEmpty(filter.Author))
+                    query = query.Where(b => b.Author.ToLower().Contains(filter.Author.ToLower()));
+
+                if (filter.GenreIds != null && filter.GenreIds.Any())
+                    query = query.Where(b => filter.GenreIds.Contains(b.GenreId));
+
+                if (filter.Languages != null && filter.Languages.Any())
+                    query = query.Where(b => filter.Languages.Contains(b.Language));
+
+                if (filter.Keywords != null && filter.Keywords.Any())
+                    query = query.Where(b => b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
+
+                var books = await query.ToListAsync();
+
+                // Convert to DTOs
+                var bookDTOs = books.Select(book => new BookDTO
+                {
+                    Id = book.Id,
+                    Title = book.Title,
+                    Author = book.Author,
+                    Genre = book.Genre?.Name,
+                    Language = book.Language,
+                    Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
+                }).ToList();
+
+                response.Success = true;
+                response.Data = bookDTOs;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"Error: {ex.Message}";
+            }
+
+            return response;
+        }
+
+
     }
 }

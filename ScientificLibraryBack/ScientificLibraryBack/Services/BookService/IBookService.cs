@@ -17,7 +17,7 @@ namespace ScientificLibraryBack.Services.BookService
         Task<ApiResponse<PDFDTO>> GetBookPDF(Guid bookId);
 
 
-        Task<ApiResponse<IEnumerable<Book>>> GetAllBooksAsync(); // Response with a collection of all books
+        Task<ApiResponse<IEnumerable<BookDTO>>> GetAllBooksAsync(); // Response with a collection of all books
         //Task<ApiResponse<IEnumerable<Book>>> GetPublishedBooksAsync(string publisherId); // Response with a collection of all books
         ////Task<IEnumerable<Book>> GetMySavedBooksAsync(string readerId); // Response with a collection of all books
         //Task<ApiResponse<IEnumerable<Book>>> GetPendingBooksAsync(string publisherId); // Response for keyword search
@@ -39,6 +39,7 @@ namespace ScientificLibraryBack.Services.BookService
         Task<ApiResponse<IEnumerable<Keyword>>> GetKeywordsAsync();
         //Task<ApiResponse<bool>> ApproveBook(Guid bookId);
         //Task<ApiResponse<bool>> RejectBook(Guid bookId);
+        Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter);
 
 
     }

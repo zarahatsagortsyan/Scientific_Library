@@ -128,10 +128,10 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(books);
         }
-        [HttpPost("genres")]
-        public async Task<IActionResult> CreateKeyword(string keywordName)
+        [HttpPost("keywords")]
+        public async Task<IActionResult> CreateKeyword([FromBody] KeywordCreateRequest request)
         {
-            var response = await _adminService.AddKeyword(keywordName);
+            var response = await _adminService.AddKeyword(request.Name);
 
             if (response.Success)
             {
@@ -141,6 +141,19 @@ namespace ScientificLibraryBack.Controllers
             return BadRequest(response);
         }
 
+        [HttpPatch("keywords/{id}")]
+        public async Task<IActionResult> UpdateKeyword(Guid id, [FromBody] KeywordCreateRequest request)
+        {
+
+            var response = await _adminService.UpdateKeyword(id, request.Name);
+
+            if (response.Success)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
+        }
 
     }
 }

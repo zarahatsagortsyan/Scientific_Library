@@ -166,7 +166,9 @@ using (var scope = app.Services.CreateScope())
         await DatabaseInitializer.SeedRoles(services);
         await DatabaseInitializer.SeedKeywords(services);
         await DatabaseInitializer.SeedLanguages(services);
+        await DatabaseInitializer.SeedGenres(services);
         await DatabaseInitializer.CreateAdmin(services);
+
 
     }
     catch (Exception ex)

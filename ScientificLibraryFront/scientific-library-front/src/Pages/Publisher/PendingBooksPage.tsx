@@ -4,17 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import "./PublisherBooks.css";
 import BookDetails from "../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  genre: string;
-  description: string;
-  publicationDate: string;
-  coverImageUrl: string;
-  status: number;
-}
+import { Book } from "../../Models/Book";
 
 const MaterialCardGrid: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -68,11 +58,11 @@ const MaterialCardGrid: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const getStatusLabel = (status: number): string => {
-    const statusMap: Record<number, string> = {
-      0: "🟡 Pending",
-      1: "🟢 Approved",
-      2: "🔴 Rejected",
+  const getStatusLabel = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      Pending: "🟡 Pending",
+      Approved: "🟢 Approved",
+      Rejected: "🔴 Rejected",
     };
     return statusMap[status] || "❓ Unknown";
   };

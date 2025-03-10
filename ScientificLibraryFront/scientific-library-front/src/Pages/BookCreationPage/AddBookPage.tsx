@@ -7,6 +7,7 @@ import { useGenres } from "../../Utils/GenresOper";
 import { useLanguages } from "../../Utils/GetLanguages";
 import { useKeywords } from "../../Utils/KeywordOper";
 import KeywordSelection from "../../Components/KeywordSelection/KeywordSelection";
+import api from "../../api/api";
 
 // Define Genre type
 interface Genre {
@@ -20,7 +21,7 @@ const AddBookPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     author: "",
-    genre: "",
+    genreId: 0,
     language: "",
     description: "",
     isbn: "",
@@ -48,13 +49,17 @@ const AddBookPage = () => {
     );
   };
 
-  // Handle text input changes
+  // // Handle text input changes
+  // const handleInputChange = (
+  //   e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  // ) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   // Handle file changes
   const handleFileChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -107,6 +112,90 @@ const AddBookPage = () => {
   //     alert("An error occurred. Please try again.");
   //   }
   // };
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+
+  //   const token = localStorage.getItem("jwtToken");
+  //   if (!token) {
+  //     alert("Unauthorized. Please log in.");
+  //     return;
+  //   }
+
+  //   const formDataToSend = new FormData();
+
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     formDataToSend.append(key, value.toString());
+  //   });
+
+  //   // Add selected keywords as an array
+  //   formDataToSend.append("keywords", JSON.stringify(selectedKeywords));
+
+  //   if (coverImage) formDataToSend.append("coverImage", coverImage);
+  //   if (pdfFile) formDataToSend.append("pdfFile", pdfFile);
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8001/api/publisher/books",
+  //       formDataToSend,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     if (response.status === 201) {
+  //       alert("Book submitted for approval!");
+  //       navigate("/");
+  //     } else {
+  //       alert("Failed to create book.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating book:", error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
+  // const handleSubmit = async (e: FormEvent) => {
+  //   e.preventDefault();
+
+  //   const token = localStorage.getItem("jwtToken");
+  //   if (!token) {
+  //     alert("Unauthorized. Please log in.");
+  //     return;
+  //   }
+
+  //   const formDataToSend = new FormData();
+
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     formDataToSend.append(key, value.toString());
+  //   });
+
+  //   formDataToSend.append("keywords", JSON.stringify(selectedKeywords));
+
+  //   if (coverImage) formDataToSend.append("coverImage", coverImage);
+  //   if (pdfFile) formDataToSend.append("pdfFile", pdfFile);
+
+  //   for (let pair of formDataToSend.entries()) {
+  //     console.log(pair[0], pair[1]);
+  //   }
+  //   try {
+  //     const response = await api.post(
+  //       "http://localhost:8001/api/publisher/books",
+  //       formDataToSend,
+  //       {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       }
+  //     );
+
+  //     if (response.status === 201) {
+  //       alert("Book submitted for approval!");
+  //       navigate("/");
+  //     } else {
+  //       alert("Failed to create book.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating book:", error);
+  //     alert("An error occurred. Please try again.");
+  //   }
+  // };
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -119,17 +208,28 @@ const AddBookPage = () => {
     const formDataToSend = new FormData();
 
     Object.entries(formData).forEach(([key, value]) => {
-      formDataToSend.append(key, value.toString());
+      if (key !== "keywords") {
+        // 🚨 Avoid adding an empty keywords field
+        formDataToSend.append(key, value.toString());
+      }
     });
 
-    // Add selected keywords as an array
-    formDataToSend.append("keywords", JSON.stringify(selectedKeywords));
+    // ✅ Append keywords as separate values (Not as JSON)
+    selectedKeywords.forEach((keyword) => {
+      formDataToSend.append("keywords", keyword); // ✅ Append each keyword separately
+    });
 
     if (coverImage) formDataToSend.append("coverImage", coverImage);
     if (pdfFile) formDataToSend.append("pdfFile", pdfFile);
 
+    // // ✅ Debugging: Print form data before sending
+    // for (let pair of formDataToSend.entries()) {
+    //   console.log(pair[0], pair[1]);
+    // }
+
+    console.log(formDataToSend);
     try {
-      const response = await axios.post(
+      const response = await api.post(
         "http://localhost:8001/api/publisher/books",
         formDataToSend,
         {
@@ -174,15 +274,15 @@ const AddBookPage = () => {
 
             {/* Genre Dropdown */}
             <select
-              name="genre"
-              value={formData.genre}
+              name="genreId"
+              value={formData.genreId}
               required
               onChange={handleInputChange}
               className="genre-select"
             >
               <option value="">Select Genre</option>
               {genres.map((genre) => (
-                <option key={genre.id} value={genre.name}>
+                <option key={genre.id} value={genre.id}>
                   {genre.name}
                 </option>
               ))}

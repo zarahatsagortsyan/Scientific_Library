@@ -13,11 +13,9 @@ namespace ScientificLibraryBack.Services.AdminService
         Task<ApiResponse<bool>> AddKeyword([FromBody] string keywordName);
         Task<ApiResponse<bool>> DeleteGenre(int id);
         Task<ApiResponse<bool>> UpdateGenre(UpdateGenreRequest genreRequest);
+        Task<ApiResponse<bool>> UpdateKeyword(Guid id, string newName);
         Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks();
         Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks();
         Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks();
-
-
-
     }
 }

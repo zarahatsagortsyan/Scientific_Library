@@ -66,14 +66,14 @@ const AdminApprovedBooksPage: React.FC = () => {
     fetchBooks();
   }, []);
 
-  const getStatusLabel = (status: number): string => {
-    const statusMap: Record<number, string> = {
-      0: "🟡 Pending",
-      1: "🟢 Approved",
-      2: "🔴 Rejected",
-    };
-    return statusMap[status] || "❓ Unknown";
-  };
+  // const getStatusLabel = (status: string): string => {
+  //   const statusMap: Record<string, string> = {
+  //     Pending: "🟡 Pending",
+  //     Approved: "🟢 Approved",
+  //     Rejected: "🔴 Rejected",
+  //   };
+  //   return statusMap[status] || "❓ Unknown";
+  // };
 
   if (loading) return <div className="loader">⏳ Loading materials...</div>;
   if (error) return <div className="error">{error}</div>;

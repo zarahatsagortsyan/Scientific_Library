@@ -59,7 +59,6 @@ namespace ScientificLibraryBack.Services.DBService
                     new Keyword { Id = Guid.NewGuid(), Name = "Engineering" },
                     new Keyword { Id = Guid.NewGuid(), Name = "Mathematics" },
                     new Keyword { Id = Guid.NewGuid(), Name = "AI" },
-                    new Keyword { Id = Guid.NewGuid(), Name = "Data Science" },
                     new Keyword { Id = Guid.NewGuid(), Name = "Blockchain" },
                     new Keyword { Id = Guid.NewGuid(), Name = "Other" }
 
@@ -70,6 +69,40 @@ namespace ScientificLibraryBack.Services.DBService
                 }
             }
         }
+
+        public static async Task SeedGenres(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                if (!await context.Genres.AnyAsync()) // Only seed if the table is empty
+                {
+                    var genres = new List<Genre>
+            {
+                new Genre { Name = "Science Fiction", Description = "Fiction based on futuristic science and technology" },
+                new Genre { Name = "Fantasy", Description = "Magical and supernatural elements in a fictional world" },
+                new Genre { Name = "Mystery", Description = "Crime, detective, and suspenseful storytelling" },
+                new Genre { Name = "Romance", Description = "Love stories with emotional connections" },
+                new Genre { Name = "Horror", Description = "Frightening and supernatural themes" },
+                new Genre { Name = "Thriller", Description = "High-stakes, suspenseful storytelling" },
+                new Genre { Name = "Historical Fiction", Description = "Stories set in historical periods" },
+                new Genre { Name = "Biography", Description = "Accounts of real people's lives" },
+                new Genre { Name = "Self-Help", Description = "Guidance for personal development" },
+                new Genre { Name = "Philosophy", Description = "Books exploring philosophical ideas" },
+                new Genre { Name = "Science", Description = "Books based on scientific knowledge" },
+                new Genre { Name = "Engineering", Description = "Books covering engineering concepts" },
+                new Genre { Name = "Mathematics", Description = "Books focusing on mathematical theories" },
+                new Genre { Name = "Technology", Description = "Books about technological advancements" }
+            };
+
+                    await context.Genres.AddRangeAsync(genres);
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+
 
         public static async Task SeedRoles(IServiceProvider serviceProvider)
         {

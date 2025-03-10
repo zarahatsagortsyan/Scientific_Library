@@ -68,6 +68,11 @@ namespace ScientificLibraryBack.Contextes
                 .HasForeignKey(bk => bk.KeywordId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Book>()
+            .HasOne(b => b.Genre)
+            .WithMany() // If Genre does not have a Books collection, keep it empty; otherwise, `.WithMany(g => g.Books)`
+            .HasForeignKey(b => b.GenreId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevent deleting Genre when a book exists
         }
         //public DbSet<ExtendedIdentityUser> Users { get; set; }
         public DbSet<Book> Books { get; set; }

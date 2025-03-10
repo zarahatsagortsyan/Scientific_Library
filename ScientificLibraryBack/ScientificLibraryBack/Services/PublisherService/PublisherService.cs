@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ScientificLibraryBack.Services.PublisherService
 {
-    public class PublisherService:IPublisherService
+    public class PublisherService : IPublisherService
     {
         private readonly IUserService _userService;
         private readonly ApplicationDbContext _context;
@@ -42,7 +42,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     response.Data = null;
                     return response;
                 }
-                
+
 
                 if (bookChangeAvailability.Abailability != existingBook.IsAvailable)
                     existingBook.IsAvailable = bookChangeAvailability.Abailability;
@@ -75,6 +75,7 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             try
             {
+
                 // 1️⃣ Check if ISBN already exists
                 bool isbnExists = await _context.Books.AnyAsync(b => b.ISBN == bookRequest.ISBN);
                 if (isbnExists)
@@ -89,7 +90,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                 // 2️⃣ Validate required fields
                 if (string.IsNullOrWhiteSpace(bookRequest.Title) ||
                     string.IsNullOrWhiteSpace(bookRequest.Author) ||
-                    string.IsNullOrWhiteSpace(bookRequest.Genre) ||
+                      bookRequest.GenreId == 0 ||
                     string.IsNullOrWhiteSpace(bookRequest.ISBN))
                 {
                     return new ApiResponse<Guid>
@@ -138,7 +139,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     Id = Guid.NewGuid(),
                     Title = bookRequest.Title,
                     Author = bookRequest.Author,
-                    Genre = bookRequest.Genre,
+                    GenreId = bookRequest.GenreId, // ✅ Assign GenreId
                     Description = bookRequest.Description,
                     ISBN = bookRequest.ISBN,
                     CoverImage = coverImageBytes,
@@ -361,23 +362,176 @@ namespace ScientificLibraryBack.Services.PublisherService
             throw new NotImplementedException();
         }
 
-       
+
         //public async Task<IEnumerable<Book>> GetApprovedBooksAsync(Guid publisherId)
         //{
         //    return await _context.Books
         //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
         //}
 
-      
+
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPublishedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre,
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Books retrieved successfully.";
+        //        response.Data = bookDTOs; // Assign the books to the Data property
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPublishedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved)
+        //                     .Include(b => b.Publisher)
+        //                     .Include(b => b.Genre) // ✅ Include Genre to get the name
+        //                     .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Books retrieved successfully.";
+        //        response.Data = bookDTOs; // Assign the books to the Data property
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPublishedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved)
+        //                     .Include(b => b.Publisher)
+        //                     .Include(b => b.Genre) // ✅ Include Genre to get the name
+        //                     .Include(b => b.BookKeywords) // ✅ Include BookKeywords to get related keywords
+        //                         .ThenInclude(bk => bk.Keyword) // ✅ Fetch Keywords via the relationship
+        //                     .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
+        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), // ✅ Convert Keywords to List<string>
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Books retrieved successfully.";
+        //        response.Data = bookDTOs; // Assign the books to the Data property
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPublishedBooksAsync(string publisherId)
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();
 
             try
             {
-                // Fetch books with related entities
+                // Fetch only necessary fields
                 var books = await _context.Books
-                             .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved).ToListAsync();
+                    .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved)
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.Author,
+                        b.ISBN,
+                        b.Status,
+                        b.Format,
+                        GenreName = b.Genre.Name, // ✅ Fetch Genre Name
+                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords as List<string>
+                        b.Description,
+                        b.Title,
+                        b.PageCount,
+                        b.IsAvailable,
+                        b.PublicationDate,
+                        b.State,
+                        b.Language
+                    })
+                    .ToListAsync();
 
                 var bookDTOs = books.Select(book => new BookDTO
                 {
@@ -386,22 +540,22 @@ namespace ScientificLibraryBack.Services.PublisherService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.Genre,
-                    Keywords = book.Keywords,
-                    PublisherName = book.Publisher?.UserName,
+                    Genre = book.GenreName, // ✅ Use Genre Name
+                    Keywords = book.Keywords, // ✅ Use List of Keywords
+                    PublisherName = book.PublisherName, // ✅ Use Publisher Name
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
                     IsAvailable = book.IsAvailable,
                     PublicationDate = book.PublicationDate,
                     State = book.State,
-                    Language = book.Language,
+                    Language = book.Language
                 }).ToList();
 
                 // Wrap the result in ApiResponse
                 response.Success = true;
-                response.Message = "Books retrieved successfully.";
-                response.Data = bookDTOs; // Assign the books to the Data property
+                response.Message = "Published books retrieved successfully.";
+                response.Data = bookDTOs;
             }
             catch (Exception ex)
             {
@@ -411,6 +565,7 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
+
 
         //public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooksAsync(string publisherId)
         //{
@@ -436,6 +591,142 @@ namespace ScientificLibraryBack.Services.PublisherService
         //    return response;
         //}
 
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        var books = await _context.Books
+        //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
+        //            .Include(b => b.Publisher)
+        //            .Include(b => b.Reviews)
+        //            .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre,
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+
+        //        response.Success = true;
+        //        response.Message = "Pending books retrieved successfully.";
+        //        response.Data = bookDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        var books = await _context.Books
+        //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
+        //            .Include(b => b.Publisher)
+        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
+        //            .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Get Genre name instead of the Genre object
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        response.Success = true;
+        //        response.Message = "Pending books retrieved successfully.";
+        //        response.Data = bookDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        var books = await _context.Books
+        //        .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
+        //        .Select(book => new
+        //        {
+        //            book, // The base book entity
+        //            GenreName = book.Genre.Name,
+        //            PublisherName = book.Publisher.UserName,
+        //            Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList()
+        //        })
+        //        .ToListAsync();
+
+        //        // Convert to DTOs
+        //        var bookDTOs = books.Select(b => new BookDTO
+        //        {
+        //            Id = b.book.Id,
+        //            Author = b.book.Author,
+        //            ISBN = b.book.ISBN,
+        //            Status = b.book.Status,
+        //            Format = b.book.Format,
+        //            Genre = b.GenreName,
+        //            Keywords = b.Keywords,
+        //            PublisherName = b.PublisherName,
+        //            Description = b.book.Description,
+        //            Title = b.book.Title,
+        //            PageCount = b.book.PageCount,
+        //            IsAvailable = b.book.IsAvailable,
+        //            PublicationDate = b.book.PublicationDate,
+        //            State = b.book.State,
+        //            Language = b.book.Language,
+        //        }).ToList();
+
+        //        response.Success = true;
+        //        response.Message = "Pending books retrieved successfully.";
+        //        response.Data = bookDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();
@@ -444,8 +735,203 @@ namespace ScientificLibraryBack.Services.PublisherService
             {
                 var books = await _context.Books
                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
-                    .Include(b => b.Publisher)
-                    .Include(b => b.Reviews)
+                    .Include(b => b.Genre) // ✅ Eager load Genre
+                    .Include(b => b.Publisher) // ✅ Eager load Publisher
+                    .Include(b => b.BookKeywords) // ✅ Eager load BookKeywords
+                        .ThenInclude(bk => bk.Keyword) // ✅ Ensure Keywords are loaded
+                    .Select(book => new BookDTO
+                    {
+                        Id = book.Id,
+                        Author = book.Author,
+                        ISBN = book.ISBN,
+                        Status = book.Status,
+                        Format = book.Format,
+                        Genre = book.Genre.Name, // ✅ Get Genre name
+                        Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Extract Keywords efficiently
+                        PublisherName = book.Publisher.UserName, // ✅ Get Publisher name
+                        Description = book.Description,
+                        Title = book.Title,
+                        PageCount = book.PageCount,
+                        IsAvailable = book.IsAvailable,
+                        PublicationDate = book.PublicationDate,
+                        State = book.State,
+                        Language = book.Language,
+                    })
+                    .ToListAsync(); // ✅ Query is fully executed in DB before hitting C#
+
+                response.Success = true;
+                response.Message = "Pending books retrieved successfully.";
+                response.Data = books;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
+
+
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //                    .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected).ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre,
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Books retrieved successfully.";
+        //        response.Data = bookDTOs; // Assign the books to the Data property
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        // Fetch books with related entities
+        //        var books = await _context.Books
+        //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected)
+        //            .Include(b => b.Publisher) // ✅ Include Publisher
+        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
+        //            .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Get Genre name instead of the Genre object
+        //            Keywords = book.Keywords,
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Rejected books retrieved successfully.";
+        //        response.Data = bookDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
+        //{
+        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+        //    try
+        //    {
+        //        var books = await _context.Books
+        //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected)
+        //            .Include(b => b.Publisher) // ✅ Include Publisher
+        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
+        //            .Include(b => b.BookKeywords) // ✅ Include BookKeywords for keyword mapping
+        //                .ThenInclude(bk => bk.Keyword)
+        //            .ToListAsync();
+
+        //        var bookDTOs = books.Select(book => new BookDTO
+        //        {
+        //            Id = book.Id,
+        //            Author = book.Author,
+        //            ISBN = book.ISBN,
+        //            Status = book.Status,
+        //            Format = book.Format,
+        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
+        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch keyword names
+        //            PublisherName = book.Publisher?.UserName,
+        //            Description = book.Description,
+        //            Title = book.Title,
+        //            PageCount = book.PageCount,
+        //            IsAvailable = book.IsAvailable,
+        //            PublicationDate = book.PublicationDate,
+        //            State = book.State,
+        //            Language = book.Language,
+        //        }).ToList();
+
+        //        // Wrap the result in ApiResponse
+        //        response.Success = true;
+        //        response.Message = "Rejected books retrieved successfully.";
+        //        response.Data = bookDTOs;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
+        {
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+            try
+            {
+                var books = await _context.Books
+                    .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected)
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.Author,
+                        b.ISBN,
+                        b.Status,
+                        b.Format,
+                        GenreName = b.Genre.Name,
+                        PublisherName = b.Publisher.UserName,
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
+                        b.Description,
+                        b.Title,
+                        b.PageCount,
+                        b.IsAvailable,
+                        b.PublicationDate,
+                        b.State,
+                        b.Language
+                    })
                     .ToListAsync();
 
                 var bookDTOs = books.Select(book => new BookDTO
@@ -455,9 +941,9 @@ namespace ScientificLibraryBack.Services.PublisherService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.Genre,
-                    Keywords = book.Keywords,
-                    PublisherName = book.Publisher?.UserName,
+                    Genre = book.GenreName, // ✅ Fetch Genre name
+                    Keywords = book.Keywords, // ✅ Fetch keyword names
+                    PublisherName = book.PublisherName,
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -467,9 +953,8 @@ namespace ScientificLibraryBack.Services.PublisherService
                     Language = book.Language,
                 }).ToList();
 
-
                 response.Success = true;
-                response.Message = "Pending books retrieved successfully.";
+                response.Message = "Rejected books retrieved successfully.";
                 response.Data = bookDTOs;
             }
             catch (Exception ex)
@@ -482,48 +967,96 @@ namespace ScientificLibraryBack.Services.PublisherService
         }
 
 
-        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooksAsync(string publisherId)
-        {
-            var response = new ApiResponse<IEnumerable<BookDTO>>();
+        //public async Task<ApiResponse<Guid>> UpdateBookAsync(Guid id, BookCreateRequest updateRequest)
+        //{
+        //    var response = new ApiResponse<Guid>();
 
-            try
-            {
-                // Fetch books with related entities
-                var books = await _context.Books
-                            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected).ToListAsync();
+        //    try
+        //    {
+        //        // Retrieve the existing book from the database
+        //        var existingBook = await _context.Books.FindAsync(id);
+        //        if (existingBook == null)
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            response.Data = id;
+        //            return response;
+        //        }
 
-                var bookDTOs = books.Select(book => new BookDTO
-                {
-                    Id = book.Id,
-                    Author = book.Author,
-                    ISBN = book.ISBN,
-                    Status = book.Status,
-                    Format = book.Format,
-                    Genre = book.Genre,
-                    Keywords = book.Keywords,
-                    PublisherName = book.Publisher?.UserName,
-                    Description = book.Description,
-                    Title = book.Title,
-                    PageCount = book.PageCount,
-                    IsAvailable = book.IsAvailable,
-                    PublicationDate = book.PublicationDate,
-                    State = book.State,
-                    Language = book.Language,
-                }).ToList();
+        //        // Check for significant changes
+        //        bool isMajorEdit =
+        //            updateRequest.Title != existingBook.Title ||
+        //            updateRequest.Author != existingBook.Author ||
+        //            updateRequest.ISBN != existingBook.ISBN;
 
-                // Wrap the result in ApiResponse
-                response.Success = true;
-                response.Message = "Books retrieved successfully.";
-                response.Data = bookDTOs; // Assign the books to the Data property
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                response.Message = $"An error occurred: {ex.Message}";
-            }
+        //        // Check each field for changes and update if necessary
+        //        if (!string.Equals(existingBook.Title, updateRequest.Title, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Title = updateRequest.Title;
 
-            return response;
-        }
+        //        if (!string.Equals(existingBook.Author, updateRequest.Author, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Author = updateRequest.Author;
+
+        //        if (!string.Equals(existingBook.Genre, updateRequest.Genre, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Genre = updateRequest.Genre;
+
+        //        if (!string.Equals(existingBook.Description, updateRequest.Description, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Description = updateRequest.Description;
+
+        //        if (!string.Equals(existingBook.ISBN, updateRequest.ISBN, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.ISBN = updateRequest.ISBN;
+
+        //        if (updateRequest.CoverImage != null && !updateRequest.CoverImage.SequenceEqual(existingBook.CoverImage ?? Array.Empty<byte>()))
+        //            existingBook.CoverImage = updateRequest.CoverImage;
+
+        //        //if (!string.Equals(existingBook.CoverImageUrl, updateRequest.CoverImageUrl, StringComparison.OrdinalIgnoreCase))
+        //        //    existingBook.CoverImageUrl = updateRequest.CoverImageUrl;
+
+        //        if (updateRequest.PublicationDate != existingBook.PublicationDate && updateRequest.PublicationDate != DateTime.MinValue)
+        //            existingBook.PublicationDate = updateRequest.PublicationDate;
+
+        //        if (updateRequest.PageCount > 0 && updateRequest.PageCount != existingBook.PageCount)
+        //            existingBook.PageCount = updateRequest.PageCount;
+
+        //        if (!string.Equals(existingBook.Language, updateRequest.Language, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Language = updateRequest.Language;
+
+        //        if (!string.Equals(existingBook.Format, updateRequest.Format, StringComparison.OrdinalIgnoreCase))
+        //            existingBook.Format = updateRequest.Format;
+
+        //        //if (!string.Equals(existingBook.Keywords, updateRequest.Keywords, StringComparison.OrdinalIgnoreCase))
+        //        //    existingBook.Keywords = updateRequest.Keywords;
+
+        //        if (updateRequest.IsAvailable != existingBook.IsAvailable)
+        //            existingBook.IsAvailable = updateRequest.IsAvailable;
+
+        //        //if (existingBook.PublisherId != updateRequest.PublisherId)
+        //        //    existingBook.PublisherId = updateRequest.PublisherId;
+
+
+        //        // If major edits, reset approval status
+        //        if (isMajorEdit)
+        //        {
+        //            existingBook.Status = ApprovalStatus.Pending;
+        //        }
+
+        //        existingBook.State = State.Edited;
+
+        //        // Save changes to the database
+        //        _context.Books.Update(existingBook); // This ensures only modified fields are persisted
+        //        await _context.SaveChangesAsync();
+
+        //        response.Success = true;
+        //        response.Message = "Book updated successfully. You need to wait the admin's approval";
+        //        response.Data = existingBook.Id;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
 
         public async Task<ApiResponse<Guid>> UpdateBookAsync(Guid id, BookCreateRequest updateRequest)
         {
@@ -532,7 +1065,11 @@ namespace ScientificLibraryBack.Services.PublisherService
             try
             {
                 // Retrieve the existing book from the database
-                var existingBook = await _context.Books.FindAsync(id);
+                var existingBook = await _context.Books
+                    .Include(b => b.Genre) // ✅ Ensure Genre is loaded
+                    .Include(b => b.BookKeywords) // ✅ Ensure Keywords are loaded
+                    .FirstOrDefaultAsync(b => b.Id == id);
+
                 if (existingBook == null)
                 {
                     response.Success = false;
@@ -545,17 +1082,18 @@ namespace ScientificLibraryBack.Services.PublisherService
                 bool isMajorEdit =
                     updateRequest.Title != existingBook.Title ||
                     updateRequest.Author != existingBook.Author ||
-                    updateRequest.ISBN != existingBook.ISBN;
+                    updateRequest.ISBN != existingBook.ISBN ||
+                    updateRequest.GenreId != existingBook.Genre?.Id; // ✅ Check if Genre changed
 
-                // Check each field for changes and update if necessary
+                // Update fields if necessary
                 if (!string.Equals(existingBook.Title, updateRequest.Title, StringComparison.OrdinalIgnoreCase))
                     existingBook.Title = updateRequest.Title;
 
                 if (!string.Equals(existingBook.Author, updateRequest.Author, StringComparison.OrdinalIgnoreCase))
                     existingBook.Author = updateRequest.Author;
 
-                if (!string.Equals(existingBook.Genre, updateRequest.Genre, StringComparison.OrdinalIgnoreCase))
-                    existingBook.Genre = updateRequest.Genre;
+                if (existingBook.Genre?.Id != updateRequest.GenreId)
+                    existingBook.GenreId = updateRequest.GenreId; // ✅ Store GenreId instead of Genre name
 
                 if (!string.Equals(existingBook.Description, updateRequest.Description, StringComparison.OrdinalIgnoreCase))
                     existingBook.Description = updateRequest.Description;
@@ -565,9 +1103,6 @@ namespace ScientificLibraryBack.Services.PublisherService
 
                 if (updateRequest.CoverImage != null && !updateRequest.CoverImage.SequenceEqual(existingBook.CoverImage ?? Array.Empty<byte>()))
                     existingBook.CoverImage = updateRequest.CoverImage;
-
-                //if (!string.Equals(existingBook.CoverImageUrl, updateRequest.CoverImageUrl, StringComparison.OrdinalIgnoreCase))
-                //    existingBook.CoverImageUrl = updateRequest.CoverImageUrl;
 
                 if (updateRequest.PublicationDate != existingBook.PublicationDate && updateRequest.PublicationDate != DateTime.MinValue)
                     existingBook.PublicationDate = updateRequest.PublicationDate;
@@ -581,17 +1116,20 @@ namespace ScientificLibraryBack.Services.PublisherService
                 if (!string.Equals(existingBook.Format, updateRequest.Format, StringComparison.OrdinalIgnoreCase))
                     existingBook.Format = updateRequest.Format;
 
-                //if (!string.Equals(existingBook.Keywords, updateRequest.Keywords, StringComparison.OrdinalIgnoreCase))
-                //    existingBook.Keywords = updateRequest.Keywords;
-
                 if (updateRequest.IsAvailable != existingBook.IsAvailable)
                     existingBook.IsAvailable = updateRequest.IsAvailable;
 
-                //if (existingBook.PublisherId != updateRequest.PublisherId)
-                //    existingBook.PublisherId = updateRequest.PublisherId;
+                // ✅ Handle Keywords (Many-to-Many Relationship)
+                var existingKeywords = await _context.Keywords
+                    .Where(k => updateRequest.Keywords.Contains(k.Name))
+                    .ToListAsync();
 
+                existingBook.BookKeywords.Clear(); // Remove old keywords
+                existingBook.BookKeywords = existingKeywords
+                    .Select(k => new BookKeyword { BookId = existingBook.Id, KeywordId = k.Id })
+                    .ToList();
 
-                // If major edits, reset approval status
+                // ✅ Reset approval status if major edits are made
                 if (isMajorEdit)
                 {
                     existingBook.Status = ApprovalStatus.Pending;
@@ -600,11 +1138,11 @@ namespace ScientificLibraryBack.Services.PublisherService
                 existingBook.State = State.Edited;
 
                 // Save changes to the database
-                _context.Books.Update(existingBook); // This ensures only modified fields are persisted
+                _context.Books.Update(existingBook);
                 await _context.SaveChangesAsync();
 
                 response.Success = true;
-                response.Message = "Book updated successfully. You need to wait the admin's approval";
+                response.Message = "Book updated successfully. You need to wait for admin approval.";
                 response.Data = existingBook.Id;
             }
             catch (Exception ex)
@@ -615,6 +1153,7 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
+
         public async Task<ApiResponse<Book>> GetBookByIdAsync(Guid bookId)
         {
             var response = new ApiResponse<Book>();
