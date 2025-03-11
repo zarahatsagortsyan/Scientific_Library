@@ -1,139 +1,89 @@
 .book-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    background: #f8f9fa;
-    padding: 16px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .filter-group {
-    flex: 1;
-    min-width: 200px;
-    display: flex;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px; /* Reduced gap for compact design */
+  padding: 12px;
+  background: #f8f9fa; /* Light gray background */
+  border-radius: 8px;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Input fields: Title & Author - Smaller width */
+.book-filter input {
+  flex: 0.5; /* Smaller width for Title & Author */
+  min-width: 120px;
+  max-width: 180px;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 13px;
+  height: 36px; /* Uniform height */
+  transition: border 0.2s ease-in-out;
+}
+
+/* Ensure input focus styling */
+.book-filter input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Multi-select dropdowns (React-Select) */
+.book-filter .react-select__control {
+  min-width: 180px;
+  max-width: 220px;
+  height: 36px; /* Uniform height */
+  font-size: 13px;
+}
+
+/* Ensure selected values in multi-select dropdowns have uniform height */
+.book-filter .react-select__multi-value {
+  background-color: #007bff;
+  color: white;
+  font-size: 12px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+/* Make the text inside selected options white */
+.book-filter .react-select__multi-value__label {
+  color: white;
+  font-size: 12px;
+}
+
+/* Make the remove icon inside selected options white */
+.book-filter .react-select__multi-value__remove {
+  color: white;
+}
+
+/* Apply button */
+.book-filter .apply-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 36px; /* Same height as other fields */
+  transition: background 0.2s ease-in-out;
+}
+
+.book-filter .apply-button:hover {
+  background: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .book-filter {
     flex-direction: column;
+    align-items: stretch;
   }
-  
-  .filter-group label {
-    font-weight: bold;
-    margin-bottom: 6px;
-    color: #333;
+
+  .book-filter input,
+  .book-filter .react-select__control,
+  .book-filter .apply-button {
+    width: 100%; /* Full width on smaller screens */
   }
-  
-  .filter-group input,
-  .filter-group button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    background: white;
-    cursor: pointer;
-  }
-  
-  .multi-select {
-    position: relative;
-  }
-  
-  .multi-select button {
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .multi-select-dropdown {
-    position: absolute;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    max-height: 250px;
-    overflow-y: auto;
-    z-index: 10;
-    width: 100%;
-    display: none;
-    padding: 6px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  .multi-select-dropdown label {
-    display: flex;
-    align-items: center; /* ✅ Keep checkboxes and text on the same line */
-    gap: 8px; /* ✅ Add spacing between checkbox and text */
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #333;
-    width: 100%;
-    white-space: nowrap; /* ✅ Prevent text from wrapping */
-  }
-  
-  .multi-select-dropdown input {
-    margin-right: 10px;
-  }
-  
-  .multi-select-dropdown label:hover {
-    background: #e9ecef;
-  }
-  
-  .multi-select .multi-select-dropdown {
-    display: block;
-  }
-  
-  .filter-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .filter-actions button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s ease;
-  }
-  
-  .filter-actions button:hover {
-    background: #0056b3;
-  }
-  
-  /* ✅ Ensure Checkboxes are Left-Aligned */
-  .multi-select-dropdown label {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .multi-select-dropdown input[type="checkbox"] {
-    align-items: left;
-    margin: 0;
-    transform: scale(1.1); /* ✅ Slightly enlarge checkbox for better UX */
-  }
-  
-  
-  @media (max-width: 768px) {
-    .book-filter {
-      flex-direction: column;
-      align-items: center;
-    }
-  
-    .filter-group {
-      width: 100%;
-    }
-  
-    .filter-actions {
-      flex-direction: column;
-      width: 100%;
-    }
-  }
-  
-  
+}

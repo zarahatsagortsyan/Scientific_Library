@@ -159,6 +159,19 @@ namespace ScientificLibraryBack.Services.AuthService
                 };
                 return response;
             }
+            if (identityUser.EmailConfirmed == false)
+            {
+                response.IsLogedIn = false;
+                response.JwtToken = string.Empty;
+                response.RefreshToken = string.Empty;
+                response.Errors = new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "User Email is not confirmed",
+                    Data = false
+                };
+                return response;
+            }
 
             response.IsLogedIn = true;
             response.JwtToken = GenerateTokenString(identityUser);

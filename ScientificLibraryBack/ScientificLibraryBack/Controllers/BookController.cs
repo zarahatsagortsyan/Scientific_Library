@@ -177,21 +177,40 @@ namespace ScientificLibraryBack.Controllers
         //    return result.Success ? Ok(result) : BadRequest(result);
         //}
 
+        //[HttpGet("filter")]
+        //public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
+        //{
+        //    // ✅ Handle empty genres, languages, keywords correctly
+        //    filter.Genres = Request.Query["genres"]
+        //        .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+        //        .Select(int.Parse).ToList();
+
+        //    filter.Languages = Request.Query["languages"]
+        //        .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+        //        .ToList();
+
+        //    filter.Keywords = Request.Query["keywords"]
+        //        .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+        //        .ToList();
+
+        //    var result = await _bookService.FilterBooksAsync(filter);
+        //    return result.Success ? Ok(result) : BadRequest(result);
+        //}
         [HttpGet("filter")]
         public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
         {
-            // ✅ Handle empty genres, languages, keywords correctly
-            filter.Genres = Request.Query["genres"]
-                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(int.Parse).ToList();
+            // ✅ Only parse if values exist
+            filter.Genres = Request.Query.ContainsKey("genres")
+                ? Request.Query["genres"].ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
+                : new List<int>();
 
-            filter.Languages = Request.Query["languages"]
-                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
+            filter.Languages = Request.Query.ContainsKey("languages")
+                ? Request.Query["languages"].ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                : new List<string>();
 
-            filter.Keywords = Request.Query["keywords"]
-                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .ToList();
+            filter.Keywords = Request.Query.ContainsKey("keywords")
+                ? Request.Query["keywords"].ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
+                : new List<string>();
 
             var result = await _bookService.FilterBooksAsync(filter);
             return result.Success ? Ok(result) : BadRequest(result);
