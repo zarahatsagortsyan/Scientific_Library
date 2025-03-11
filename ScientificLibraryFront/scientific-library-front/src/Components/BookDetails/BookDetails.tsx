@@ -45,11 +45,11 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
         ✖ Close
       </button>
       <div className="book-details-content">
-        <img
+        {/* <img
           src={book.coverImageUrl || "https://via.placeholder.com/200"}
           alt={book.title}
           className="book-details-image"
-        />
+        /> */}
         <div className="book-details-info">
           <h2>{book.title}</h2>
           <p>
@@ -70,9 +70,6 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
           </p>
           <p>
             <strong>🌐 Language:</strong> {book.language}
-          </p>
-          <p>
-            <strong>📑 Format:</strong> {book.format}
           </p>
           <p>
             <strong>🔍 Keywords:</strong>{" "}

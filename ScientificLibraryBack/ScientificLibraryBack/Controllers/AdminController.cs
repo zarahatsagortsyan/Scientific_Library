@@ -144,7 +144,6 @@ namespace ScientificLibraryBack.Controllers
         [HttpPatch("keywords/{id}")]
         public async Task<IActionResult> UpdateKeyword(Guid id, [FromBody] KeywordCreateRequest request)
         {
-
             var response = await _adminService.UpdateKeyword(id, request.Name);
 
             if (response.Success)

@@ -191,13 +191,13 @@ const KeywordsListPage: React.FC = () => {
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Edit Keyword</h5>
-                <button
+                <h5 className="modal-title">edit keyword</h5>
+                {/* <button
                   type="button"
                   className="btn-close"
                   aria-label="Close"
                   onClick={handleCloseModal}
-                ></button>
+                ></button> */}
               </div>
               <div className="modal-body">
                 <KeywordEditForm
@@ -221,13 +221,13 @@ const KeywordsListPage: React.FC = () => {
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Create Keyword</h5>
-                <button
+                <h5 className="modal-title">new keyword</h5>
+                {/* <button
                   type="button"
                   className="btn-close"
                   aria-label="Close"
                   onClick={handleCloseCreateModal}
-                ></button>
+                ></button> */}
               </div>
               <div className="modal-body">
                 {errorMessage && (

@@ -26,7 +26,7 @@ namespace ScientificLibraryBack.Services.PublisherService
             try
             {
                 // Retrieve the existing book from the database
-                var existingBook = await _context.Books.FindAsync(bookChangeAvailability.PublisherId);
+                var existingBook = await _context.Books.FindAsync(bookChangeAvailability.BookId);
                 if (existingBook == null)
                 {
                     response.Success = false;
@@ -44,8 +44,8 @@ namespace ScientificLibraryBack.Services.PublisherService
                 }
 
 
-                if (bookChangeAvailability.Abailability != existingBook.IsAvailable)
-                    existingBook.IsAvailable = bookChangeAvailability.Abailability;
+                if (bookChangeAvailability.Availability != existingBook.IsAvailable)
+                    existingBook.IsAvailable = bookChangeAvailability.Availability;
 
                 //if (existingBook.PublisherId != updateRequest.PublisherId)
                 //    existingBook.PublisherId = updateRequest.PublisherId;

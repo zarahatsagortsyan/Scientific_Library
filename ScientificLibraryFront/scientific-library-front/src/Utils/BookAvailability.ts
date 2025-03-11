@@ -1,50 +1,6 @@
-// import { jwtDecode } from "jwt-decode";
-// import { Book } from "../Models/Book";
-// import { useState } from "react";
-// import axios from "axios";
-
-// const toggleAvailability = async (book: Book) => {
-
-//   const [error, setError] = useState<string | null>(null);
-//   const [books, setBooks] = useState<Book[]>([]);
-//     const token = localStorage.getItem("jwtToken");
-//     if (!token) {
-//         setError("Authentication required.");
-//         console.error("Error fetching materials:", error);
-//         return;
-//     }
-  
-//     try {
-//         const decodedToken: any = jwtDecode(token);
-//         const publisherId =
-//         decodedToken[
-//             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-//         ];
-//         const response = await axios.patch(
-//             `http://localhost:8001/api/Publisher/books/availability`,
-//             {
-//                 PublisherId: publisherId,
-//                 BookId: book.id,
-//                 Abailability: !book.isAvailable,
-//             },
-//             { headers: { Authorization: `Bearer ${token}` } }
-//             );
-//             if (response.status === 200) {
-//             setBooks((prevBooks) =>
-//                 prevBooks.map((b) =>
-//                 b.id === book.id ? { ...b, isAvailable: !b.isAvailable } : b
-//                 )
-//             );
-//             }
-
-//     } catch (error) {
-//       console.error("Failed to toggle availability:", error);
-//     }
-//   };
-// src/Utils/BookUtils.js
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { Book } from "../Models/Book";
+import api from "../api/api";
 
 export const toggleBookAvailability = async (book:Book) => {
   try {
@@ -52,23 +8,24 @@ export const toggleBookAvailability = async (book:Book) => {
     if (!token) {
       throw new Error("Authentication required.");
     }
-
+console.log("helooooooooooooooooo  " +  !book.isAvailable)
     const decodedToken: any = jwtDecode(token);
     const publisherId =  decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
-    const response = await axios.patch(
-      `http://localhost:8001/api/Publisher/books/availability`,
+    const response = await api.patch(
+      `${import.meta.env.VITE_API_URL}/Publisher/books/availability`,
       {
         PublisherId: publisherId,
         BookId: book.id,
-        Abailability: !book.isAvailable,
+        Availability: !book.isAvailable,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
 
-    if (response.status === 200) {
+    console.log(response)
+    if (response.status === 200 && response.data.success == true) {
       return { ...book, isAvailable: !book.isAvailable };
     } else {
       console.error("Failed to toggle availability:", response.data);

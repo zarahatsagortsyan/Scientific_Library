@@ -133,14 +133,14 @@ namespace ScientificLibraryBack.Services.BookService
             {
                 // Fetch books with only necessary fields using projection
                 var books = await _context.Books
-                    .Where(b => b.Status == ApprovalStatus.Approved)
+                    .Where(b => b.Status == ApprovalStatus.Approved && b.IsAvailable == true)
                     .Select(b => new BookDTO
                     {
                         Id = b.Id,
                         Author = b.Author,
                         ISBN = b.ISBN,
                         Status = b.Status,
-                        Format = b.Format,
+                        //Format = b.Format,
                         Genre = b.Genre.Name, // ✅ Get Genre Name
                         Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords
                         PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
@@ -732,10 +732,9 @@ namespace ScientificLibraryBack.Services.BookService
         {
             var response = new ApiResponse<IEnumerable<ReviewDTO>>();
 
-            // Retrieve reviews for the given book
             var reviews = await _context.Reviews
                 .Where(r => r.BookId == bookId)
-                .Include(r => r.User)  // You can include user info if needed
+                .Include(r => r.User)
             .ToListAsync();
 
             var reviewsDTOs = reviews.Select(review => new ReviewDTO
@@ -764,13 +763,11 @@ namespace ScientificLibraryBack.Services.BookService
 
             try
             {
-                // Fetch books with related entities
                 var genres = await _context.Genres.ToListAsync();
 
-                // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Genres retrieved successfully.";
-                response.Data = genres; // Assign the books to the Data property
+                response.Data = genres;
             }
             catch (Exception ex)
             {
@@ -786,13 +783,11 @@ namespace ScientificLibraryBack.Services.BookService
 
             try
             {
-                // Fetch books with related entities
                 var languages = await _context.Languages.ToListAsync();
 
-                // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Languages retrieved successfully.";
-                response.Data = languages; // Assign the books to the Data property
+                response.Data = languages;
             }
             catch (Exception ex)
             {
@@ -809,13 +804,11 @@ namespace ScientificLibraryBack.Services.BookService
 
             try
             {
-                // Fetch books with related entities
                 var keywords = await _context.Keywords.ToListAsync();
 
-                // Wrap the result in ApiResponse
                 response.Success = true;
                 response.Message = "Keywords retrieved successfully.";
-                response.Data = keywords; // Assign the books to the Data property
+                response.Data = keywords;
             }
             catch (Exception ex)
             {
@@ -825,104 +818,6 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
-
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var query = _context.Books
-        //            .Include(b => b.Genre)
-        //            .Include(b => b.BookKeywords)
-        //                .ThenInclude(bk => bk.Keyword)
-        //            .AsQueryable();
-
-        //        // Apply filters dynamically
-        //        if (!string.IsNullOrEmpty(filter.Title))
-        //            query = query.Where(b => b.Title.ToLower().Contains(filter.Title.ToLower()));
-
-        //        if (!string.IsNullOrEmpty(filter.Author))
-        //            query = query.Where(b => b.Author.ToLower().Contains(filter.Author.ToLower()));
-
-        //        if (filter.GenreIds != null && filter.GenreIds.Any())
-        //            query = query.Where(b => filter.GenreIds.Contains(b.GenreId));
-
-        //        if (filter.Languages != null && filter.Languages.Any())
-        //            query = query.Where(b => filter.Languages.Contains(b.Language));
-
-        //        if (filter.Keywords != null && filter.Keywords.Any())
-        //            query = query.Where(b => b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
-
-        //        var books = await query.ToListAsync();
-
-        //        // Convert to DTOs
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Title = book.Title,
-        //            Author = book.Author,
-        //            Genre = book.Genre?.Name,
-        //            Language = book.Language,
-        //            Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
-        //        }).ToList();
-
-        //        response.Success = true;
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"Error: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
-
-        //public async Task<IEnumerable<BookDTO>> FilterBooksAsync(BookFilterRequest filter)
-        //{
-        //    var query = _context.Books
-        //        .Include(b => b.Genre)
-        //        .Include(b => b.BookKeywords).ThenInclude(bk => bk.Keyword)
-        //        .AsQueryable();
-
-        //    if (!string.IsNullOrWhiteSpace(filter.Title))
-        //    {
-        //        query = query.Where(b => b.Title.ToLower().Contains(filter.Title.ToLower()));
-        //    }
-
-        //    if (!string.IsNullOrWhiteSpace(filter.Author))
-        //    {
-        //        query = query.Where(b => b.Author.ToLower().Contains(filter.Author.ToLower()));
-        //    }
-
-        //    if (filter.GenreIds != null && filter.GenreIds.Any())
-        //    {
-        //        query = query.Where(b => filter.GenreIds.Contains(b.GenreId));
-        //    }
-
-        //    if (filter.Languages != null && filter.Languages.Any())
-        //    {
-        //        query = query.Where(b => filter.Languages.Contains(b.Language));
-        //    }
-
-        //    if (filter.Keywords != null && filter.Keywords.Any())
-        //    {
-        //        query = query.Where(b => b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
-        //    }
-
-        //    var books = await query.Select(book => new BookDTO
-        //    {
-        //        Id = book.Id,
-        //        Title = book.Title,
-        //        Author = book.Author,
-        //        Genre = book.Genre.Name,
-        //        Language = book.Language,
-        //        Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
-        //    }).ToListAsync();
-
-        //    return books;
-        //}
         public async Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();
@@ -935,8 +830,8 @@ namespace ScientificLibraryBack.Services.BookService
                         .ThenInclude(bk => bk.Keyword)
                     .AsQueryable();
 
-                query = query.Where(b => b.Status == ApprovalStatus.Approved);
-                // 🔍 Apply filters dynamically
+                query = query.Where(b => b.Status == ApprovalStatus.Approved && b.IsAvailable == true);
+
                 if (!string.IsNullOrWhiteSpace(filter.Title))
                     query = query.Where(b => b.Title.ToLower().Contains(filter.Title.ToLower()));
 
@@ -983,8 +878,5 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
-
-
-
     }
 }

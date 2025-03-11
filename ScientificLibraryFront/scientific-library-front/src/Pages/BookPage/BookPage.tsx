@@ -118,9 +118,6 @@ const BookPage: React.FC = () => {
         <strong>🌐 Language:</strong> {book.language}
       </p>
       <p>
-        <strong>📑 Format:</strong> {book.format}
-      </p>
-      <p>
         <strong>🔍 Keywords:</strong>{" "}
         {book.keywords && Array.isArray(book.keywords)
           ? book.keywords.join(", ")

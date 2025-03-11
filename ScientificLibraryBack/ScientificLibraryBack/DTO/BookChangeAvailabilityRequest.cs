@@ -4,6 +4,6 @@
     {
         public string PublisherId { get; set; }
         public Guid BookId { get; set; }
-        public bool Abailability { get; set; }
+        public bool Availability { get; set; }
     }
 }

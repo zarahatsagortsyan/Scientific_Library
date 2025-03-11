@@ -80,7 +80,7 @@ const AdminApprovedBooksPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Pending</h1>
+      <h1>Approved</h1>
       <br></br>
       <div className="material-card-grid">
         {books.map((book) => (

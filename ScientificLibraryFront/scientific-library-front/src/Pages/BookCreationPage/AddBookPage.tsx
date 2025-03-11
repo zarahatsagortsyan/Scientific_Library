@@ -113,7 +113,7 @@ const AddBookPage = () => {
         <form className="book-form" onSubmit={handleSubmit}>
           {/* Basic Info */}
           <div className="form-section">
-            <h3>📝 Book Details</h3>
+            {/* <h3>📝 Book Details</h3> */}
             <input
               type="text"
               name="title"
