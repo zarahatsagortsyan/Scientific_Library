@@ -147,17 +147,54 @@ namespace ScientificLibraryBack.Controllers
             return File(book.Data, "image/jpeg");
         }
 
-        [HttpPost("filter")]
-        public async Task<IActionResult> FilterBooks([FromBody] BookFilterRequest filterRequest)
+        //[HttpPost("filter")]
+        //public async Task<IActionResult> FilterBooks([FromBody] BookFilterRequest filterRequest)
+        //{
+        //    var response = await _bookService.FilterBooksAsync(filterRequest);
+
+        //    if (response.Success)
+        //    {
+        //        return Ok(response);
+        //    }
+
+        //    return BadRequest(response);
+        //}
+        //[HttpGet("filter")]
+        //public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
+        //{
+        //    var result = await _bookService.FilterBooksAsync(filter);
+        //    return result.Success ? Ok(result) : BadRequest(result);
+        //}
+        //[HttpGet("filter")]
+        //public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
+        //{
+        //    // ✅ Convert comma-separated values into lists
+        //    filter.Genres = Request.Query["genres"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).ToList();
+        //    filter.Languages = Request.Query["languages"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
+        //    filter.Keywords = Request.Query["keywords"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+        //    var result = await _bookService.FilterBooksAsync(filter);
+        //    return result.Success ? Ok(result) : BadRequest(result);
+        //}
+
+        [HttpGet("filter")]
+        public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
         {
-            var response = await _bookService.FilterBooksAsync(filterRequest);
+            // ✅ Handle empty genres, languages, keywords correctly
+            filter.Genres = Request.Query["genres"]
+                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse).ToList();
 
-            if (response.Success)
-            {
-                return Ok(response);
-            }
+            filter.Languages = Request.Query["languages"]
+                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
 
-            return BadRequest(response);
+            filter.Keywords = Request.Query["keywords"]
+                .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .ToList();
+
+            var result = await _bookService.FilterBooksAsync(filter);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
     }
