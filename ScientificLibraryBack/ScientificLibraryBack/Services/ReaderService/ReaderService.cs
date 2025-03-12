@@ -96,7 +96,7 @@ namespace ScientificLibraryBack.Services.BookService
             if (toReadBook == null)
             {
                 response.Success = false;
-                response.Message = "Book not found in your To-Read list.";
+                response.Message = "Book not found in your list.";
                 response.Data = false;
                 return response;
             }
@@ -105,7 +105,7 @@ namespace ScientificLibraryBack.Services.BookService
             await _context.SaveChangesAsync();
 
             response.Success = true;
-            response.Message = "Book removed from your To-Read list.";
+            response.Message = "Book removed from your list.";
             response.Data = true;
 
             return response;

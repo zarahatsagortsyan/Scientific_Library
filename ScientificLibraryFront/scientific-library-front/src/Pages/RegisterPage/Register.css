@@ -85,7 +85,7 @@
 .registration-form .error {
   color: red;
   font-size: 14px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   display: block;
   text-align: left;
 }
@@ -156,3 +156,8 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
 }
 
+.form-group{
+
+  margin-bottom: 10px;
+  text-align: left;
+}

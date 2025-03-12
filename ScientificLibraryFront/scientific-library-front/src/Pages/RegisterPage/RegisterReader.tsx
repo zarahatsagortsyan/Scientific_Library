@@ -31,17 +31,16 @@ const RegisterReader: React.FC = () => {
     // Prepare the payload
     const payload = {
       email,
-      // userName: name,
       password,
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
       birthDate: new Date(dateOfBirth).toISOString(),
       phone: phoneNumber,
-      clientUri: `${window.location.origin}/confirm-email`, // ✅ Frontend confirmation page
+      clientUri: `${window.location.origin}/confirm-email`,
     };
-    console.log(payload);
+
     try {
-      const apiUrl = import.meta.env.VITE_API_URL; // Ensure your env variable is set
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/Auth/register/reader`, {
         method: "POST",
         headers: {
@@ -52,17 +51,25 @@ const RegisterReader: React.FC = () => {
 
       const data = await response.json();
 
-      if (response.ok && data.success && data.data.succeeded) {
-        // Registration successful
+      if (response.ok && data.success && data.data?.succeeded) {
         setError("");
         setSuccessMessage(data.message);
-        setTimeout(() => navigate("/login"), 3000);
+        // setTimeout(() => navigate("/login"), 3000);
       } else {
-        // If errors are present
-        const errorDescriptions =
-          data.data.errors?.map((err: any) => err.description).join("\n ") ||
-          "Registration failed.";
-        setError(errorDescriptions);
+        // Extract and show only the first error message
+        let firstErrorMessage = "Registration failed.";
+
+        if (data.errors) {
+          const firstErrorKey = Object.keys(data.errors)[0]; // Get the first error field
+          firstErrorMessage =
+            data.errors[firstErrorKey]?.[0] || firstErrorMessage;
+        } else if (data.data?.errors?.length > 0) {
+          firstErrorMessage = data.data.errors[0].description;
+        } else if (data.message) {
+          firstErrorMessage = data.message;
+        }
+
+        setError(firstErrorMessage);
       }
     } catch (error) {
       setError("An error occurred. Please try again later.");
@@ -77,23 +84,23 @@ const RegisterReader: React.FC = () => {
         {successMessage && <p className="success">{successMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="name">First Name</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
-              id="name"
+              id="firstName"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
             />
           </div>
           <div className="form-group">
-            <label htmlFor="name">Last Name</label>
+            <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
-              id="name"
+              id="lastName"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              placeholder="Enter your full name"
+              placeholder="Enter your last name"
             />
           </div>
           <div className="form-group">
@@ -115,6 +122,16 @@ const RegisterReader: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
             />
+            <small className="password-policy">
+              🔒 Your password must contain:
+              <ul>
+                <li>At least **8 characters**</li>
+                <li>At least **one uppercase letter (A-Z)**</li>
+                <li>At least **one lowercase letter (a-z)**</li>
+                <li>At least **one number (0-9)**</li>
+                <li>At least **one special character (!@#$%^&*)**</li>
+              </ul>
+            </small>
           </div>
           <div className="form-group">
             <label htmlFor="dob">Date of Birth</label>

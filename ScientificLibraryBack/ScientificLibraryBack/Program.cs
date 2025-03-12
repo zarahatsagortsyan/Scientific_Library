@@ -36,14 +36,26 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};Encrypt=False;MultipleActiveResultSets=true;";
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString));
 
+//builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
+//{
+//    options.Password.RequiredLength = 5;
+//    options.User.RequireUniqueEmail = true;
+//})
 builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
 {
-    options.Password.RequiredLength = 5;
-    options.User.RequireUniqueEmail = true;
+    options.Password.RequiredLength = 8; // Minimum password length
+    options.Password.RequireDigit = true; // Requires at least one number
+    options.Password.RequireLowercase = true; // Requires at least one lowercase letter
+    options.Password.RequireUppercase = true; // Requires at least one uppercase letter
+    options.Password.RequireNonAlphanumeric = true; // Requires at least one special character
+    options.Password.RequiredUniqueChars = 3; // Requires at least 3 unique characters
+
+    options.User.RequireUniqueEmail = true; // Ensures unique email addresses
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
 
 
 //Config for Email

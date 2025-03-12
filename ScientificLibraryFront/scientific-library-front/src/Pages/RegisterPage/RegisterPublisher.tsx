@@ -108,6 +108,16 @@ const RegisterPublisher: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)} // Directly update state
               placeholder="Enter your password"
             />
+            <small className="password-policy">
+              🔒 Your password must contain:
+              <ul>
+                <li>At least **8 characters**</li>
+                <li>At least **one uppercase letter (A-Z)**</li>
+                <li>At least **one lowercase letter (a-z)**</li>
+                <li>At least **one number (0-9)**</li>
+                <li>At least **one special character (!@#$%^&*)**</li>
+              </ul>
+            </small>
           </div>
           <div className="form-group">
             <label htmlFor="dob">Date of Establishment</label>

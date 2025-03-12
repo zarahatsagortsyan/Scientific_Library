@@ -30,7 +30,7 @@ namespace ScientificLibraryBack.Controllers
 
         // Remove a book from the user's reading list
         [HttpDelete("user-books")]
-        public async Task<IActionResult> RemoveBookFromUserList([FromBody] UserBookRequest request)
+        public async Task<IActionResult> RemoveBookFromUserList([FromBody] UserBookRemoveRequest request)
         {
             var response = await _readerService.RemoveBookFromUserList(request.UserId, request.BookId);
             if (!response.Success)

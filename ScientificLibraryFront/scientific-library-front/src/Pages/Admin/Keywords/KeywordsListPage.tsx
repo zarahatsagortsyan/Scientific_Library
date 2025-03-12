@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import { Keyword } from "../../../Models/Keyword";
 import { useKeywords } from "../../../Utils/KeywordOper";
 import KeywordEditForm from "./KeywordEditForm";

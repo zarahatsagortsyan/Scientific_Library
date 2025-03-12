@@ -16,7 +16,6 @@ const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState<boolean>(false);
-  const [newPassword, setNewPassword] = useState<string>("");
   const [role, setRole] = useState<string>("");
 
   useEffect(() => {
@@ -90,32 +89,6 @@ const ProfilePage: React.FC = () => {
       alert("Error updating profile.");
     }
   };
-
-  // const handleResetPassword = async () => {
-  //   if (!profile || !newPassword.trim()) return alert("Enter a new password!");
-
-  //   try {
-  //     const apiUrl =
-  //       role === "Reader"
-  //         ? `${import.meta.env.VITE_API_URL}/reader/profile/reset-password`
-  //         : `${import.meta.env.VITE_API_URL}/publisher/profile/reset-password`;
-
-  //     const response = await api.post(apiUrl, {
-  //       email: profile.email,
-  //       newPassword,
-  //     });
-
-  //     if (response.status === 200 && response.data.success) {
-  //       alert("Password reset successfully!");
-  //       setNewPassword("");
-  //     } else {
-  //       alert("Failed to reset password.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error resetting password:", error);
-  //     alert("Error resetting password.");
-  //   }
-  // };
 
   if (loading) return <div className="loader">⏳ Loading profile...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -195,19 +168,6 @@ const ProfilePage: React.FC = () => {
           Edit Profile
         </button>
       )}
-
-      {/* <div className="password-reset">
-        <h3>Reset Password</h3>
-        <input
-          type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <button className="reset-button" onClick={handleResetPassword}>
-          Reset Password
-        </button>
-      </div> */}
     </div>
   );
 };

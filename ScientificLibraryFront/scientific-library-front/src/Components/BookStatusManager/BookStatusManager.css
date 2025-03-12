@@ -58,6 +58,9 @@
 .status-button.Read {
     background-color: #28a745;
 }
+.status-button.None {
+    background-color: #000000;
+}
 
 /* Disabled Button */
 .status-button:disabled {

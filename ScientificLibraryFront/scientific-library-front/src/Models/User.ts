@@ -1,13 +1,5 @@
-// export interface User {
-//     id: string;
-//     name: string;
-//     email: string;
-//     banned: boolean;
-//   }
-
   export interface User {
   id: string;
-  // userName: string;
   companyName:string;
   firstName: string;
   lastName:string;
