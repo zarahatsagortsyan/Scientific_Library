@@ -47,8 +47,8 @@ const ReaderReviewsPage: React.FC = () => {
           setError(response.data.message || "Failed to fetch reviews.");
         }
       } catch (err) {
-        console.error("Error fetching user reviews:", err);
         setError("Failed to retrieve data.");
+        console.error("Error fetching user reviews:", error);
       } finally {
         setLoading(false);
       }
@@ -56,6 +56,11 @@ const ReaderReviewsPage: React.FC = () => {
 
     fetchUserReviews();
   }, [userId]);
+
+  if (loading) {
+    return <div>Loading reviews...</div>;
+  }
+
   const handleReviewClick = (reviewId: string) => {
     setExpandedReviewId((prev) => (prev === reviewId ? null : reviewId));
   };
@@ -129,7 +134,7 @@ const ReaderReviewsPage: React.FC = () => {
     startIndex,
     startIndex + reviewsPerPage
   );
-  const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
+  // const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
 
   return (
     <div className="user-reviews-page">

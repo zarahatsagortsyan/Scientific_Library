@@ -1,6 +1,7 @@
 .vs/
 # Ignore node_modules folder inside the React project
 ScientificLibraryFront/node_modules/
+ScientificLibraryFront/scientific-library-front/node_modules/
 
 # Ignore build folder inside the React project
 ScientificLibraryFront/build/

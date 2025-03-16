@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Header from "../Components/Header/Header";
 import SidebarMenu from "../Components/Sidebar/Sidebar";
 import BookPage from "../Pages/BookPage/BookPage";
@@ -36,7 +36,8 @@ const AppRoutes: React.FC = () => {
         <div style={{ flex: 1, padding: "20px" }}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<BookListPage />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<BookListPage />} />
             <Route path="/book/:bookId" element={<BookPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/reset-password" element={<ResetPassword />} />

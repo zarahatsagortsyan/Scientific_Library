@@ -1,4 +1,4 @@
-networks:
+﻿networks:
   scientificlibraryapp:
 
 services:
@@ -15,7 +15,7 @@ services:
   
 
   scientificlibraryback:
-    container_name: scientific-library-app
+    container_name: scientific-library-back
     image: ${DOCKER_REGISTRY-}scientificlibraryback
     build:
       context: .
@@ -32,3 +32,14 @@ services:
         - DB_SA_PASSWORD=Test123!@#
     networks:
         - scientificlibraryapp
+
+    
+  scientificlibraryfront:
+    container_name: scientific-library-front
+    build:
+      context: ../ScientificLibraryFront/scientific-library-front/
+      dockerfile: Dockerfile  
+    ports:
+        - "5173:80"
+    depends_on:
+        - scientificlibraryback

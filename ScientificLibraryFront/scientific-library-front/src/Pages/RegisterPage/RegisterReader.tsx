@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Register.css";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { useNavigate } from "react-router-dom";
 
 const RegisterReader: React.FC = () => {
   const [firstName, setFirstName] = useState("");
@@ -14,7 +13,6 @@ const RegisterReader: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,7 +144,8 @@ const RegisterReader: React.FC = () => {
             <PhoneInput
               placeholder="Enter phone number"
               value={phoneNumber}
-              onChange={setPhoneNumber}
+              // onChange={setPhoneNumber}
+              onChange={(value) => setPhoneNumber(value || '')}
             />
           </div>
           <button type="submit">Register</button>

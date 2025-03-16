@@ -1,6 +1,5 @@
 // export default ReadersListPage;
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { User } from "../../../Models/User";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../../api/api";

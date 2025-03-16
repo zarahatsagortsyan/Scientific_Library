@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import "./AdminBooks.css";
 import BookDetails from "../../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../../Utils/Pdf";
@@ -42,11 +41,6 @@ const AdminPendingPage: React.FC = () => {
       }
 
       try {
-        const decodedToken: any = jwtDecode(token);
-        const userId =
-          decodedToken[
-            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
-          ];
         const response = await axios.get(
           `http://localhost:8001/api/Admin/books/pending`,
           {
@@ -69,15 +63,6 @@ const AdminPendingPage: React.FC = () => {
 
     fetchBooks();
   }, []);
-
-  const getStatusLabel = (status: string): string => {
-    const statusMap: Record<string, string> = {
-      Pending: "🟡 Pending",
-      Approved: "🟢 Approved",
-      Rejected: "🔴 Rejected",
-    };
-    return statusMap[status] || "❓ Unknown";
-  };
 
   if (loading) return <div className="loader">⏳ Loading materials...</div>;
   if (error) return <div className="error">{error}</div>;

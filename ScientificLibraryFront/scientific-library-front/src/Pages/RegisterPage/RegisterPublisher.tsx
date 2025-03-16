@@ -132,7 +132,8 @@ const RegisterPublisher: React.FC = () => {
             <PhoneInput
               placeholder="Enter phone number"
               value={phoneNumber}
-              onChange={setPhoneNumber}
+              // onChange={setPhoneNumber}
+              onChange={(value) => setPhoneNumber(value || '')}
             />
           </div>
           <button type="submit">Register</button>
