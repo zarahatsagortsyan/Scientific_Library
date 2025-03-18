@@ -17,5 +17,9 @@ namespace ScientificLibraryBack.Services.AdminService
         Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks();
         Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks();
         Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks();
+        Task<ApiResponse<string>> MarkAsRepliedAsync(int messageId);
+        Task<ApiResponse<List<Message>>> GetAllMessagesAsync();
+
+
     }
 }

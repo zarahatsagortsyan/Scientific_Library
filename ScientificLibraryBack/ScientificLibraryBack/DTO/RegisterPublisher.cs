@@ -25,6 +25,6 @@ namespace ScientificLibraryBack.DTO
         [Required]
         [DataType(DataType.Date)]
         public DateTime EstablishDate { get; set; }
-        public string? ClientUri { get; set; }  // ✅ Add this property for email confirmation URL
+        public string? ClientUri { get; set; }  //  Add this property for email confirmation URL
     }
 }

@@ -139,7 +139,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     Id = Guid.NewGuid(),
                     Title = bookRequest.Title,
                     Author = bookRequest.Author,
-                    GenreId = bookRequest.GenreId, // ✅ Assign GenreId
+                    GenreId = bookRequest.GenreId, //  Assign GenreId
                     Description = bookRequest.Description,
                     ISBN = bookRequest.ISBN,
                     CoverImage = coverImageBytes,
@@ -422,7 +422,7 @@ namespace ScientificLibraryBack.Services.PublisherService
         //        var books = await _context.Books
         //                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved)
         //                     .Include(b => b.Publisher)
-        //                     .Include(b => b.Genre) // ✅ Include Genre to get the name
+        //                     .Include(b => b.Genre) //  Include Genre to get the name
         //                     .ToListAsync();
 
         //        var bookDTOs = books.Select(book => new BookDTO
@@ -432,7 +432,7 @@ namespace ScientificLibraryBack.Services.PublisherService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
+        //            Genre = book.Genre?.Name, //  Fetch Genre name
         //            Keywords = book.Keywords,
         //            PublisherName = book.Publisher?.UserName,
         //            Description = book.Description,
@@ -467,9 +467,9 @@ namespace ScientificLibraryBack.Services.PublisherService
         //        var books = await _context.Books
         //                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Approved)
         //                     .Include(b => b.Publisher)
-        //                     .Include(b => b.Genre) // ✅ Include Genre to get the name
-        //                     .Include(b => b.BookKeywords) // ✅ Include BookKeywords to get related keywords
-        //                         .ThenInclude(bk => bk.Keyword) // ✅ Fetch Keywords via the relationship
+        //                     .Include(b => b.Genre) //  Include Genre to get the name
+        //                     .Include(b => b.BookKeywords) //  Include BookKeywords to get related keywords
+        //                         .ThenInclude(bk => bk.Keyword) //  Fetch Keywords via the relationship
         //                     .ToListAsync();
 
         //        var bookDTOs = books.Select(book => new BookDTO
@@ -479,8 +479,8 @@ namespace ScientificLibraryBack.Services.PublisherService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
-        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), // ✅ Convert Keywords to List<string>
+        //            Genre = book.Genre?.Name, //  Fetch Genre name
+        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), //  Convert Keywords to List<string>
         //            PublisherName = book.Publisher?.UserName,
         //            Description = book.Description,
         //            Title = book.Title,
@@ -520,9 +520,9 @@ namespace ScientificLibraryBack.Services.PublisherService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, // ✅ Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, //  Fetch Genre Name
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -540,9 +540,9 @@ namespace ScientificLibraryBack.Services.PublisherService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, // ✅ Use Genre Name
-                    Keywords = book.Keywords, // ✅ Use List of Keywords
-                    PublisherName = book.PublisherName, // ✅ Use Publisher Name
+                    Genre = book.GenreName, //  Use Genre Name
+                    Keywords = book.Keywords, //  Use List of Keywords
+                    PublisherName = book.PublisherName, //  Use Publisher Name
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -644,7 +644,7 @@ namespace ScientificLibraryBack.Services.PublisherService
         //        var books = await _context.Books
         //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
         //            .Include(b => b.Publisher)
-        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
+        //            .Include(b => b.Genre) //  Include Genre to get the genre name
         //            .ToListAsync();
 
         //        var bookDTOs = books.Select(book => new BookDTO
@@ -654,7 +654,7 @@ namespace ScientificLibraryBack.Services.PublisherService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Get Genre name instead of the Genre object
+        //            Genre = book.Genre?.Name, //  Get Genre name instead of the Genre object
         //            Keywords = book.Keywords,
         //            PublisherName = book.Publisher?.UserName,
         //            Description = book.Description,
@@ -735,10 +735,10 @@ namespace ScientificLibraryBack.Services.PublisherService
             {
                 var books = await _context.Books
                     .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Pending)
-                    .Include(b => b.Genre) // ✅ Eager load Genre
-                    .Include(b => b.Publisher) // ✅ Eager load Publisher
-                    .Include(b => b.BookKeywords) // ✅ Eager load BookKeywords
-                        .ThenInclude(bk => bk.Keyword) // ✅ Ensure Keywords are loaded
+                    .Include(b => b.Genre) //  Eager load Genre
+                    .Include(b => b.Publisher) //  Eager load Publisher
+                    .Include(b => b.BookKeywords) //  Eager load BookKeywords
+                        .ThenInclude(bk => bk.Keyword) //  Ensure Keywords are loaded
                     .Select(book => new BookDTO
                     {
                         Id = book.Id,
@@ -746,9 +746,9 @@ namespace ScientificLibraryBack.Services.PublisherService
                         ISBN = book.ISBN,
                         Status = book.Status,
                         Format = book.Format,
-                        Genre = book.Genre.Name, // ✅ Get Genre name
-                        Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Extract Keywords efficiently
-                        PublisherName = book.Publisher.UserName, // ✅ Get Publisher name
+                        Genre = book.Genre.Name, //  Get Genre name
+                        Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Extract Keywords efficiently
+                        PublisherName = book.Publisher.UserName, //  Get Publisher name
                         Description = book.Description,
                         Title = book.Title,
                         PageCount = book.PageCount,
@@ -757,7 +757,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                         State = book.State,
                         Language = book.Language,
                     })
-                    .ToListAsync(); // ✅ Query is fully executed in DB before hitting C#
+                    .ToListAsync(); //  Query is fully executed in DB before hitting C#
 
                 response.Success = true;
                 response.Message = "Pending books retrieved successfully.";
@@ -824,8 +824,8 @@ namespace ScientificLibraryBack.Services.PublisherService
         //        // Fetch books with related entities
         //        var books = await _context.Books
         //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected)
-        //            .Include(b => b.Publisher) // ✅ Include Publisher
-        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
+        //            .Include(b => b.Publisher) //  Include Publisher
+        //            .Include(b => b.Genre) //  Include Genre to get the genre name
         //            .ToListAsync();
 
         //        var bookDTOs = books.Select(book => new BookDTO
@@ -835,7 +835,7 @@ namespace ScientificLibraryBack.Services.PublisherService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Get Genre name instead of the Genre object
+        //            Genre = book.Genre?.Name, //  Get Genre name instead of the Genre object
         //            Keywords = book.Keywords,
         //            PublisherName = book.Publisher?.UserName,
         //            Description = book.Description,
@@ -868,9 +868,9 @@ namespace ScientificLibraryBack.Services.PublisherService
         //    {
         //        var books = await _context.Books
         //            .Where(b => b.PublisherId == publisherId && b.Status == ApprovalStatus.Rejected)
-        //            .Include(b => b.Publisher) // ✅ Include Publisher
-        //            .Include(b => b.Genre) // ✅ Include Genre to get the genre name
-        //            .Include(b => b.BookKeywords) // ✅ Include BookKeywords for keyword mapping
+        //            .Include(b => b.Publisher) //  Include Publisher
+        //            .Include(b => b.Genre) //  Include Genre to get the genre name
+        //            .Include(b => b.BookKeywords) //  Include BookKeywords for keyword mapping
         //                .ThenInclude(bk => bk.Keyword)
         //            .ToListAsync();
 
@@ -881,8 +881,8 @@ namespace ScientificLibraryBack.Services.PublisherService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Fetch Genre name
-        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch keyword names
+        //            Genre = book.Genre?.Name, //  Fetch Genre name
+        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), //  Fetch keyword names
         //            PublisherName = book.Publisher?.UserName,
         //            Description = book.Description,
         //            Title = book.Title,
@@ -941,8 +941,8 @@ namespace ScientificLibraryBack.Services.PublisherService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, // ✅ Fetch Genre name
-                    Keywords = book.Keywords, // ✅ Fetch keyword names
+                    Genre = book.GenreName, //  Fetch Genre name
+                    Keywords = book.Keywords, //  Fetch keyword names
                     PublisherName = book.PublisherName,
                     Description = book.Description,
                     Title = book.Title,
@@ -1066,8 +1066,8 @@ namespace ScientificLibraryBack.Services.PublisherService
             {
                 // Retrieve the existing book from the database
                 var existingBook = await _context.Books
-                    .Include(b => b.Genre) // ✅ Ensure Genre is loaded
-                    .Include(b => b.BookKeywords) // ✅ Ensure Keywords are loaded
+                    .Include(b => b.Genre) //  Ensure Genre is loaded
+                    .Include(b => b.BookKeywords) //  Ensure Keywords are loaded
                     .FirstOrDefaultAsync(b => b.Id == id);
 
                 if (existingBook == null)
@@ -1083,7 +1083,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     updateRequest.Title != existingBook.Title ||
                     updateRequest.Author != existingBook.Author ||
                     updateRequest.ISBN != existingBook.ISBN ||
-                    updateRequest.GenreId != existingBook.Genre?.Id; // ✅ Check if Genre changed
+                    updateRequest.GenreId != existingBook.Genre?.Id; //  Check if Genre changed
 
                 // Update fields if necessary
                 if (!string.Equals(existingBook.Title, updateRequest.Title, StringComparison.OrdinalIgnoreCase))
@@ -1093,7 +1093,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     existingBook.Author = updateRequest.Author;
 
                 if (existingBook.Genre?.Id != updateRequest.GenreId)
-                    existingBook.GenreId = updateRequest.GenreId; // ✅ Store GenreId instead of Genre name
+                    existingBook.GenreId = updateRequest.GenreId; //  Store GenreId instead of Genre name
 
                 if (!string.Equals(existingBook.Description, updateRequest.Description, StringComparison.OrdinalIgnoreCase))
                     existingBook.Description = updateRequest.Description;
@@ -1119,7 +1119,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                 if (updateRequest.IsAvailable != existingBook.IsAvailable)
                     existingBook.IsAvailable = updateRequest.IsAvailable;
 
-                // ✅ Handle Keywords (Many-to-Many Relationship)
+                //  Handle Keywords (Many-to-Many Relationship)
                 var existingKeywords = await _context.Keywords
                     .Where(k => updateRequest.Keywords.Contains(k.Name))
                     .ToListAsync();
@@ -1129,7 +1129,7 @@ namespace ScientificLibraryBack.Services.PublisherService
                     .Select(k => new BookKeyword { BookId = existingBook.Id, KeywordId = k.Id })
                     .ToList();
 
-                // ✅ Reset approval status if major edits are made
+                //  Reset approval status if major edits are made
                 if (isMajorEdit)
                 {
                     existingBook.Status = ApprovalStatus.Pending;
@@ -1179,7 +1179,7 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
-        // ✅ Get Publisher Profile
+        //  Get Publisher Profile
         public async Task<ApiResponse<PublisherProfileDTO>> GetPublisherProfileAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -1196,7 +1196,7 @@ namespace ScientificLibraryBack.Services.PublisherService
             return new ApiResponse<PublisherProfileDTO> { Success = true, Data = userProfile };
         }
 
-        // ✅ Update Publisher Profile
+        //  Update Publisher Profile
         public async Task<ApiResponse<string>> UpdatePublisherProfileAsync(string userId, PublisherProfileDTO profile)
         {
             var user = await _userManager.FindByIdAsync(userId);

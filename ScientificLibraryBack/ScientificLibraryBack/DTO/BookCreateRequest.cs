@@ -14,7 +14,7 @@ namespace ScientificLibraryBack.DTO
         public string Author { get; set; }
 
         [Required(ErrorMessage = "Genre is required.")]
-        public int GenreId { get; set; }  // ✅ Now it takes GenreId instead of string
+        public int GenreId { get; set; }  //  Now it takes GenreId instead of string
         //public string Genre { get; set; }
 
         [Required(ErrorMessage = "Description is required.")]

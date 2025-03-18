@@ -53,7 +53,6 @@ const KeywordsListPage: React.FC = () => {
     setCreating(true);
     try {
       const token = localStorage.getItem("jwtToken");
-      console.log("asdasdasd  " + newKeyword);
       await api.post(
         `${import.meta.env.VITE_API_URL}/Admin/keywords`,
         { name: newKeyword },

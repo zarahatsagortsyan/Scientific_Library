@@ -1,25 +1,15 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.EmailService;
 using ScientificLibraryBack.Services.EmailService.Models;
-using ScientificLibraryBack.Shared;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
-using User.Management.Service.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace ScientificLibraryBack.Services.AuthService
 {
     public class AuthService : IAuthService
@@ -35,41 +25,6 @@ namespace ScientificLibraryBack.Services.AuthService
             _emailService = emailService;
 
         }
-
-        //public string GenerateTokenString(string userName)
-        //{
-        //    var roles = GetUserRole(userName); // Call the synchronous method to get roles
-
-        //    if (roles == null || roles.Count() == 0)
-        //    {
-        //        throw new UnauthorizedAccessException("User has no roles assigned.");
-        //    }
-
-        //    var claims = new List<Claim>
-        //    {
-        //        new Claim(ClaimTypes.Name, userName),
-        //    };
-
-        //    foreach (var role in roles)
-        //    {
-        //        claims.Add(new Claim(ClaimTypes.Role, role)); // Add each role to the claims
-        //    }
-
-        //    var staticKey = _config.GetSection("Jwt:Key").Value;
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(staticKey));
-        //    var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
-        //    var securityToken = new JwtSecurityToken(
-        //        claims: claims,
-        //        expires: DateTime.Now.AddHours(20),
-        //        issuer: _config["JWT:Issuer"],
-        //        audience: _config["JWT:Audience"],
-        //        signingCredentials: signingCredentials
-        //    );
-
-        //    string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
-        //    return tokenString;
-        //}
 
         public string GenerateTokenString(ExtendedIdentityUser user)
         {
@@ -106,30 +61,7 @@ namespace ScientificLibraryBack.Services.AuthService
             string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
             return tokenString;
         }
-        //public async Task<LoginResponse> Login(LoginUser user)
-        //{
-        //    var response = new LoginResponse();
-        //    var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
-
-        //    if (identityUser == null || await _userManager.CheckPasswordAsync(identityUser, user.Password) == false)
-        //    {
-        //        return response;
-        //    }
-
-        //    response.IsLogedIn = true;
-        //    //response.JwtToken = GenerateTokenString(identityUser.Email);
-        //    response.JwtToken = GenerateTokenString(identityUser);
-
-        //    response.RefreshToken = GenerateRefreshTokenString();
-
-
-        //    identityUser.RefreshToken = response.RefreshToken;
-        //    identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
-        //    await _userManager.UpdateAsync(identityUser);
-
-        //    return response;
-        //}
         public async Task<LoginResponse> Login(LoginUser user)
         {
             var response = new LoginResponse();
@@ -201,28 +133,48 @@ namespace ScientificLibraryBack.Services.AuthService
         //        var identityUser = new ExtendedIdentityUser
         //        {
         //            UserName = user.Email,
-        //            FirstName = user.FirstName!,
-        //            LastName = user.LastName!,
         //            Email = user.Email,
         //            PhoneNumber = user.Phone,
+        //            FirstName = user.FirstName,
+        //            LastName = user.LastName,
         //            DateOfBirth = user.BirthDate,
         //            Type = UserType.Reader,
         //            IsActive = true,
         //            CreatedAt = DateTime.Now,
         //            Banned = false,
+        //            EmailConfirmed = false 
         //        };
 
         //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
 
-        //        if (result.Succeeded)
+        //        if (!result.Succeeded)
         //        {
-        //            await _userManager.AddToRoleAsync(identityUser, "Reader");
+        //            return new ApiResponse<IdentityResult>
+        //            {
+        //                Success = false,
+        //                Message = "Registration failed.",
+        //                Data = result
+        //            };
         //        }
 
+        //        // Add user to Publisher role
+        //        await _userManager.AddToRoleAsync(identityUser, "Reader");
+
+        //        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+        //        var encodedToken = HttpUtility.UrlEncode(token);
+        //        var param = new Dictionary<string, string?>
+        //                        {
+        //                            { "token", encodedToken },
+        //                            { "email", user.Email }
+        //                        };
+
+        //        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+        //        var message = new Message([user.Email!], "Confirm your email", callbackUrl);
+        //        _emailService.SendEmail(message);
         //        return new ApiResponse<IdentityResult>
         //        {
-        //            Success = result.Succeeded,
-        //            Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+        //            Success = true,
+        //            Message = "Registration successful. Please check your email for verification.",
         //            Data = result
         //        };
         //    }
@@ -236,10 +188,47 @@ namespace ScientificLibraryBack.Services.AuthService
         //        };
         //    }
         //}
+
         public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user)
         {
             try
             {
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+
+                // Check if email is already registered but not confirmed
+                if (existingUser != null)
+                {
+                    if (!existingUser.EmailConfirmed)
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+                        var encodedToken = HttpUtility.UrlEncode(token);
+                        var param = new Dictionary<string, string?>
+                {
+                    { "token", encodedToken },
+                    { "email", user.Email }
+                };
+
+                        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+                        var message = new EmailService.Models.Message([user.Email!], "Confirm your email", callbackUrl);
+                        _emailService.SendEmail(message);
+
+                        return new ApiResponse<IdentityResult>
+                        {
+                            Success = false,
+                            Message = "This email is already registered but not confirmed. A new confirmation email has been sent.",
+                            Data = null
+                        };
+                    }
+
+                    return new ApiResponse<IdentityResult>
+                    {
+                        Success = false,
+                        Message = "This email is already registered.",
+                        Data = null
+                    };
+                }
+
+                // Create new user since the email is not found
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.Email,
@@ -252,7 +241,7 @@ namespace ScientificLibraryBack.Services.AuthService
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     Banned = false,
-                    EmailConfirmed = false 
+                    EmailConfirmed = false
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);
@@ -267,20 +256,22 @@ namespace ScientificLibraryBack.Services.AuthService
                     };
                 }
 
-                // Add user to Publisher role
+                // Add user to Reader role
                 await _userManager.AddToRoleAsync(identityUser, "Reader");
 
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                var encodedToken = HttpUtility.UrlEncode(token);
-                var param = new Dictionary<string, string?>
-                                {
-                                    { "token", encodedToken },
-                                    { "email", user.Email }
-                                };
+                // Send confirmation email
+                var newToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                var newEncodedToken = HttpUtility.UrlEncode(newToken);
+                var newParam = new Dictionary<string, string?>
+        {
+            { "token", newEncodedToken },
+            { "email", user.Email }
+        };
 
-                var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
-                var message = new Message([user.Email!], "Confirm your email", callbackUrl);
-                _emailService.SendEmail(message);
+                var newCallbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, newParam);
+                var newMessage = new EmailService.Models.Message([user.Email!], "Confirm your email", newCallbackUrl);
+                _emailService.SendEmail(newMessage);
+
                 return new ApiResponse<IdentityResult>
                 {
                     Success = true,
@@ -316,7 +307,7 @@ namespace ScientificLibraryBack.Services.AuthService
         //    {
         //        var identityUser = new ExtendedIdentityUser
         //        {
-        //            UserName = user.Email,
+        //            UserName = user.Email, //  Use email as username
         //            Email = user.Email,
         //            PhoneNumber = user.Phone,
         //            CompanyName = user.CompanyName,
@@ -325,19 +316,39 @@ namespace ScientificLibraryBack.Services.AuthService
         //            IsActive = true,
         //            CreatedAt = DateTime.Now,
         //            Banned = false,
+        //            EmailConfirmed = false // ❌ Ensure email is not confirmed until verified
         //        };
 
         //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
 
-        //        if (result.Succeeded)
+        //        if (!result.Succeeded)
         //        {
-        //            await _userManager.AddToRoleAsync(identityUser, "Publisher");
+        //            return new ApiResponse<IdentityResult>
+        //            {
+        //                Success = false,
+        //                Message = "Registration failed.",
+        //                Data = result
+        //            };
         //        }
 
+        //        // Add user to Publisher role
+        //        await _userManager.AddToRoleAsync(identityUser, "Publisher");
+
+        //        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+        //        var encodedToken = HttpUtility.UrlEncode(token);
+        //        var param = new Dictionary<string, string?>
+        //                        {
+        //                            { "token", encodedToken },
+        //                            { "email", user.Email }
+        //                        };
+
+        //        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+        //        var message = new Message([user.Email!], "Confirm your email", callbackUrl);
+        //        _emailService.SendEmail(message);
         //        return new ApiResponse<IdentityResult>
         //        {
-        //            Success = result.Succeeded,
-        //            Message = result.Succeeded ? "Registration successful." : "Registration failed.",
+        //            Success = true,
+        //            Message = "Registration successful. Please check your email for verification.",
         //            Data = result
         //        };
         //    }
@@ -352,14 +363,50 @@ namespace ScientificLibraryBack.Services.AuthService
         //    }
         //}
 
-
         public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
         {
             try
             {
+                // Check if the email already exists
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+
+                if (existingUser != null)
+                {
+                    if (!existingUser.EmailConfirmed)
+                    {
+                        // Resend confirmation email
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+                        var encodedToken = HttpUtility.UrlEncode(token);
+                        var param = new Dictionary<string, string?>
+                {
+                    { "token", encodedToken },
+                    { "email", user.Email }
+                };
+
+                        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
+                        var message = new EmailService.Models.Message([user.Email!], "Confirm your email", callbackUrl);
+                        _emailService.SendEmail(message);
+
+                        return new ApiResponse<IdentityResult>
+                        {
+                            Success = false,
+                            Message = "This email is already registered but not confirmed. A new confirmation email has been sent.",
+                            Data = null
+                        };
+                    }
+
+                    return new ApiResponse<IdentityResult>
+                    {
+                        Success = false,
+                        Message = "This email is already registered.",
+                        Data = null
+                    };
+                }
+
+                // Create new user if email is not found
                 var identityUser = new ExtendedIdentityUser
                 {
-                    UserName = user.Email, // ✅ Use email as username
+                    UserName = user.Email,
                     Email = user.Email,
                     PhoneNumber = user.Phone,
                     CompanyName = user.CompanyName,
@@ -368,7 +415,7 @@ namespace ScientificLibraryBack.Services.AuthService
                     IsActive = true,
                     CreatedAt = DateTime.Now,
                     Banned = false,
-                    EmailConfirmed = false // ❌ Ensure email is not confirmed until verified
+                    EmailConfirmed = false
                 };
 
                 var result = await _userManager.CreateAsync(identityUser, user.Password!);
@@ -386,17 +433,19 @@ namespace ScientificLibraryBack.Services.AuthService
                 // Add user to Publisher role
                 await _userManager.AddToRoleAsync(identityUser, "Publisher");
 
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                var encodedToken = HttpUtility.UrlEncode(token);
-                var param = new Dictionary<string, string?>
-                                {
-                                    { "token", encodedToken },
-                                    { "email", user.Email }
-                                };
+                // Send confirmation email
+                var newToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                var newEncodedToken = HttpUtility.UrlEncode(newToken);
+                var newParam = new Dictionary<string, string?>
+        {
+            { "token", newEncodedToken },
+            { "email", user.Email }
+        };
 
-                var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
-                var message = new Message([user.Email!], "Confirm your email", callbackUrl);
-                _emailService.SendEmail(message);
+                var newCallbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, newParam);
+                var newMessage = new EmailService.Models.Message([user.Email!], "Confirm your email", newCallbackUrl);
+                _emailService.SendEmail(newMessage);
+
                 return new ApiResponse<IdentityResult>
                 {
                     Success = true,
@@ -414,6 +463,7 @@ namespace ScientificLibraryBack.Services.AuthService
                 };
             }
         }
+
 
         public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
         {
@@ -487,23 +537,6 @@ namespace ScientificLibraryBack.Services.AuthService
             return logoutResponse;
         }
 
-        //public async Task<IdentityResult> ResetPassword(string userName, string newPassword, string token)
-        //{
-        //    var user = await _userManager.FindByNameAsync(userName);
-        //    if (user == null)
-        //    {
-        //        // User not found
-        //        return IdentityResult.Failed(new IdentityError { Description = "User not found" });
-        //    }
-
-        //    // Reset the password
-        //    var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
-
-
-
-        //    return result;
-        //}
-
         public async Task<ApiResponse<IdentityResult>> ResetPassword(Models.ResetPasswordRequest resetPassword)
         {
             try
@@ -538,19 +571,6 @@ namespace ScientificLibraryBack.Services.AuthService
                 };
             }
         }
+
     }
-
-    //public async Task<IActionResult> ForgotPassword(string email)
-    //{
-    //    var user = await _userManager.FindByEmailAsync(email);
-    //    if (user == null)
-    //    {
-    //        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-    //        var forgotPasswordLink = Url.Action("ResetPassword", "Auth", new {token, email = user.Email}, Request.Scheme);
-    //        var message = new Message(new string[] { user.Email! }, "Confirmation email link", forgotPasswordLink!);
-
-
-    //    }
-
-    //}
 }

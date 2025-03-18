@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import Header from "../Components/Header/Header";
 import SidebarMenu from "../Components/Sidebar/Sidebar";
 import BookPage from "../Pages/BookPage/BookPage";
@@ -26,6 +31,7 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import ProtectedRoute from "../Utils/ProtectedRoute";
 import KeywordsListPage from "../Pages/Admin/Keywords/KeywordsListPage";
 import BookListPage from "../Pages/BookListPage/BookList";
+import AdminMessages from "../Pages/Admin/Messages/AdminMessages";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -181,6 +187,15 @@ const AppRoutes: React.FC = () => {
               element={
                 <ProtectedRoute
                   element={<KeywordsListPage />}
+                  allowedRoles={["Admin"]}
+                />
+              }
+            />
+            <Route
+              path="/messages-list"
+              element={
+                <ProtectedRoute
+                  element={<AdminMessages />}
                   allowedRoles={["Admin"]}
                 />
               }

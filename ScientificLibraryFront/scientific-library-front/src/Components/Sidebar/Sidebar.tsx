@@ -96,6 +96,10 @@ const SidebarMenu: React.FC = () => {
                 <MdOutlinePlaylistAdd />
                 Keywords
               </MenuItem>
+
+              <MenuItem component={<Link to="/messages-list" />}>
+                Messages
+              </MenuItem>
             </>
           )}
         </Menu>

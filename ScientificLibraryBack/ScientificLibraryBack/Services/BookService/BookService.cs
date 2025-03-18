@@ -141,9 +141,9 @@ namespace ScientificLibraryBack.Services.BookService
                         ISBN = b.ISBN,
                         Status = b.Status,
                         //Format = b.Format,
-                        Genre = b.Genre.Name, // ✅ Get Genre Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords
-                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
+                        Genre = b.Genre.Name, //  Get Genre Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
                         Description = b.Description,
                         Title = b.Title,
                         PageCount = b.PageCount,
@@ -240,9 +240,9 @@ namespace ScientificLibraryBack.Services.BookService
         //    {
         //        // Fetch book with related entities
         //        var book = await _context.Books
-        //            .Include(b => b.Publisher) // ✅ Ensure Publisher is loaded
-        //            .Include(b => b.Genre) // ✅ Ensure Genre is loaded
-        //            .Include(b => b.BookKeywords) // ✅ Ensure Keywords are loaded
+        //            .Include(b => b.Publisher) //  Ensure Publisher is loaded
+        //            .Include(b => b.Genre) //  Ensure Genre is loaded
+        //            .Include(b => b.BookKeywords) //  Ensure Keywords are loaded
         //                .ThenInclude(bk => bk.Keyword)
         //            .FirstOrDefaultAsync(b => b.Id == bookId);
 
@@ -253,7 +253,7 @@ namespace ScientificLibraryBack.Services.BookService
         //            return response;
         //        }
 
-        //        //// ✅ Convert CoverImage to Base64 (if applicable)
+        //        ////  Convert CoverImage to Base64 (if applicable)
         //        //string? coverImageUrl = null;
         //        //if (book.CoverImage != null && book.CoverImage.Length > 0)
         //        //{
@@ -261,10 +261,10 @@ namespace ScientificLibraryBack.Services.BookService
         //        //    coverImageUrl = $"data:image/jpeg;base64,{base64Image}";
         //        //}
 
-        //        // ✅ Convert Keywords from many-to-many relationship
+        //        //  Convert Keywords from many-to-many relationship
         //        var keywordList = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList() ?? new List<string>();
 
-        //        // ✅ Create BookDTO
+        //        //  Create BookDTO
         //        var bookResponse = new BookDTO
         //        {
         //            Id = book.Id,
@@ -272,9 +272,9 @@ namespace ScientificLibraryBack.Services.BookService
         //            ISBN = book.ISBN,
         //            Status = book.Status,
         //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Use Genre name instead of string
-        //            Keywords = keywordList, // ✅ Use list of keyword names
-        //            PublisherName = book.Publisher?.UserName ?? "Unknown", // ✅ Handle null Publisher
+        //            Genre = book.Genre?.Name, //  Use Genre name instead of string
+        //            Keywords = keywordList, //  Use list of keyword names
+        //            PublisherName = book.Publisher?.UserName ?? "Unknown", //  Handle null Publisher
         //            Description = book.Description,
         //            Title = book.Title,
         //            PageCount = book.PageCount,
@@ -282,7 +282,7 @@ namespace ScientificLibraryBack.Services.BookService
         //            PublicationDate = book.PublicationDate,
         //            State = book.State,
         //            Language = book.Language,
-        //            //CoverImageUrl = coverImageUrl // ✅ Include CoverImage URL
+        //            //CoverImageUrl = coverImageUrl //  Include CoverImage URL
         //        };
 
         //        response.Success = true;
@@ -334,7 +334,7 @@ namespace ScientificLibraryBack.Services.BookService
                     return response;
                 }
 
-                // ✅ Map fetched data to DTO
+                //  Map fetched data to DTO
                 var bookResponse = new BookDTO
                 {
                     Id = bookData.Id,
@@ -464,7 +464,7 @@ namespace ScientificLibraryBack.Services.BookService
         public async Task<IEnumerable<Book>> GetBooksByGenreAsync(string genreName)
         {
             return await _context.Books
-                .Include(b => b.Genre) // ✅ Ensure Genre is included
+                .Include(b => b.Genre) //  Ensure Genre is included
                 .Where(b => b.Genre.Name == genreName && b.Status == ApprovalStatus.Approved)
                 .ToListAsync();
         }

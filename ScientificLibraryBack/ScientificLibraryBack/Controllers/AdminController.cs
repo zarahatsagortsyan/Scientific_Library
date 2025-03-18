@@ -154,5 +154,20 @@ namespace ScientificLibraryBack.Controllers
             return BadRequest(response);
         }
 
+        // Get all messages
+        [HttpGet("messages")]
+        public async Task<IActionResult> GetMessages()
+        {
+            var response = await _adminService.GetAllMessagesAsync();
+            return Ok(response);
+        }
+
+        // Mark a message as replied
+        [HttpPut("messages/{id}/reply")]
+        public async Task<IActionResult> MarkMessageAsReplied(int id)
+        {
+            var response = await _adminService.MarkAsRepliedAsync(id);
+            return Ok(response);
+        }
     }
 }

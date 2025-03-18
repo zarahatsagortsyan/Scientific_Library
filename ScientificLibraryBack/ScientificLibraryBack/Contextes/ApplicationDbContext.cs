@@ -83,7 +83,7 @@ namespace ScientificLibraryBack.Contextes
         public DbSet<Language> Languages { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<BookKeyword> BookKeywords { get; set; }
-
+        public DbSet<Message> Messages { get; set; }
 
     }
 }

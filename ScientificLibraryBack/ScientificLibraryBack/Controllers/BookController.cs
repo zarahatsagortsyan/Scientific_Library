@@ -168,7 +168,7 @@ namespace ScientificLibraryBack.Controllers
         //[HttpGet("filter")]
         //public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
         //{
-        //    // ✅ Convert comma-separated values into lists
+        //    //  Convert comma-separated values into lists
         //    filter.Genres = Request.Query["genres"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).ToList();
         //    filter.Languages = Request.Query["languages"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
         //    filter.Keywords = Request.Query["keywords"].ToString().Split(',').Where(s => !string.IsNullOrEmpty(s)).ToList();
@@ -180,7 +180,7 @@ namespace ScientificLibraryBack.Controllers
         //[HttpGet("filter")]
         //public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
         //{
-        //    // ✅ Handle empty genres, languages, keywords correctly
+        //    //  Handle empty genres, languages, keywords correctly
         //    filter.Genres = Request.Query["genres"]
         //        .ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)
         //        .Select(int.Parse).ToList();
@@ -199,7 +199,7 @@ namespace ScientificLibraryBack.Controllers
         [HttpGet("filter")]
         public async Task<IActionResult> FilterBooks([FromQuery] BookFilterRequest filter)
         {
-            // ✅ Only parse if values exist
+            //  Only parse if values exist
             filter.Genres = Request.Query.ContainsKey("genres")
                 ? Request.Query["genres"].ToString().Split(',', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToList()
                 : new List<int>();

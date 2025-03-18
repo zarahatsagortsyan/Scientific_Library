@@ -81,7 +81,7 @@ const BookListPage: React.FC = () => {
 
   return (
     <div className="BookListPage">
-      <h1>Publications</h1>
+      {/* <h1>Publications</h1> */}
       <BookFilter
         filters={filters}
         onFilter={handleFilterBooks}

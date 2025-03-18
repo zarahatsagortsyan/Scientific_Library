@@ -157,7 +157,7 @@ namespace ScientificLibraryBack.Controllers
             };
 
             var callback = QueryHelpers.AddQueryString(forgotPassword.ClientUri!, param);
-            var message = new Message([user.Email!], "Reset password link", callback!);
+            var message = new Services.EmailService.Models.Message([user.Email!], "Reset password link", callback!);
 
             _emailService.SendEmail(message);
             return Ok();
@@ -202,7 +202,7 @@ namespace ScientificLibraryBack.Controllers
             if (user == null)
                 return BadRequest(new ApiResponse<string> { Success = false, Message = "Invalid email or token." });
 
-            var decodedToken = HttpUtility.UrlDecode(request.Token); // ✅ Decode the token before usage
+            var decodedToken = HttpUtility.UrlDecode(request.Token); //  Decode the token before usage
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
             if (result.Succeeded)
@@ -211,6 +211,40 @@ namespace ScientificLibraryBack.Controllers
             return BadRequest(new ApiResponse<string> { Success = false, Message = "Email confirmation failed." });
         }
 
+        [HttpPost("resend-confirmation")]
+        public async Task<IActionResult> ResendConfirmation([FromBody] ResendEmailRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null || user.EmailConfirmed)
+            {
+                return BadRequest(new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = "Email not found or already confirmed.",
+                    Data = false
+                });
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = HttpUtility.UrlEncode(token);
+            var param = new Dictionary<string, string?>
+    {
+        { "token", encodedToken },
+        { "email", request.Email }
+    };
+
+            var callbackUrl = QueryHelpers.AddQueryString(request.ClientUri!, param);
+            var message = new Services.EmailService.Models.Message([request.Email!], "Confirm your email", callbackUrl);
+            _emailService.SendEmail(message);
+
+            return Ok(new ApiResponse<bool>
+            {
+                Success = true,
+                Message = "A new confirmation email has been sent.",
+                Data = true
+            });
+        }
 
     }
 }

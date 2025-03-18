@@ -20,7 +20,7 @@ namespace ScientificLibraryBack.DTO
 
         //public string? CoverImageUrl { get; set; } // If storing the image in a file system
 
-        //public string? PdfFileName { get; set; } // ✅ To store the original file name
+        //public string? PdfFileName { get; set; } //  To store the original file name
 
         public DateTime PublicationDate { get; set; }
         public int PageCount { get; set; }

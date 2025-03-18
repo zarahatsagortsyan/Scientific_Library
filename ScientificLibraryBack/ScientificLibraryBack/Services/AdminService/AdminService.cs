@@ -198,134 +198,6 @@ namespace ScientificLibraryBack.Services.AdminService
             }
             return apiResponse;
         }
-
-        //public async Task<ApiResponse<IEnumerable<Book>>> GetPendingBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<Book>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Pending)
-        //            .Include(b => b.Publisher)
-        //            .ToListAsync();
-
-        //        // Convert CoverImage to Base64 directly
-        //        foreach (var book in books)
-        //        {
-        //            if (book.CoverImage != null && book.CoverImage.Length > 0)
-        //            {
-        //                var base64Image = Convert.ToBase64String(book.CoverImage);
-        //                book.CoverImageUrl = $"data:image/jpeg;base64,{base64Image}";
-        //            }
-        //        }
-
-        //        response.Success = true;
-        //        response.Message = "Pending books retrieved successfully.";
-        //        response.Data = books;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-
-        //}
-
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Pending)
-        //            .Include(b => b.Publisher)
-        //            .Include(b=> b.Genre)
-        //            .ToListAsync();
-
-        //        // Map Books to BookDTOs with CoverImage conversion to Base64
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre?.Name,
-        //            Keywords = book.Keywords,
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-        //        response.Success = true;
-        //        response.Message = "Pending books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Pending)
-        //            .Include(b => b.Publisher)
-        //            .Include(b => b.Genre)
-        //            .Include(b => b.BookKeywords) // ✅ Ensure BookKeywords are loaded
-        //                .ThenInclude(bk => bk.Keyword) // ✅ Include Keywords in query
-        //            .ToListAsync();
-
-        //        // Map Books to BookDTOs with CoverImage conversion to Base64
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Use Genre name
-
-        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList() ?? new List<string>(), // ✅ Extract keyword names
-
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-        //        response.Success = true;
-        //        response.Message = "Pending books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks()
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();
@@ -341,9 +213,9 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, // ✅ Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, //  Fetch Genre Name
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -362,9 +234,9 @@ namespace ScientificLibraryBack.Services.AdminService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, // ✅ Use Genre Name
-                    Keywords = book.Keywords, // ✅ Use List of Keywords
-                    PublisherName = book.PublisherName, // ✅ Use Publisher Name
+                    Genre = book.GenreName, 
+                    Keywords = book.Keywords, 
+                    PublisherName = book.PublisherName, 
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -386,101 +258,6 @@ namespace ScientificLibraryBack.Services.AdminService
 
             return response;
         }
-
-
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Rejected)
-        //            .Include(b => b.Publisher)
-        //            .ToListAsync();
-
-        //        // Map Books to BookDTOs with CoverImage conversion to Base64
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre,
-        //            Keywords = book.Keywords,
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-
-        //        response.Success = true;
-        //        response.Message = "Rejected books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-
-        //}
-
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Rejected)
-        //            .Include(b => b.Publisher)
-        //            .Include(b => b.Genre) // ✅ Include Genre
-        //            .Include(b => b.BookKeywords) // ✅ Ensure BookKeywords are loaded
-        //                .ThenInclude(bk => bk.Keyword) // ✅ Include Keywords
-        //            .ToListAsync();
-
-        //        // Map Books to BookDTOs with proper handling of Genre and Keywords
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Use Genre Name
-        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList() ?? new List<string>(), // ✅ Extract keyword names
-
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-        //        response.Success = true;
-        //        response.Message = "Rejected books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetRejectedBooks()
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();
@@ -496,9 +273,9 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, // ✅ Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, 
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -517,9 +294,9 @@ namespace ScientificLibraryBack.Services.AdminService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, // ✅ Use Genre Name
-                    Keywords = book.Keywords, // ✅ Use List of Keywords
-                    PublisherName = book.PublisherName, // ✅ Use Publisher Name
+                    Genre = book.GenreName, //  Use Genre Name
+                    Keywords = book.Keywords, //  Use List of Keywords
+                    PublisherName = book.PublisherName, //  Use Publisher Name
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -542,96 +319,6 @@ namespace ScientificLibraryBack.Services.AdminService
             return response;
         }
 
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Approved)
-        //            .Include(b => b.Publisher)
-        //            .ToListAsync();
-
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre,
-        //            Keywords = book.Keywords,
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-
-        //        response.Success = true;
-        //        response.Message = "Approved books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-
-
-        //}
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks()
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var books = await _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Approved)
-        //            .Include(b => b.Publisher)
-        //            .Include(b => b.Genre) // ✅ Include Genre relationship
-        //            .Include(b => b.BookKeywords) // ✅ Include BookKeywords for keyword mapping
-        //                .ThenInclude(bk => bk.Keyword)
-        //            .ToListAsync();
-
-        //        var bookDTOs = books.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Author = book.Author,
-        //            ISBN = book.ISBN,
-        //            Status = book.Status,
-        //            Format = book.Format,
-        //            Genre = book.Genre?.Name, // ✅ Correctly fetch Genre name
-        //            Keywords = book.BookKeywords?.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch keyword names
-        //            PublisherName = book.Publisher?.UserName,
-        //            Description = book.Description,
-        //            Title = book.Title,
-        //            PageCount = book.PageCount,
-        //            IsAvailable = book.IsAvailable,
-        //            PublicationDate = book.PublicationDate,
-        //            State = book.State,
-        //            Language = book.Language,
-        //        }).ToList();
-
-        //        response.Success = true;
-        //        response.Message = "Approved books retrieved successfully.";
-        //        response.Data = bookDTOs;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
 
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetApprovedBooks()
         {
@@ -648,9 +335,9 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, // ✅ Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, // ✅ Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), // ✅ Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, 
+                        PublisherName = b.Publisher.UserName,
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), 
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -669,9 +356,9 @@ namespace ScientificLibraryBack.Services.AdminService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, // ✅ Use Genre Name
-                    Keywords = book.Keywords, // ✅ Use List of Keywords
-                    PublisherName = book.PublisherName, // ✅ Use Publisher Name
+                    Genre = book.GenreName, //  Use Genre Name
+                    Keywords = book.Keywords, //  Use List of Keywords
+                    PublisherName = book.PublisherName, //  Use Publisher Name
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -769,6 +456,31 @@ namespace ScientificLibraryBack.Services.AdminService
                 return apiResponse;
             }
             return apiResponse;
+        }
+
+        // Fetch all messages
+        public async Task<ApiResponse<List<Message>>> GetAllMessagesAsync()
+        {
+            var messages = await _context.Messages.ToListAsync();
+            return new ApiResponse<List<Message>>
+            {
+                Success = true,
+                Message = "Messages retrieved successfully",
+                Data = messages
+            };
+        }
+
+        // Mark message as replied
+        public async Task<ApiResponse<string>> MarkAsRepliedAsync(int messageId)
+        {
+            var message = await _context.Messages.FindAsync(messageId);
+            if (message == null)
+                return new ApiResponse<string> { Success = false, Message = "Message not found" };
+
+            message.Status = "Replied";
+            await _context.SaveChangesAsync();
+
+            return new ApiResponse<string> { Success = true, Message = "Message marked as replied" };
         }
 
     }

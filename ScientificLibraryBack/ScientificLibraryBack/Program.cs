@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using ScientificLibraryBack.Contextes;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.AdminService;
@@ -13,10 +10,9 @@ using ScientificLibraryBack.Services.BookService;
 using ScientificLibraryBack.Services.DBService;
 using ScientificLibraryBack.Services.EmailService;
 using ScientificLibraryBack.Services.EmailService.Models;
+using ScientificLibraryBack.Services.MessageService;
 using ScientificLibraryBack.Services.PublisherService;
 using ScientificLibraryBack.Services.UserService;
-
-using System.Data;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -51,6 +47,7 @@ builder.Services.AddIdentity<ExtendedIdentityUser, IdentityRole>(options =>
     options.Password.RequiredUniqueChars = 3; // Requires at least 3 unique characters
 
     options.User.RequireUniqueEmail = true; // Ensures unique email addresses
+
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -102,6 +99,8 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddScoped<IReaderService, ReaderService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 
