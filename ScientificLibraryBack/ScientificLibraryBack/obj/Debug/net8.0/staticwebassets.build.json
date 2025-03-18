@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "TR3Z40BeIAbt4LRbWi8FJr6DV+5cuZQGH1JpcL4Mh5k=",
+  "Hash": "tQXDpgCbA3Qb0KUK7dVlnkvpP5694VLeW5Xrqz4SAcs=",
   "Source": "ScientificLibraryBack",
   "BasePath": "_content/ScientificLibraryBack",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

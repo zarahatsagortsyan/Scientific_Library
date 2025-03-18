@@ -2,9 +2,11 @@
 <Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
-    <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
     <ProjectGuid>1ee0ffef-c093-4533-90c3-112d7bd6ddc8</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DockerTargetOS>Linux</DockerTargetOS>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
