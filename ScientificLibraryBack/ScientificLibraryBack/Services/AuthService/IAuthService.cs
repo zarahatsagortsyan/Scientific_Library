@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
-using ScientificLibraryBack.Shared;
 
 namespace ScientificLibraryBack.Services.AuthService
 {

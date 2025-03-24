@@ -1,0 +1,14 @@
+/* BookSortDropdown.css or global styles */
+.book-sort-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem; /* optional spacing */
+  }
+  
+  .book-sort-select {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 150px; /* small width */
+  }
+  

@@ -469,3 +469,4 @@ C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\Scientif
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ScientificLibraryBack.pdb
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ScientificLibraryBack.genruntimeconfig.cache
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ref\ScientificLibraryBack.dll
+C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\AutoMapper.dll

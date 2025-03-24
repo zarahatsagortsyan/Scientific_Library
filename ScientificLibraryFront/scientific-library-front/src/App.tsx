@@ -1,6 +1,6 @@
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import AppRoutes from "./Router/routes";
-import "font-awesome/css/font-awesome.min.css";
+// import "font-awesome/css/font-awesome.min.css";
 import ReaderChatBot from "./Components/ChatBot/ReaderChatBot";
 
 function App() {

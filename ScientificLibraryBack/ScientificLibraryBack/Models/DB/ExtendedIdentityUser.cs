@@ -19,7 +19,7 @@ namespace ScientificLibraryBack.Models.DB
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
         public bool Banned { get; set; } //banned or not
-
+        public DateTime LastLoginDate { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
     }

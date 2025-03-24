@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ScientificLibraryBack.Contextes;
+using ScientificLibraryBack.Mapping;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.AdminService;
 using ScientificLibraryBack.Services.AuthService;
@@ -102,7 +103,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 
 builder.Services.AddScoped<IPublisherService, PublisherService>();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

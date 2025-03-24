@@ -38,6 +38,9 @@
   color: #333;
   height: 42px;
   margin-bottom: 12px; /* Adds more space before Description */
+  padding-top: 0px;
+  padding-bottom: 0px;
+
 }
 
 /* 🎯 Input Fields */

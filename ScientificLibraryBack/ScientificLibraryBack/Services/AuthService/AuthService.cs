@@ -109,6 +109,7 @@ namespace ScientificLibraryBack.Services.AuthService
             response.JwtToken = GenerateTokenString(identityUser);
             response.RefreshToken = GenerateRefreshTokenString();
 
+            identityUser.LastLoginDate = DateTime.UtcNow;
             identityUser.RefreshToken = response.RefreshToken;
             identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
             await _userManager.UpdateAsync(identityUser);
@@ -125,69 +126,6 @@ namespace ScientificLibraryBack.Services.AuthService
                 return Convert.ToBase64String(randomNumber);
             }
         }
-
-        //public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user)
-        //{
-        //    try
-        //    {
-        //        var identityUser = new ExtendedIdentityUser
-        //        {
-        //            UserName = user.Email,
-        //            Email = user.Email,
-        //            PhoneNumber = user.Phone,
-        //            FirstName = user.FirstName,
-        //            LastName = user.LastName,
-        //            DateOfBirth = user.BirthDate,
-        //            Type = UserType.Reader,
-        //            IsActive = true,
-        //            CreatedAt = DateTime.Now,
-        //            Banned = false,
-        //            EmailConfirmed = false 
-        //        };
-
-        //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
-
-        //        if (!result.Succeeded)
-        //        {
-        //            return new ApiResponse<IdentityResult>
-        //            {
-        //                Success = false,
-        //                Message = "Registration failed.",
-        //                Data = result
-        //            };
-        //        }
-
-        //        // Add user to Publisher role
-        //        await _userManager.AddToRoleAsync(identityUser, "Reader");
-
-        //        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-        //        var encodedToken = HttpUtility.UrlEncode(token);
-        //        var param = new Dictionary<string, string?>
-        //                        {
-        //                            { "token", encodedToken },
-        //                            { "email", user.Email }
-        //                        };
-
-        //        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
-        //        var message = new Message([user.Email!], "Confirm your email", callbackUrl);
-        //        _emailService.SendEmail(message);
-        //        return new ApiResponse<IdentityResult>
-        //        {
-        //            Success = true,
-        //            Message = "Registration successful. Please check your email for verification.",
-        //            Data = result
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ApiResponse<IdentityResult>
-        //        {
-        //            Success = false,
-        //            Message = $"An error occurred: {ex.Message}",
-        //            Data = null
-        //        };
-        //    }
-        //}
 
         public async Task<ApiResponse<IdentityResult>> RegisterReader(RegisterReader user)
         {
@@ -300,69 +238,6 @@ namespace ScientificLibraryBack.Services.AuthService
 
             return _userManager.GetRolesAsync(identityUser).Result; // Get roles synchronously
         }
-
-        //public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
-        //{
-        //    try
-        //    {
-        //        var identityUser = new ExtendedIdentityUser
-        //        {
-        //            UserName = user.Email, //  Use email as username
-        //            Email = user.Email,
-        //            PhoneNumber = user.Phone,
-        //            CompanyName = user.CompanyName,
-        //            DateOfBirth = user.EstablishDate,
-        //            Type = UserType.Publisher,
-        //            IsActive = true,
-        //            CreatedAt = DateTime.Now,
-        //            Banned = false,
-        //            EmailConfirmed = false // ❌ Ensure email is not confirmed until verified
-        //        };
-
-        //        var result = await _userManager.CreateAsync(identityUser, user.Password!);
-
-        //        if (!result.Succeeded)
-        //        {
-        //            return new ApiResponse<IdentityResult>
-        //            {
-        //                Success = false,
-        //                Message = "Registration failed.",
-        //                Data = result
-        //            };
-        //        }
-
-        //        // Add user to Publisher role
-        //        await _userManager.AddToRoleAsync(identityUser, "Publisher");
-
-        //        var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-        //        var encodedToken = HttpUtility.UrlEncode(token);
-        //        var param = new Dictionary<string, string?>
-        //                        {
-        //                            { "token", encodedToken },
-        //                            { "email", user.Email }
-        //                        };
-
-        //        var callbackUrl = QueryHelpers.AddQueryString(user.ClientUri!, param);
-        //        var message = new Message([user.Email!], "Confirm your email", callbackUrl);
-        //        _emailService.SendEmail(message);
-        //        return new ApiResponse<IdentityResult>
-        //        {
-        //            Success = true,
-        //            Message = "Registration successful. Please check your email for verification.",
-        //            Data = result
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return new ApiResponse<IdentityResult>
-        //        {
-        //            Success = false,
-        //            Message = $"An error occurred: {ex.Message}",
-        //            Data = null
-        //        };
-        //    }
-        //}
-
         public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
         {
             try
