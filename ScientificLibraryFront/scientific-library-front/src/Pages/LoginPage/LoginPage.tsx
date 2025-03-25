@@ -4,9 +4,9 @@ import LoginForm from "../../Components/Login/LoginForm";
 
 const LoginPage: React.FC = () => {
   return (
-    <div>
+    // <div>
       <LoginForm />
-    </div>
+    // </div>
   );
 };
 

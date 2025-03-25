@@ -326,7 +326,7 @@ const RegisterReader: React.FC = () => {
               onChange={(e) => setDateOfBirth(e.target.value)}
             />
           </div>
-          <div className="phone-input-container">
+          <div className="phoneColor">
             <PhoneInput
               placeholder="Enter phone number"
               value={phoneNumber}

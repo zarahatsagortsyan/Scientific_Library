@@ -1,21 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import {
+  MdOutlinePlaylistAdd,
+  MdBook,
+  MdLibraryBooks,
+  MdCheckCircle,
+  MdPending,
+  MdPeople,
+  MdRateReview,
+  MdPerson,
+  MdAdd,
+  MdCancel,
+  MdMessage
+} from "react-icons/md";
 import "./Sidebar.css";
-import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { useReaderBookCounts } from "../../Utils/UseReaderBookCounts";
+import { usePublisherBookCounts } from "../../Utils/UsePublisherBookCounts";
+import { useAdminBookCounts } from "../../Utils/UseAdminBookCounts";
 
-// Utility function to get user roles
+// Utility function
 const getUserRoles = (): string[] | null => {
   const token = localStorage.getItem("jwtToken");
   if (!token) return null;
 
   try {
     const decodedToken: any = jwtDecode(token);
-    const roles =
-      decodedToken[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      ];
+    const roles = decodedToken[
+      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+    ];
     return roles ? [roles] : null;
   } catch (error) {
     console.error("Failed to decode JWT token", error);
@@ -25,81 +39,63 @@ const getUserRoles = (): string[] | null => {
 
 const SidebarMenu: React.FC = () => {
   const [userRole, setUserRole] = useState<string[] | null>(null);
+  const location = useLocation();
+  
+  const bookCounts = useReaderBookCounts();
+  const publisherCounts = usePublisherBookCounts();
+  const adminCounts = useAdminBookCounts();
 
   useEffect(() => {
     const roles = getUserRoles();
     setUserRole(roles);
   }, []);
 
-  if (userRole == null) return null;
+  if (!userRole) return null;
+
+  const menuItem = (to: string, icon: React.ReactNode, label: string) => (
+    <MenuItem
+      component={<Link to={to} />}
+      icon={icon}
+      className={location.pathname === to ? "active-menu-item" : ""}
+    >
+      {label}
+    </MenuItem>
+  );
 
   return (
     <div className="sidebar-container">
-      <Sidebar>
+      <Sidebar breakPoint="md" backgroundColor="#1f2937" className="custom-sidebar">
         <Menu>
-          {/* Reader Links */}
-          {userRole?.includes("Reader") && (
+          {userRole.includes("Reader") && (
             <>
-              <MenuItem component={<Link to="/to-read" />}>📖 To Read</MenuItem>
-              <MenuItem component={<Link to="/reading" />}>📚 Reading</MenuItem>
-              <MenuItem component={<Link to="/read" />}>✅ Read</MenuItem>
-              <MenuItem component={<Link to="/my-reviews" />}>
-                📝 My Reviews
-              </MenuItem>
-              <MenuItem component={<Link to="/profile" />}>Profile</MenuItem>
+              {menuItem("/to-read", <MdBook />, `To Read (${bookCounts.toRead})`)}
+              {menuItem("/reading", <MdLibraryBooks />, `Reading (${bookCounts.reading})`)}
+              {menuItem("/read", <MdCheckCircle />, `Read (${bookCounts.read})`)}
+              {menuItem("/my-reviews", <MdRateReview />, "My Reviews")}
+              {menuItem("/profile", <MdPerson />, "Profile")}
             </>
           )}
 
-          {/* Publisher Links */}
-          {userRole?.includes("Publisher") && (
+          {userRole.includes("Publisher") && (
             <>
-              <MenuItem component={<Link to="/add-book" />}>
-                ➕ Add New Book
-              </MenuItem>
-              <MenuItem component={<Link to="/published" />}>
-                📚 Published Books
-              </MenuItem>
-              <MenuItem component={<Link to="/rejected" />}>
-                ❌ Rejected Books
-              </MenuItem>
-              <MenuItem component={<Link to="/pending" />}>
-                🕒 Pending Approval
-              </MenuItem>
-              <MenuItem component={<Link to="/profile" />}>Profile</MenuItem>
+              {menuItem("/add-book", <MdAdd />, "Add New Book")}
+              {menuItem("/published", <MdLibraryBooks />, `Published (${publisherCounts.approved})`)}
+              {menuItem("/rejected", <MdCancel />, `Rejected (${publisherCounts.rejected})`)}
+              {menuItem("/pending", <MdPending />, `Pending (${publisherCounts.pending})`)}
+              {menuItem("/profile", <MdPerson />, "Profile")}
             </>
           )}
 
-          {/* Admin Links */}
-          {userRole?.includes("Admin") && (
+          {userRole.includes("Admin") && (
             <>
-              <MenuItem component={<Link to="/admin-approved" />}>
-                ✔️ Approved Books
-              </MenuItem>
-              <MenuItem component={<Link to="/admin-rejected" />}>
-                ❌ Rejected Books
-              </MenuItem>
-              <MenuItem component={<Link to="/pending-approval" />}>
-                ⏳ Pending Approval
-              </MenuItem>
-              <MenuItem component={<Link to="/readers-list" />}>
-                👥 Readers
-              </MenuItem>
-              <MenuItem component={<Link to="/publishers-list" />}>
-                🖋️ Publishers
-              </MenuItem>
-
-              <MenuItem component={<Link to="/genre-list" />}>
-                <MdOutlinePlaylistAdd />
-                Genres
-              </MenuItem>
-              <MenuItem component={<Link to="/keyword-list" />}>
-                <MdOutlinePlaylistAdd />
-                Keywords
-              </MenuItem>
-
-              <MenuItem component={<Link to="/messages-list" />}>
-                Messages
-              </MenuItem>
+              {menuItem("/admin-approved", <MdCheckCircle />, `Approved (${adminCounts.approved})`)}
+              {menuItem("/admin-rejected", <MdCancel />, `Rejected (${adminCounts.rejected})`)}
+              {menuItem("/pending-approval", <MdPending />, `Pending (${adminCounts.pending})`)}
+              {menuItem("/readers-list", <MdPeople />, "Readers")}
+              {menuItem("/publishers-list", <MdPeople />, "Publishers")}
+              {menuItem("/genre-list", <MdOutlinePlaylistAdd />, "Genres")}
+              {menuItem("/keyword-list", <MdOutlinePlaylistAdd />, "Keywords")}
+              {menuItem("/messages-list", <MdMessage />, "Messages")}
             </>
           )}
         </Menu>

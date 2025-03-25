@@ -244,7 +244,67 @@ namespace ScientificLibraryBack.Services.PublisherService
 
             return response;
         }
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetNyAllBooksAsync(string publisherId)
+        {
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
 
+            try
+            {
+                // Fetch only necessary fields
+                var books = await _context.Books
+                    .Where(b => b.PublisherId == publisherId)
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.Author,
+                        b.ISBN,
+                        b.Status,
+                        b.Format,
+                        GenreName = b.Genre.Name, //  Fetch Genre Name
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
+                        b.Description,
+                        b.Title,
+                        b.PageCount,
+                        b.IsAvailable,
+                        b.PublicationDate,
+                        b.State,
+                        b.Language
+                    })
+                    .ToListAsync();
+
+                var bookDTOs = books.Select(book => new BookDTO
+                {
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.GenreName, //  Use Genre Name
+                    Keywords = book.Keywords, //  Use List of Keywords
+                    PublisherName = book.PublisherName, //  Use Publisher Name
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language
+                }).ToList();
+
+                // Wrap the result in ApiResponse
+                response.Success = true;
+                response.Message = "All books retrieved successfully.";
+                response.Data = bookDTOs;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooksAsync(string publisherId)
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();

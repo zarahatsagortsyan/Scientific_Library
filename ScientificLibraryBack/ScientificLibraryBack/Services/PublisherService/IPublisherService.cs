@@ -15,5 +15,6 @@ namespace ScientificLibraryBack.Services.PublisherService
         Task<ApiResponse<Book>> GetBookByIdAsync(Guid bookId); // Response containing the book details
         Task<ApiResponse<string>> UpdatePublisherProfileAsync(string userId, PublisherProfileDTO profile);
         Task<ApiResponse<PublisherProfileDTO>> GetPublisherProfileAsync(string userId);
+        Task<ApiResponse<IEnumerable<BookDTO>>> GetNyAllBooksAsync(string publisherId);
     }
 }

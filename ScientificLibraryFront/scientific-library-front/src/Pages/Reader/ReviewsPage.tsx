@@ -138,7 +138,7 @@ const ReaderReviewsPage: React.FC = () => {
 
   return (
     <div className="user-reviews-page">
-      <h1>My Reviews</h1>
+      <h3>My Reviews</h3>
 
       <input
         type="text"
@@ -193,7 +193,7 @@ const ReaderReviewsPage: React.FC = () => {
                       : review.reviewText}
                   </td>
                   <td>{new Date(review.createdAt).toLocaleDateString()}</td>
-                  <td className="action-buttons">
+                  <td className="">
                     <button
                       className="see-book-button"
                       onClick={() => handleSeeBook(review.bookId)}

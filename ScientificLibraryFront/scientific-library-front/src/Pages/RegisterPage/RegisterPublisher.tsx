@@ -311,8 +311,9 @@ const RegisterPublisher: React.FC = () => {
               onChange={(e) => setDateOfEstablishment(e.target.value)}
             />
           </div>
-          <div className="phone-input-container">
+          <div className="phoneColor">
             <PhoneInput
+              //className="PhoneInputInput"
               placeholder="Enter phone number"
               value={phoneNumber}
               onChange={(value) => setPhoneNumber(value || "")}

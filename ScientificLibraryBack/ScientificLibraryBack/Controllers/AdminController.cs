@@ -116,6 +116,18 @@ namespace ScientificLibraryBack.Controllers
             return Ok(books);
         }
 
+        [HttpGet("books/all")]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            var books = await _adminService.GetAllBooks();
+
+            if (books == null)
+            {
+                return NotFound(books);
+            }
+
+            return Ok(books);
+        }
         [HttpGet("books/approved")]
         public async Task<IActionResult> GetApprovedBooks()
         {

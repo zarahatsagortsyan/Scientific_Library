@@ -93,9 +93,8 @@ const UserBooksList: React.FC<UserBooksListProps> = ({
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>{title}</h1>
-      <br />
+    <div className="reader_content">
+      <h3>{title}</h3>
       <div className="material-card-grid">
         {books.map((userBook) => (
           <div

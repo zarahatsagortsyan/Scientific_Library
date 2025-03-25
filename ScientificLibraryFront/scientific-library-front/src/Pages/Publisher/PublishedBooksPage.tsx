@@ -84,9 +84,9 @@ const MaterialCardGrid: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>Published</h1>
-      <br></br>
+    <div className="publisher_content">
+      {/* <br></br> */}
+      <h3>Published</h3>
       <div className="material-card-grid">
         {books.map((book) => (
           <div className="card" key={book.id}>

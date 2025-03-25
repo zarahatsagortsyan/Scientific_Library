@@ -1,9 +1,25 @@
 /* App.css or main container CSS */
-.main-content {
-    margin-left: 230px; /* Width of the sidebar */
+/* .main-content {
+    margin-left: 230px; 
     padding: 20px;
     box-sizing: border-box;
     min-height: 100vh;
     min-width: 100vh;
     
-  }
+  } */
+
+  /* Remove all default spacing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Make sure body and root take full height */
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  font-family: "Segoe UI", sans-serif;
+}

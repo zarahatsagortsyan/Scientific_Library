@@ -1,160 +1,138 @@
-/* Container to center the form */
+/* Container to center the form and apply background */
 .registration-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh;
-  padding: 10px;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)),
+    url("https://thumbs.dreamstime.com/b/futuristic-digital-library-shows-shelves-full-glowing-colorful-books-contain-international-case-law-business-contracts-market-359237943.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
 }
 
+/* Form panel */
 .registration-form {
   width: 100%;
-  max-width: 360px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  max-width: 420px;
+  padding: 32px;
+  background-color: rgba(30, 41, 59, 0.95); /* dark slate with opacity */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
 
-/* Title for the form */
+/* Form Title */
 .registration-form h2 {
-  color: #4CAF50;
-  font-size: 24px;
-  margin-bottom: 10px;
-  font-weight: bold;
+  color: #38bdf8;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
-/* Styling for form labels */
+/* Labels */
 .registration-form label {
-  font-size: 13px;
-  color: #333;
+  font-size: 14px;
+  color: #f1f5f9;
   text-align: left;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-weight: 600;
 }
 
-/* Input field styling */
+/* Inputs */
 .registration-form input[type="text"],
 .registration-form input[type="email"],
 .registration-form input[type="password"],
-.registration-form input[type="date"] {
+.registration-form input[type="date"],
+.PhoneInputInput {
   width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 10px;
+  font-size: 15px;
+  margin-bottom: 16px;
+  border: 2px solid #334155;
+  border-radius: 8px;
   outline: none;
-  background-color: #f9f9f9;
+  background-color: #0f172a;
+  color: #f1f5f9;
   transition: all 0.3s ease;
 }
+.phoneColor {
+color: #f1f5f9;
 
-.registration-form input:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6);
+}
+.registration-form input:focus,
+.PhoneInputInput:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
 }
 
-/* Phone input field styling */
+/* Phone container */
 .phone-input-container {
   display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-
-.phone-input-container input {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
-}
-
-.phone-input-container input:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6);
-}
-
-/* Error message styling */
-.registration-form .error {
-  color: red;
-  font-size: 12px;
-  margin-bottom: 8px;
-  text-align: left;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 /* Submit button */
 .registration-form button {
   width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: #fff;
+  padding: 12px;
+  background-color: #38bdf8;
+  color: #0f172a;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .registration-form button:hover {
-  background-color: #45a049;
+  background-color: #0ea5e9;
   transform: scale(1.03);
 }
 
 .registration-form button:active {
-  background-color: #388e3c;
+  background-color: #0284c7;
 }
 
-/* Responsive styling */
+/* Error messages */
+.registration-form .error {
+  color: #f87171;
+  font-size: 13px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Group wrapper */
+.form-group {
+  margin-bottom: 10px;
+  text-align: left;
+}
+.password-policy{
+  color: aliceblue;
+
+}
+
+/* Responsive tweaks */
 @media (max-width: 500px) {
   .registration-form {
-    padding: 15px;
+    padding: 20px;
   }
 
   .registration-form h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
   .registration-form input {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .registration-form button {
-    font-size: 14px;
+    font-size: 15px;
   }
-}
-
-/* Style for PhoneInput wrapper */
-.phone-input-container {
-  margin-bottom: 10px;
-}
-
-.PhoneInput {
-  width: 100%;
-  display: block;
-}
-
-.PhoneInputInput {
-  width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
-}
-
-.PhoneInputInput:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.6);
-}
-
-.form-group {
-  margin-bottom: 6px;
-  text-align: left;
 }

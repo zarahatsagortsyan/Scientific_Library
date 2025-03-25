@@ -198,6 +198,66 @@ namespace ScientificLibraryBack.Services.AdminService
             }
             return apiResponse;
         }
+
+        public async Task<ApiResponse<IEnumerable<BookDTO>>> GetAllBooks()
+        {
+            var response = new ApiResponse<IEnumerable<BookDTO>>();
+
+            try
+            {
+                var books = await _context.Books
+                    .Select(b => new
+                    {
+                        b.Id,
+                        b.Author,
+                        b.ISBN,
+                        b.Status,
+                        b.Format,
+                        GenreName = b.Genre.Name, //  Fetch Genre Name
+                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
+                        b.Description,
+                        b.Title,
+                        b.PageCount,
+                        b.IsAvailable,
+                        b.PublicationDate,
+                        b.State,
+                        b.Language
+                    })
+                    .ToListAsync();
+
+                // Convert to DTOs
+                var bookDTOs = books.Select(book => new BookDTO
+                {
+                    Id = book.Id,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Status = book.Status,
+                    Format = book.Format,
+                    Genre = book.GenreName,
+                    Keywords = book.Keywords,
+                    PublisherName = book.PublisherName,
+                    Description = book.Description,
+                    Title = book.Title,
+                    PageCount = book.PageCount,
+                    IsAvailable = book.IsAvailable,
+                    PublicationDate = book.PublicationDate,
+                    State = book.State,
+                    Language = book.Language
+                }).ToList();
+
+                response.Success = true;
+                response.Message = "Pending books retrieved successfully.";
+                response.Data = bookDTOs;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = $"An error occurred: {ex.Message}";
+            }
+
+            return response;
+        }
         public async Task<ApiResponse<IEnumerable<BookDTO>>> GetPendingBooks()
         {
             var response = new ApiResponse<IEnumerable<BookDTO>>();

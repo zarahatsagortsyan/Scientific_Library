@@ -99,7 +99,18 @@ namespace ScientificLibraryBack.Controllers
 
             return Ok(updateRespone);
         }
+        [HttpGet("books/all")]
+        public async Task<IActionResult> GetMyAllBooks(string publisherId)
+        {
+            var books = await _publisherService.GetNyAllBooksAsync(publisherId);
 
+            if (books == null)
+            {
+                return NotFound(books);
+            }
+
+            return Ok(books);
+        }
         [HttpGet("books/published")]
         public async Task<IActionResult> GetMyPublishedBooks(string publisherId)
         {

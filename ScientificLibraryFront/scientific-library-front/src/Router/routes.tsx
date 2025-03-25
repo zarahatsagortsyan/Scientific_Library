@@ -37,9 +37,10 @@ const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Header />
-      <div style={{ display: "flex", height: "100vh" }}>
+      <div style={{ display: "flex", minHeight: "100vh" }}>
+
         <SidebarMenu />
-        <div style={{ flex: 1, padding: "20px" }}>
+        <div style={{ flex: 1}}>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Navigate to="/home" replace />} />

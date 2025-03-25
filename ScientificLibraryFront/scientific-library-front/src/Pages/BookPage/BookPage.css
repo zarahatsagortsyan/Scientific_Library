@@ -1,166 +1,3 @@
-/* BookPage.css
-
-.book-page {
-    max-width: 700px;
-    margin: 30px auto;
-    padding: 25px;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    transition: transform 0.3s;
-  }
-  
-  .book-page:hover {
-    transform: translateY(-5px);
-  }
-  
-  .book-cover {
-    width: 250px;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin: 20px auto;
-    display: block;
-    border: 4px solid #0288d1;
-  }
-  
-  h2 {
-    color: #01579b;
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  p {
-    margin: 10px 0;
-    color: #333;
-    font-size: 1.1em;
-  }
-  
-  .button-group {
-    margin: 20px 0;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 7px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    font-size: 1em;
-    color: #fff;
-    font-weight: bold;
-  }
-  
-  .open-button {
-    background-color: #0288d1;
-  }
-  
-  .open-button:hover {
-    background-color: #0277bd;
-    transform: scale(1.05);
-  }
-  
-  .download-button {
-    background-color: #43a047;
-  }
-  
-  .download-button:hover {
-    background-color: #388e3c;
-    transform: scale(1.05);
-  }
-  
-  .availability-button {
-    background-color: #ff9800;
-  }
-  
-  .availability-button:hover {
-    background-color: #fb8c00;
-    transform: scale(1.05);
-  }
-  
-  .reviews-section {
-    margin-top: 30px;
-    text-align: left;
-    padding: 15px;
-    border-top: 2px solid #0288d1;
-  }
-  
-  .review {
-    background-color: #fff;
-    border: 2px solid #0288d1;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .review p {
-    margin: 5px 0;
-    color: #01579b;
-  }
-  
-  .add-review {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #e1f5fe;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .add-review textarea {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #0288d1;
-    border-radius: 5px;
-    font-size: 1em;
-    resize: vertical;
-  }
-  
-  .add-review select {
-    margin-top: 10px;
-    padding: 5px 10px;
-    border: 1px solid #0288d1;
-    border-radius: 5px;
-  }
-  
-  .submit-review-button {
-    margin-top: 15px;
-    background-color: #0288d1;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  .submit-review-button:hover {
-    background-color: #0277bd;
-    transform: scale(1.05);
-  }
-  
-  .loader {
-    text-align: center;
-    font-size: 1.5em;
-    color: #0288d1;
-    margin-top: 50px;
-  }
-  
-  .error {
-    color: red;
-    text-align: center;
-    font-size: 1.2em;
-    margin-top: 50px;
-  }
-   */
-
-   /* Main Page Container */
 .book-page {
   max-width: 800px;
   margin: 40px auto;
@@ -185,7 +22,7 @@
 }
 
 /* Book Title */
-h2 {
+.book-page h2 {
   font-size: 2rem;
   color: #333;
   margin-bottom: 10px;
@@ -193,14 +30,14 @@ h2 {
 }
 
 /* Book Details */
-p {
+.book-page p {
   font-size: 1rem;
   line-height: 1.6;
   margin: 8px 0;
   color: #555;
 }
 
-p strong {
+.book-page p strong {
   color: #000;
   font-weight: 600;
 }
@@ -214,7 +51,7 @@ p strong {
 }
 
 /* Button Styles */
-button {
+.book-page button {
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -226,16 +63,16 @@ button {
   min-width: 100px;
 }
 
-button:hover {
+.book-page button:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.open-button {
+.book-page .open-button {
   background-color: #3498db;
 }
 
-.download-button {
+.book-page .download-button {
   background-color: #2ecc71;
 }
 

@@ -30,7 +30,6 @@
 // };
 
 // export default Pagination;
-import React from "react";
 import "./Pagination.css";
 
 const Pagination = ({
