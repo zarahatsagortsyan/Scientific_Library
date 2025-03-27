@@ -91,7 +91,7 @@ const ReadersListPage: React.FC = () => {
       reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="container mt-4">Loading...</div>;
   if (error) return <div className="text-danger">{error}</div>;
 
   return (

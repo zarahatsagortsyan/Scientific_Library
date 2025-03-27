@@ -14,7 +14,6 @@ export const getUserRole = (): string | null => {
   try {
     const decodedToken: Token = jwtDecode(token); // Decode the JWT token
     const role = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]; // Extract the role
-    console.log(role);
     return role || null; // Return the role if it exists, otherwise return null
   } catch (error) {
     console.error("Failed to decode JWT token", error);

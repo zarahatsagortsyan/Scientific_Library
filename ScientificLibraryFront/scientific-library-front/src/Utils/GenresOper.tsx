@@ -13,7 +13,6 @@ export const useGenres = () => {
         const response = await api.get(
           import.meta.env.VITE_API_URL + "/book/genres"
         );
-        console.log(response.data);
         if (response.data.success) {
           setGenres(response.data.data);
         } else {
@@ -50,7 +49,6 @@ export const handleGenreEdit = async (
       genreDescription: genreDescription || null,
     };
 
-    console.log("asdasd: " + payload.name);
     const response = await api.patch(
       `${import.meta.env.VITE_API_URL}/Admin/genres/${genreId}`,
       payload,
@@ -63,7 +61,6 @@ export const handleGenreEdit = async (
     );
 
     if (response.status === 200 && response.data.success) {
-      console.log("Genre updated successfully:", response.data);
       return true;
     } else {
       console.error("Failed to update genre:", response.data);

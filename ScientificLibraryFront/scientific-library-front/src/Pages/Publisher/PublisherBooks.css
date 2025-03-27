@@ -3,9 +3,9 @@
   text-align: center;
 }
 
-.publisher_content h3 {
+.publisher_content h2 {
   color: #07658d;              /* brighter sky-blue */
-  font-size: 1.2rem;          /* larger font */
+  font-size: 1.7rem;          /* larger font */
   font-weight: 700;            /* bold text */
   margin-bottom: 10px;
   letter-spacing: 1px;
@@ -63,12 +63,12 @@
   justify-content: center;
 }
 
-.details-button,
-.open-button,
-.download-button,
-.availability-button {
+.Pdetails-button,
+.Popen-button,
+.Pdownload-button,
+.Pavailability-button {
   margin-top: 5px;
-  background-color: #007BFF;
+  /* background-color: #007BFF; */
   color: #fff;
   border: none;
   padding: 5px 8px;
@@ -78,27 +78,38 @@
   font-size: 0.85em;
 }
 
-.details-button:hover {
+.Pdetails-button {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.Popen-button {
+  background-color: #007BFF;
+  color: white;
+}
+
+.Pdownload-button {
+  background-color: #000000;
+  color: white;
+}
+
+.Pdetails-button:hover {
   background-color: #218838;
 }
 
-.open-button:hover {
+.Popen-button:hover {
   background-color: #0056b3;
 }
 
-.download-button {
-  background-color: #5c5c5c;
+.Pdownload-button:hover {
+  background-color: #494949;
 }
 
-.download-button:hover {
-  background-color: #e0a800;
-}
-
-.availability-button {
+.Pavailability-button {
   background-color: #6c757d;
 }
 
-.availability-button:hover {
+.Pavailability-button:hover {
   background-color: #5a6268;
 }
 

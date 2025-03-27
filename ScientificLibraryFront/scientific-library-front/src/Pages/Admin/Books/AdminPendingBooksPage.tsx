@@ -197,8 +197,8 @@ const AdminPendingPage: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>Pending</h1>
+    <div className="admin_content">
+      <h2>Pending</h2>
       <br />
       <div className="material-card-grid">
         {books.map((book) => (

@@ -13,7 +13,6 @@ export const useLanguages = () => {
           const response = await api.get(
             import.meta.env.VITE_API_URL + "/book/languages"
           );
-          console.log(response.data);
           if (response.data.success) {
             setLanguages(response.data.data);
           } else {

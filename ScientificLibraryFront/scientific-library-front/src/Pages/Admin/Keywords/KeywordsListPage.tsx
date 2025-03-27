@@ -20,7 +20,7 @@ const KeywordsListPage: React.FC = () => {
 
   const { keywords, keyLoading, keyError } = useKeywords();
 
-  if (keyLoading) return <div>Loading keywords...</div>;
+  if (keyLoading) return <div className="container mt-4">Loading keywords...</div>;
   if (keyError) return <div className="text-danger">{keyError}</div>;
 
   const handleEditKeyword = (keyword: Keyword) => {

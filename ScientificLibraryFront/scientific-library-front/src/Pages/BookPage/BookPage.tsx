@@ -50,7 +50,6 @@ const BookPage: React.FC = () => {
           `http://localhost:8001/api/book/info/${bookId}`
         );
         const bookData = await response.json();
-        console.log("Fetched Book Data:", bookData); // Log the fetched data
         if (bookData.success) {
           setBook(bookData.data); // Store the book data in the state
         } else {

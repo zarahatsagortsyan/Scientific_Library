@@ -86,7 +86,7 @@ const MaterialCardGrid: React.FC = () => {
   return (
     <div className="publisher_content">
       {/* <br></br> */}
-      <h3>Published</h3>
+      <h2>Published</h2>
       <div className="material-card-grid">
         {books.map((book) => (
           <div className="card" key={book.id}>
@@ -102,22 +102,22 @@ const MaterialCardGrid: React.FC = () => {
               <p className="card__author">👤 {book.author}</p>
               <p className="card__genre">📖 {book.genre}</p>
               <button
-                className="details-button"
+                className="Pdetails-button"
                 onClick={() => handleViewDetails(book.id)}
               >
                 👁️ View Details
               </button>
-              <button className="open-button" onClick={() => openPdf(book.id)}>
+              <button className="Popen-button" onClick={() => openPdf(book.id)}>
                 📥 Open PDF
               </button>
               <button
-                className="download-button"
+                className="Pdownload-button"
                 onClick={() => downloadPdf(book.id)}
               >
                 📥 Download PDF
               </button>
               <button
-                className="availability-button"
+                className="Pavailability-button"
                 onClick={() => handleToggleAvailability(book)}
               >
                 {book.isAvailable ? "🔴 Make Unavailable" : "🟢 Make Available"}

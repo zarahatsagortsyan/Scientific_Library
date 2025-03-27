@@ -8,7 +8,6 @@ export const toggleBookAvailability = async (book:Book) => {
     if (!token) {
       throw new Error("Authentication required.");
     }
-console.log("helooooooooooooooooo  " +  !book.isAvailable)
     const decodedToken: any = jwtDecode(token);
     const publisherId =  decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
@@ -24,7 +23,6 @@ console.log("helooooooooooooooooo  " +  !book.isAvailable)
       }
     );
 
-    console.log(response)
     if (response.status === 200 && response.data.success == true) {
       return { ...book, isAvailable: !book.isAvailable };
     } else {

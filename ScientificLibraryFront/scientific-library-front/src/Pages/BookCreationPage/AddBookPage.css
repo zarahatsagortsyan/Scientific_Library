@@ -42,7 +42,14 @@
   padding-bottom: 0px;
 
 }
-
+.error {
+  color: #d9534f;
+  font-weight: bold;
+  margin: 10px 0;
+  background-color: #f8d7da;
+  padding: 10px;
+  border-radius: 4px;
+}
 /* 🎯 Input Fields */
 input[type="text"],
 input[type="number"],

@@ -13,7 +13,6 @@ export const useKeywords = () => {
         const response = await api.get(
           import.meta.env.VITE_API_URL + "/book/keywords"
         );
-        console.log(response.data);
         if (response.data.success) {
           setKeywords(response.data.data);
         } else {

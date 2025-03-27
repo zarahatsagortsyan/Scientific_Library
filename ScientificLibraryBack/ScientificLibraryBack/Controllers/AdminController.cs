@@ -39,6 +39,11 @@ namespace ScientificLibraryBack.Controllers
         [HttpPatch("books/reject")]
         public async Task<IActionResult> RejectBook(Guid bookId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                Console.WriteLine("User not authenticated");
+                return Unauthorized(new ApiResponse<string> { Success = false, Message = "User not authenticated" });
+            }
             var response = await _adminService.RejectBook(bookId);
 
             if (response.Success)

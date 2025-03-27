@@ -3,9 +3,9 @@
   text-align: center;
 }
 
-.reader_content h3 {
+.reader_content h2 {
   color: #07658d;              /* brighter sky-blue */
-  font-size: 1.2rem;          /* larger font */
+  font-size: 1.7rem;          /* larger font */
   font-weight: 700;            /* bold text */
   margin-bottom: 10px;
   letter-spacing: 1px;
@@ -70,7 +70,6 @@
 .download-button,
 .availability-button {
   margin-top: 5px;
-  /* background-color: #007BFF; */
   color: #fff;
   border: none;
   padding: 5px 8px;

@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScientificLibraryBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8d5387e4d60ad8e51ce7e025c6765e6bddfbc33")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f90090a9e1a20a38e13375ab0ffbdbad4e2b0150")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScientificLibraryBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScientificLibraryBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

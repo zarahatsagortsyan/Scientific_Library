@@ -28,7 +28,7 @@ namespace ScientificLibraryBack.Services.AuthService
 
         public string GenerateTokenString(ExtendedIdentityUser user)
         {
-            var roles = GetUserRole(user.Email!); // Call the synchronous method to get roles
+            var roles = GetUserRole(user.Email!); 
 
             if (roles == null || roles.Count() == 0)
             {
@@ -43,7 +43,7 @@ namespace ScientificLibraryBack.Services.AuthService
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role)); // Add each role to the claims
+                claims.Add(new Claim(ClaimTypes.Role, role)); 
             }
 
             var staticKey = _config.GetSection("Jwt:Key").Value;

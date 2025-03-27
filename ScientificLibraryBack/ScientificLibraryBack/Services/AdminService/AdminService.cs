@@ -16,26 +16,59 @@ namespace ScientificLibraryBack.Services.AdminService
         {
             _context = context;
         }
+        //public async Task<ApiResponse<bool>> ApproveBook(Guid bookId)
+        //{
+        //    var response = new ApiResponse<bool>();
+
+        //    try
+        //    {
+        //        // Retrieve the existing book from the database
+        //        var existingBook = await _context.Books.FindAsync(bookId);
+        //        if (existingBook == null)
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            response.Data = false;
+        //            return response;
+        //        }
+
+        //        existingBook.Status = ApprovalStatus.Approved;
+        //        // Save changes to the database
+        //        _context.Books.Update(existingBook); // This ensures only modified fields are persisted
+        //        await _context.SaveChangesAsync();
+
+        //        response.Success = true;
+        //        response.Message = "Book approved successfully.";
+        //        response.Data = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
+
         public async Task<ApiResponse<bool>> ApproveBook(Guid bookId)
         {
             var response = new ApiResponse<bool>();
 
             try
             {
-                // Retrieve the existing book from the database
-                var existingBook = await _context.Books.FindAsync(bookId);
-                if (existingBook == null)
+                var rowsAffected = await _context.Books
+                    .Where(b => b.Id == bookId)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(b => b.Status, ApprovalStatus.Approved)
+                    );
+
+                if (rowsAffected == 0)
                 {
                     response.Success = false;
                     response.Message = "Book not found.";
                     response.Data = false;
                     return response;
                 }
-
-                existingBook.Status = ApprovalStatus.Approved;
-                // Save changes to the database
-                _context.Books.Update(existingBook); // This ensures only modified fields are persisted
-                await _context.SaveChangesAsync();
 
                 response.Success = true;
                 response.Message = "Book approved successfully.";
@@ -45,31 +78,64 @@ namespace ScientificLibraryBack.Services.AdminService
             {
                 response.Success = false;
                 response.Message = $"An error occurred: {ex.Message}";
+                response.Data = false;
             }
 
             return response;
         }
 
+        //public async Task<ApiResponse<bool>> RejectBook(Guid bookId)
+        //{
+        //    var response = new ApiResponse<bool>();
+
+        //    try
+        //    {
+        //        // Retrieve the existing book from the database
+        //        var existingBook = await _context.Books.FindAsync(bookId);
+        //        if (existingBook == null)
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            response.Data = false;
+        //            return response;
+        //        }
+
+        //        existingBook.Status = ApprovalStatus.Rejected;
+        //        // Save changes to the database
+        //        _context.Books.Update(existingBook); // This ensures only modified fields are persisted
+        //        await _context.SaveChangesAsync();
+
+        //        response.Success = true;
+        //        response.Message = "Book rejected successfully.";
+        //        response.Data = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
         public async Task<ApiResponse<bool>> RejectBook(Guid bookId)
         {
             var response = new ApiResponse<bool>();
 
             try
             {
-                // Retrieve the existing book from the database
-                var existingBook = await _context.Books.FindAsync(bookId);
-                if (existingBook == null)
+                var rowsAffected = await _context.Books
+                    .Where(b => b.Id == bookId)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(b => b.Status, ApprovalStatus.Rejected)
+                    );
+
+                if (rowsAffected == 0)
                 {
                     response.Success = false;
                     response.Message = "Book not found.";
                     response.Data = false;
                     return response;
                 }
-
-                existingBook.Status = ApprovalStatus.Rejected;
-                // Save changes to the database
-                _context.Books.Update(existingBook); // This ensures only modified fields are persisted
-                await _context.SaveChangesAsync();
 
                 response.Success = true;
                 response.Message = "Book rejected successfully.";
@@ -79,6 +145,7 @@ namespace ScientificLibraryBack.Services.AdminService
             {
                 response.Success = false;
                 response.Message = $"An error occurred: {ex.Message}";
+                response.Data = false;
             }
 
             return response;

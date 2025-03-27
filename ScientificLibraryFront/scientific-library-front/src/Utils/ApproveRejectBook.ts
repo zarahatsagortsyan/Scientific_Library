@@ -1,7 +1,6 @@
 import api from "../api/api";
 
 export const handleBookApprove = async (id: any) => {
-  console.log(id);
   try {
     const token = localStorage.getItem("jwtToken");
     if (!token) {
@@ -31,7 +30,6 @@ export const handleBookApprove = async (id: any) => {
 };
 
 export const handleBookReject = async (id: any) => {
-  console.log(id);
   try {
     const token = localStorage.getItem("jwtToken");
     if (!token) {

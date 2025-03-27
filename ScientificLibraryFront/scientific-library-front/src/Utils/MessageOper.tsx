@@ -28,7 +28,6 @@ export const useMessages = () => {
             },
           }
         );
-        console.log(response.data);
         if (response.data.success) {
           setMessages(response.data.data);
         } else {

@@ -66,8 +66,8 @@ const AdminRejectedBooksPage: React.FC = () => {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div>
-      <h1>Rejected</h1>
+    <div className="admin_content">
+      <h2>Rejected</h2>
       <br></br>
       <div className="material-card-grid">
         {books.map((book) => (

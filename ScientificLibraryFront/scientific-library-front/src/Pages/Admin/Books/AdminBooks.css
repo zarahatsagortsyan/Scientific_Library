@@ -1,3 +1,17 @@
+.admin_content {
+  padding: 20px;
+  text-align: center;
+}
+
+.admin_content h2 {
+  color: #07658d;              /* brighter sky-blue */
+  font-size: 1.7rem;          /* larger font */
+  font-weight: 700;            /* bold text */
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 .material-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -45,7 +59,7 @@
 }
 
 /* Reusable Button Base */
-.button {
+/* .button {
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 5px;
@@ -53,6 +67,23 @@
   cursor: pointer;
   transition: background-color 0.25s ease;
   width: 100%;
+} */
+
+.details-button,
+.open-button,
+.download-button,
+.availability-button,
+.reject-button,
+.approve-button {
+  margin-top: 5px;
+  /* background-color: #007BFF; */
+  color: #fff;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.85em;
 }
 
 .details-button {
@@ -82,13 +113,7 @@
   background-color: #e0a800;
 }
 
-/* Approve/Reject Section */
-.approvereject {
-  /* display: flex; */
-  justify-content: space-between;
-  gap: 20px;
-  /* margin-top: 8px; */
-}
+
 
 .reject-button {
   background-color: #dc3545;

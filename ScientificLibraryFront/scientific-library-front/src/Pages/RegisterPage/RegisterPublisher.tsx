@@ -196,7 +196,6 @@ const RegisterPublisher: React.FC = () => {
       });
 
       const data = await response.json();
-      console.log(data);
       if (response.ok && data.success && data.data?.succeeded) {
         setError("");
         setSuccessMessage(data.message);

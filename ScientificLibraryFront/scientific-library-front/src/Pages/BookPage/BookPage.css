@@ -52,7 +52,7 @@
 
 /* Button Styles */
 .book-page button {
-  padding: 10px 15px;
+  padding: 5px 10px;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
@@ -63,6 +63,14 @@
   min-width: 100px;
 }
 
+/* Approve/Reject Section */
+.approvereject {
+  display: flex;
+  justify-content: space-between;
+  gap: 300px;
+  margin-bottom: 25px;
+  
+}
 .book-page button:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -94,41 +102,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Reviews Section */
-.reviews-section {
-  margin-top: 30px;
-}
-
-.reviews-section h3 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  color: #333;
-}
-
-/* Review Card */
-.review {
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Add Review Form */
-.add-review {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-textarea {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  resize: vertical;
-  font-size: 1rem;
-}
 
 select {
   padding: 8px;
@@ -137,21 +110,6 @@ select {
   font-size: 1rem;
 }
 
-.submit-review-button {
-  align-self: flex-start;
-  background-color: #3498db;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.submit-review-button:hover {
-  background-color: #2980b9;
-}
 
 /* Loader and Error */
 .loader {

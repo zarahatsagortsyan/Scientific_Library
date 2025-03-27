@@ -94,7 +94,7 @@ const UserBooksList: React.FC<UserBooksListProps> = ({
 
   return (
     <div className="reader_content">
-      <h3>{title}</h3>
+      <h2>{title}</h2>
       <div className="material-card-grid">
         {books.map((userBook) => (
           <div

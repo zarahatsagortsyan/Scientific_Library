@@ -9,7 +9,7 @@ const AdminMessages: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const messagesPerPage = 6;
 
-  if (mesLoading) return <div>Loading messages...</div>;
+  if (mesLoading) return     <div className="container mt-4"> Loading messages...</div>;
   if (mesError) return <div className="text-danger">{mesError}</div>;
 
   const markAsReplied = async (id: number) => {

@@ -36,7 +36,6 @@ const ReaderReviewsPage: React.FC = () => {
     const fetchUserReviews = async () => {
       setLoading(true);
       try {
-        console.log(userId);
         const response = await axios.get(
           `http://localhost:8001/api/Reader/user-reviews/${userId}`
         );

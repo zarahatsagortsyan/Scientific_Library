@@ -44,12 +44,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
   return (
     <div className="review-form">
-      <textarea
-        value={newReview}
-        onChange={(e) => setNewReview(e.target.value)}
-        placeholder="Write your review here..."
-        rows={4}
-      />
       <div className="rating-stars">
         <Rating
           onClick={(rate) => setRating(rate)}
@@ -60,6 +54,12 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           emptyColor="gray"
         />
       </div>
+      <textarea
+        value={newReview}
+        onChange={(e) => setNewReview(e.target.value)}
+        placeholder="Write your review here..."
+        rows={4}
+      />
       <button onClick={handleSubmit} className="submit-review-button">
         Submit Review
       </button>

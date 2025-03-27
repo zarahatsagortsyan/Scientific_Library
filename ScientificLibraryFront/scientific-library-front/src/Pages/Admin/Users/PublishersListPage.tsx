@@ -89,7 +89,7 @@ const PublishersListPage: React.FC = () => {
       reader.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="container mt-4">Loading...</div>;
   if (error) return <div className="text-danger">{error}</div>;
 
   return (
@@ -129,14 +129,14 @@ const PublishersListPage: React.FC = () => {
                     className="btn btn-success"
                     onClick={() => handleUnbanUser(reader.id)}
                   >
-                    Unban
+                    Unblock
                   </button>
                 ) : (
                   <button
                     className="btn btn-danger"
                     onClick={() => handleBanUser(reader.id)}
                   >
-                    Ban
+                    Block
                   </button>
                 )}
               </td>

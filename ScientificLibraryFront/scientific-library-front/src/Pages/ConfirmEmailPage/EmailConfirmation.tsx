@@ -30,7 +30,6 @@ const EmailConfirmation: React.FC = () => {
           { email, token }
         );
 
-        console.log("API Response:", response);
         if (response.status === 200) {
           setStatus("success");
         } else {

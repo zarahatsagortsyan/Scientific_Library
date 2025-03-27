@@ -20,7 +20,7 @@ const GenresListPage: React.FC = () => {
 
   const { genres, loading, error } = useGenres();
 
-  if (loading) return <div>Loading genres...</div>;
+  if (loading) return <div className="container mt-4">Loading genres...</div>;
   if (error) return <div className="text-danger">{error}</div>;
 
   const handleEditGenre = (genre: Genre) => {
