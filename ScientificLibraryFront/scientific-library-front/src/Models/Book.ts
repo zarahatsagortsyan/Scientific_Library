@@ -14,6 +14,6 @@ export interface Book {
     keywords: string;
     isAvailable: boolean;
     status: string;
-
+    averageRating:number;
   }
 

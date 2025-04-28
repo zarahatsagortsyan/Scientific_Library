@@ -8,7 +8,7 @@ export interface BookCounts {
   read: number;
 }
 
-export const useReaderBookCounts = (): BookCounts => {
+export const useReaderBookCounts = (refreshTrigger: number): BookCounts => {
   const [counts, setCounts] = useState<BookCounts>({
     toRead: 0,
     reading: 0,
@@ -50,7 +50,7 @@ export const useReaderBookCounts = (): BookCounts => {
     };
 
     fetchCounts();
-  }, []);
+  }, [refreshTrigger]); // refetch when triggered
 
   return counts;
 };

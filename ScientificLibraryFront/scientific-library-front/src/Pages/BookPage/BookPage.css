@@ -148,3 +148,8 @@ select {
       padding: 8px 12px;
   }
 }
+.average-rating {
+  margin: 8px 0;
+  color: #f59e0b; /* nice gold star color */
+  font-weight: bold;
+}

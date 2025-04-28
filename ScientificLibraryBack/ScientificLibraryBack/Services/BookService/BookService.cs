@@ -69,13 +69,81 @@ namespace ScientificLibraryBack.Services.BookService
             return response;
         }
 
+        //public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
+        //{
+        //    var response = new ApiResponse<BookDTO>();
+
+        //    try
+        //    {
+        //        // Fetch the book with only necessary related data
+        //        var bookData = await _context.Books
+        //            .Where(b => b.Id == bookId)
+        //            .Select(b => new
+        //            {
+        //                b.Id,
+        //                b.Title,
+        //                b.Author,
+        //                b.ISBN,
+        //                b.Status,
+        //                b.Format,
+        //                GenreName = b.Genre.Name,
+        //                PublisherName = b.Publisher.UserName,
+        //                Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
+        //                b.Description,
+        //                b.PageCount,
+        //                b.IsAvailable,
+        //                b.PublicationDate,
+        //                b.State,
+        //                b.Language
+        //            })
+        //            .FirstOrDefaultAsync();
+
+        //        if (bookData == null)
+        //        {
+        //            response.Success = false;
+        //            response.Message = "Book not found.";
+        //            return response;
+        //        }
+
+        //        //  Map fetched data to DTO
+        //        var bookResponse = new BookDTO
+        //        {
+        //            Id = bookData.Id,
+        //            Title = bookData.Title,
+        //            Author = bookData.Author,
+        //            ISBN = bookData.ISBN,
+        //            Status = bookData.Status,
+        //            Format = bookData.Format,
+        //            Genre = bookData.GenreName,
+        //            Keywords = bookData.Keywords,
+        //            PublisherName = bookData.PublisherName ?? "Unknown",
+        //            Description = bookData.Description,
+        //            PageCount = bookData.PageCount,
+        //            IsAvailable = bookData.IsAvailable,
+        //            PublicationDate = bookData.PublicationDate,
+        //            State = bookData.State,
+        //            Language = bookData.Language
+        //        };
+
+        //        response.Success = true;
+        //        response.Message = "Book retrieved successfully.";
+        //        response.Data = bookResponse;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Success = false;
+        //        response.Message = $"An error occurred: {ex.Message}";
+        //    }
+
+        //    return response;
+        //}
         public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
         {
             var response = new ApiResponse<BookDTO>();
 
             try
             {
-                // Fetch the book with only necessary related data
+                // Fetch the book with only necessary related data, including average rating
                 var bookData = await _context.Books
                     .Where(b => b.Id == bookId)
                     .Select(b => new
@@ -94,7 +162,8 @@ namespace ScientificLibraryBack.Services.BookService
                         b.IsAvailable,
                         b.PublicationDate,
                         b.State,
-                        b.Language
+                        b.Language,
+                        AverageRating = b.Reviews.Any() ? b.Reviews.Average(r => r.Rating) : 0 
                     })
                     .FirstOrDefaultAsync();
 
@@ -122,7 +191,8 @@ namespace ScientificLibraryBack.Services.BookService
                     IsAvailable = bookData.IsAvailable,
                     PublicationDate = bookData.PublicationDate,
                     State = bookData.State,
-                    Language = bookData.Language
+                    Language = bookData.Language,
+                    AverageRating = bookData.AverageRating 
                 };
 
                 response.Success = true;
@@ -137,6 +207,8 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
+
+
 
         public async Task<ApiResponse<byte[]>> GetBookCoverImage(Guid bookId)
         {

@@ -33,15 +33,19 @@ const AddBookPage = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [fileError, setFileError] = useState<string>(""); // For file validation errors
 
-  const validImageFormats = ["image/jpeg", "image/png", "image/jpg", "image/gif"];
+  const validImageFormats = [
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/gif",
+  ];
   const validPdfFormat = "application/pdf";
 
   const handleKeywordChange = (keyword: string) => {
-    setSelectedKeywords(
-      (prevKeywords) =>
-        prevKeywords.includes(keyword)
-          ? prevKeywords.filter((k) => k !== keyword)
-          : [...prevKeywords, keyword]
+    setSelectedKeywords((prevKeywords) =>
+      prevKeywords.includes(keyword)
+        ? prevKeywords.filter((k) => k !== keyword)
+        : [...prevKeywords, keyword]
     );
   };
 
@@ -60,7 +64,9 @@ const AddBookPage = () => {
 
       if (fileType === "image") {
         if (!validImageFormats.includes(selectedFile.type)) {
-          setFileError("Invalid image format. Only JPG, PNG, and GIF are allowed.");
+          setFileError(
+            "Invalid image format. Only JPG, PNG, and GIF are allowed."
+          );
           setCoverImage(null);
           return;
         }
@@ -81,7 +87,7 @@ const AddBookPage = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
-    
+
     // Prevent submission if there are file errors
     if (fileError) {
       return;
@@ -118,6 +124,7 @@ const AddBookPage = () => {
 
       if (response.status === 201) {
         alert("Book submitted for approval!");
+        window.location.reload();
         navigate("/");
       } else {
         setErrorMessage("Failed to create book.");
@@ -126,7 +133,8 @@ const AddBookPage = () => {
       console.error("Error creating book:", error);
 
       if (error.response && error.response.data) {
-        const errorMsg = error.response.data.message || "An error occurred. Please try again.";
+        const errorMsg =
+          error.response.data.message || "An error occurred. Please try again.";
         setErrorMessage(errorMsg);
       } else {
         setErrorMessage("An error occurred. Please try again.");
@@ -138,29 +146,78 @@ const AddBookPage = () => {
     <div className="centered-container">
       <div className="add-book-page">
         <h2 className="form-title">📖 Add New Book</h2>
-        {errorMessage && <p className="error">{errorMessage}</p>}
         {/* Show error messages */}
         {errorMessage && <div className="error">{errorMessage}</div>}
         {fileError && <div className="error">{fileError}</div>}
 
         <form className="book-form" onSubmit={handleSubmit}>
           <div className="form-section">
-            <input type="text" name="title" placeholder="Title" required onChange={handleInputChange} />
-            <input type="text" name="author" placeholder="Author" required onChange={handleInputChange} />
-            <select name="genreId" value={formData.genreId} required onChange={handleInputChange} className="genre-select">
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              required
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="author"
+              placeholder="Author"
+              required
+              onChange={handleInputChange}
+            />
+            <select
+              name="genreId"
+              value={formData.genreId}
+              required
+              onChange={handleInputChange}
+              className="genre-select"
+            >
               <option value="">Select Genre</option>
               {genres.map((genre) => (
-                <option key={genre.id} value={genre.id}>{genre.name}</option>
+                <option key={genre.id} value={genre.id}>
+                  {genre.name}
+                </option>
               ))}
             </select>
-            <textarea name="description" placeholder="Description" required onChange={handleInputChange}></textarea>
-            <input type="text" name="isbn" placeholder="ISBN" required onChange={handleInputChange} />
-            <input type="date" name="publicationDate" required onChange={handleInputChange} />
-            <input type="number" name="pageCount" placeholder="Page Count" required onChange={handleInputChange} />
-            <select name="language" value={formData.language} required onChange={handleInputChange} className="genre-select">
+            <textarea
+              name="description"
+              placeholder="Description"
+              required
+              onChange={handleInputChange}
+            ></textarea>
+            <input
+              type="text"
+              name="isbn"
+              placeholder="ISBN"
+              required
+              onChange={handleInputChange}
+            />
+            <input
+              type="date"
+              name="publicationDate"
+              required
+              onChange={handleInputChange}
+            />
+            <input
+              type="number"
+              name="pageCount"
+              placeholder="Page Count"
+              required
+              onChange={handleInputChange}
+            />
+            <select
+              name="language"
+              value={formData.language}
+              required
+              onChange={handleInputChange}
+              className="genre-select"
+            >
               <option value="">Select Language</option>
               {languages.map((languages) => (
-                <option key={languages.id} value={languages.name}>{languages.name}</option>
+                <option key={languages.id} value={languages.name}>
+                  {languages.name}
+                </option>
               ))}
             </select>
             <KeywordSelection
@@ -174,7 +231,7 @@ const AddBookPage = () => {
 
           <div className="form-section">
             <h3>📂 Upload Files</h3>
-            
+
             {/* Cover Image */}
             <div className="file-input">
               <label htmlFor="coverImage" className="file-label">
@@ -204,7 +261,11 @@ const AddBookPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="submit-button" disabled={!!fileError}>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={!!fileError}
+          >
             🚀 Submit for Approval
           </button>
         </form>

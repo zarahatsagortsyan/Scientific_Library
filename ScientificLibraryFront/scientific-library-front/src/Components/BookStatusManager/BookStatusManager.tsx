@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/api";
 import "./BookStatusManager.css";
+import { BookEvents } from "../../Utils/BookEvents";
 
 interface BookStatusManagerProps {
   bookId: string;
@@ -62,6 +63,7 @@ const BookStatusManager: React.FC<BookStatusManagerProps> = ({
 
         if (responseDelete.data.success) {
           setReadingStatus("None");
+          BookEvents.notify(); // trigger sidebar refresh
         } else {
           setError(
             responseDelete.data.message || "Failed to update reading status."
@@ -85,6 +87,7 @@ const BookStatusManager: React.FC<BookStatusManagerProps> = ({
 
         if (response.data.success) {
           setReadingStatus(newStatus);
+          BookEvents.notify(); //  trigger refresh for Sidebar
         } else {
           setError(response.data.message || "Failed to update reading status.");
         }

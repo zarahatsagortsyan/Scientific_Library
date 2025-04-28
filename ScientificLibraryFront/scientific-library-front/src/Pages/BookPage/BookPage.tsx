@@ -93,6 +93,19 @@ const BookPage: React.FC = () => {
         <BookStatusManager bookId={book.id} userId={userId ?? ""} />
       )}
       <h2>{book.title}</h2>
+
+      {book.averageRating > 0 ? (
+        <div className="average-rating">
+          <span style={{ fontSize: "1.5rem" }}>
+            ⭐ {book.averageRating.toFixed(1)} / 5
+          </span>
+        </div>
+      ) : (
+        <div className="average-rating">
+          <span style={{ fontSize: "1.2rem" }}>No rating yet</span>
+        </div>
+      )}
+
       <img
         src={`http://localhost:8001/api/book/cover/${book.id}`}
         alt={book.title}

@@ -19,19 +19,13 @@ namespace ScientificLibraryBack.Controllers
         [HttpPut("books/approve")]
         public async Task<IActionResult> ApproveBook(Guid bookId)
         {
-
             if (!User.Identity.IsAuthenticated)
-            {
-                Console.WriteLine("User not authenticated");
-                return Unauthorized(new ApiResponse<string> { Success = false, Message = "User not authenticated" });
-            }
+                return Unauthorized(new ApiResponse<string> {
+                    Success = false, Message = "User not authenticated" });
             var response = await _adminService.ApproveBook(bookId);
 
             if (response.Success)
-            {
                 return Ok(response);
-            }
-
             return BadRequest(response);
         }
 

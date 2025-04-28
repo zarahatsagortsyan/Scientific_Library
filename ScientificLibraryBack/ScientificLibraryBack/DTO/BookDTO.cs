@@ -41,7 +41,7 @@ namespace ScientificLibraryBack.DTO
         public string PublisherId { get; set; }
         public string PublisherName { get; set; }
         //public ExtendedIdentityUser Publisher { get; set; }
-
+        public double AverageRating { get; set; } 
         // Navigation property for Reviews
         //public virtual ICollection<Review> Reviews { get; set; }
     }

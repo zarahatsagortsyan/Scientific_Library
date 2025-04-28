@@ -19,6 +19,7 @@ import "./Sidebar.css";
 import { useReaderBookCounts } from "../../Utils/UseReaderBookCounts";
 import { usePublisherBookCounts } from "../../Utils/UsePublisherBookCounts";
 import { useAdminBookCounts } from "../../Utils/UseAdminBookCounts";
+import { BookEvents } from "../../Utils/BookEvents";
 
 // Utility function
 const getUserRoles = (): string[] | null => {
@@ -41,7 +42,17 @@ const SidebarMenu: React.FC = () => {
   const [userRole, setUserRole] = useState<string[] | null>(null);
   const location = useLocation();
   
-  const bookCounts = useReaderBookCounts();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = BookEvents.subscribe(() => {
+      setRefreshTrigger(prev => prev + 1); // Force refresh
+    });
+
+    return () => unsubscribe(); // clean up
+  }, []);
+
+  const bookCounts = useReaderBookCounts(refreshTrigger); // <-- pass trigger here
   const publisherCounts = usePublisherBookCounts();
   const adminCounts = useAdminBookCounts();
 
