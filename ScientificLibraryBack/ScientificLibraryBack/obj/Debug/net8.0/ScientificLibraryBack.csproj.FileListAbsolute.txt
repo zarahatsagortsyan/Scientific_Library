@@ -470,3 +470,8 @@ C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\Scientif
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ScientificLibraryBack.genruntimeconfig.cache
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\ref\ScientificLibraryBack.dll
 C:\Users\Prog_2\Desktop\diplom\Scientific_Library\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\ScientificLibraryBack.staticwebassets.endpoints.json
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\staticwebassets\msbuild.ScientificLibraryBack.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Users\Zaruhi Hatsagortsyan\Desktop\dplom\ScientificLibraryBack\ScientificLibraryBack\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

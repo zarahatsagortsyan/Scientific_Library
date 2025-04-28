@@ -7,7 +7,7 @@ export const handleBookApprove = async (id: any) => {
       throw new Error("Authentication required.");
     }
 
-    const response = await api.patch(
+    const response = await api.put(
       import.meta.env.VITE_API_URL + `/Admin/books/approve?bookId=${id}`,
       {},
       {

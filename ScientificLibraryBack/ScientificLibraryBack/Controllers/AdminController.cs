@@ -16,7 +16,7 @@ namespace ScientificLibraryBack.Controllers
             _adminService = adminService;
         }
 
-        [HttpPatch("books/approve")]
+        [HttpPut("books/approve")]
         public async Task<IActionResult> ApproveBook(Guid bookId)
         {
 
