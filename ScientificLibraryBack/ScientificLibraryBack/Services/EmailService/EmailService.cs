@@ -3,8 +3,6 @@ using MimeKit;
 using ScientificLibraryBack.Services.EmailService;
 using ScientificLibraryBack.Services.EmailService.Models;
 
-
-
 namespace User.Management.Service.Services
 {
     public class EmailService : IEmailService
@@ -16,7 +14,6 @@ namespace User.Management.Service.Services
             var emailMessage = CreateEmailMessage(message);
             Send(emailMessage);
         }
-
         private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
@@ -41,7 +38,6 @@ namespace User.Management.Service.Services
             }
             catch
             {
-                //log an error message or throw an exception or both.
                 throw;
             }
             finally

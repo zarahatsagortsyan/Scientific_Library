@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import api from "../../api/api";
 
 interface ResendConfirmationProps {
   email: string;
@@ -16,7 +16,7 @@ const ResendConfirmation: React.FC<ResendConfirmationProps> = ({
   const handleResend = async () => {
     setLoading(true);
     try {
-      const response = await axios.post<{ success: boolean; message: string }>(
+      const response = await api.post<{ success: boolean; message: string }>(
         "/api/auth/resend-confirmation",
         {
           email,

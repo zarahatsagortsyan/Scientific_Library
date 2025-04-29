@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ReviewsPage.css";
-import axios from "axios";
 import { Review } from "../../Models/Review";
+import api from "../../api/api";
 
 const ReaderReviewsPage: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -36,7 +36,7 @@ const ReaderReviewsPage: React.FC = () => {
     const fetchUserReviews = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Reader/user-reviews/${userId}`
         );
         if (response.data.success) {
@@ -67,7 +67,7 @@ const ReaderReviewsPage: React.FC = () => {
     if (!window.confirm("Are you sure you want to delete this review?")) return;
 
     try {
-      const response = await axios.delete(
+      const response = await api.delete(
         `http://localhost:8001/api/Reader/delete-review/${reviewId}?userId=${userId}`
       );
       if (response.data.success) {
@@ -133,7 +133,6 @@ const ReaderReviewsPage: React.FC = () => {
     startIndex,
     startIndex + reviewsPerPage
   );
-  // const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage);
 
   return (
     <div className="user-reviews-page">

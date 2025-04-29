@@ -40,28 +40,28 @@
 FROM node:20 AS frontend-build
 WORKDIR /app
 
-# ✅ Copy frontend source code
+#  Copy frontend source code
 COPY ./ ./  
 
-# ✅ Install dependencies
+#  Install dependencies
 RUN npm install
 
-# ✅ Build the project for production
+#  Build the project for production
 RUN npm run build || (echo "Build failed! Check Vite config." && exit 1)
 
-# ✅ Debugging: List files after build
+#  Debugging: List files after build
 RUN ls -l /app/dist
 
 # Frontend - Serve stage
 FROM nginx:alpine AS frontend
 WORKDIR /usr/share/nginx/html
 
-# ✅ Ensure Nginx folder exists
+#  Ensure Nginx folder exists
 RUN mkdir -p /usr/share/nginx/html
 
-# ✅ Copy built frontend files from previous stage
+#  Copy built frontend files from previous stage
 COPY --from=frontend-build /app/dist .  
-# ✅ Ensure correct Nginx configuration
+#  Ensure correct Nginx configuration
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./ReaderBooks.css";
 import BookDetails from "../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
 import { jwtDecode } from "jwt-decode";
 import { Book } from "../../Models/Book";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
 
 export enum ReadingStatus {
   ToRead = 0,
@@ -66,7 +66,7 @@ const UserBooksList: React.FC<UserBooksListProps> = ({
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
 
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Reader/user-books/${userId}?status=${readingStatus}`,
           {
             headers: { Authorization: `Bearer ${token}` },

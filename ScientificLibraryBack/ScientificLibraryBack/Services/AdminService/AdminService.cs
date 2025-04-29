@@ -16,40 +16,7 @@ namespace ScientificLibraryBack.Services.AdminService
         {
             _context = context;
         }
-        //public async Task<ApiResponse<bool>> ApproveBook(Guid bookId)
-        //{
-        //    var response = new ApiResponse<bool>();
-
-        //    try
-        //    {
-        //        // Retrieve the existing book from the database
-        //        var existingBook = await _context.Books.FindAsync(bookId);
-        //        if (existingBook == null)
-        //        {
-        //            response.Success = false;
-        //            response.Message = "Book not found.";
-        //            response.Data = false;
-        //            return response;
-        //        }
-
-        //        existingBook.Status = ApprovalStatus.Approved;
-        //        // Save changes to the database
-        //        _context.Books.Update(existingBook); // This ensures only modified fields are persisted
-        //        await _context.SaveChangesAsync();
-
-        //        response.Success = true;
-        //        response.Message = "Book approved successfully.";
-        //        response.Data = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
-
+       
         public async Task<ApiResponse<bool>> ApproveBook(Guid bookId)
         {
             var response = new ApiResponse<bool>();
@@ -84,39 +51,6 @@ namespace ScientificLibraryBack.Services.AdminService
             return response;
         }
 
-        //public async Task<ApiResponse<bool>> RejectBook(Guid bookId)
-        //{
-        //    var response = new ApiResponse<bool>();
-
-        //    try
-        //    {
-        //        // Retrieve the existing book from the database
-        //        var existingBook = await _context.Books.FindAsync(bookId);
-        //        if (existingBook == null)
-        //        {
-        //            response.Success = false;
-        //            response.Message = "Book not found.";
-        //            response.Data = false;
-        //            return response;
-        //        }
-
-        //        existingBook.Status = ApprovalStatus.Rejected;
-        //        // Save changes to the database
-        //        _context.Books.Update(existingBook); // This ensures only modified fields are persisted
-        //        await _context.SaveChangesAsync();
-
-        //        response.Success = true;
-        //        response.Message = "Book rejected successfully.";
-        //        response.Data = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
         public async Task<ApiResponse<bool>> RejectBook(Guid bookId)
         {
             var response = new ApiResponse<bool>();
@@ -280,9 +214,9 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, //  Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, 
+                        PublisherName = b.Publisher.UserName,
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), 
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -293,7 +227,6 @@ namespace ScientificLibraryBack.Services.AdminService
                     })
                     .ToListAsync();
 
-                // Convert to DTOs
                 var bookDTOs = books.Select(book => new BookDTO
                 {
                     Id = book.Id,
@@ -340,9 +273,9 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.ISBN,
                         b.Status,
                         b.Format,
-                        GenreName = b.Genre.Name, //  Fetch Genre Name
-                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
+                        GenreName = b.Genre.Name, 
+                        PublisherName = b.Publisher.UserName, 
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), 
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -353,7 +286,6 @@ namespace ScientificLibraryBack.Services.AdminService
                     })
                     .ToListAsync();
 
-                // Convert to DTOs
                 var bookDTOs = books.Select(book => new BookDTO
                 {
                     Id = book.Id,
@@ -401,8 +333,8 @@ namespace ScientificLibraryBack.Services.AdminService
                         b.Status,
                         b.Format,
                         GenreName = b.Genre.Name, 
-                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords as List<string>
+                        PublisherName = b.Publisher.UserName, 
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), 
                         b.Description,
                         b.Title,
                         b.PageCount,
@@ -413,7 +345,6 @@ namespace ScientificLibraryBack.Services.AdminService
                     })
                     .ToListAsync();
 
-                // Convert to DTOs
                 var bookDTOs = books.Select(book => new BookDTO
                 {
                     Id = book.Id,
@@ -421,9 +352,9 @@ namespace ScientificLibraryBack.Services.AdminService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, //  Use Genre Name
-                    Keywords = book.Keywords, //  Use List of Keywords
-                    PublisherName = book.PublisherName, //  Use Publisher Name
+                    Genre = book.GenreName, 
+                    Keywords = book.Keywords, 
+                    PublisherName = book.PublisherName, 
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -475,7 +406,6 @@ namespace ScientificLibraryBack.Services.AdminService
                     })
                     .ToListAsync();
 
-                // Convert to DTOs
                 var bookDTOs = books.Select(book => new BookDTO
                 {
                     Id = book.Id,
@@ -483,9 +413,9 @@ namespace ScientificLibraryBack.Services.AdminService
                     ISBN = book.ISBN,
                     Status = book.Status,
                     Format = book.Format,
-                    Genre = book.GenreName, //  Use Genre Name
-                    Keywords = book.Keywords, //  Use List of Keywords
-                    PublisherName = book.PublisherName, //  Use Publisher Name
+                    Genre = book.GenreName, 
+                    Keywords = book.Keywords, 
+                    PublisherName = book.PublisherName, 
                     Description = book.Description,
                     Title = book.Title,
                     PageCount = book.PageCount,
@@ -585,7 +515,6 @@ namespace ScientificLibraryBack.Services.AdminService
             return apiResponse;
         }
 
-        // Fetch all messages
         public async Task<ApiResponse<List<Message>>> GetAllMessagesAsync()
         {
             var messages = await _context.Messages.ToListAsync();
@@ -597,7 +526,6 @@ namespace ScientificLibraryBack.Services.AdminService
             };
         }
 
-        // Mark message as replied
         public async Task<ApiResponse<string>> MarkAsRepliedAsync(int messageId)
         {
             var message = await _context.Messages.FindAsync(messageId);

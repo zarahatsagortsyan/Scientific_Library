@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 
 export interface AdminBookCounts {
   approved: number;
@@ -20,7 +20,7 @@ export const useAdminBookCounts = (): AdminBookCounts => {
       if (!token) return;
 
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Admin/books/all`,
           {
             headers: { Authorization: `Bearer ${token}` },

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./BookDetails.css";
 import { Book } from "../../Models/Book";
+import api from "../../api/api";
 
 interface BookDetailsProps {
   bookId: string;
@@ -15,7 +15,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
   useEffect(() => {
     const fetchBookDetails = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Book/info/${bookId}`
         );
         if (response.status === 200) {
@@ -45,45 +45,40 @@ const BookDetails: React.FC<BookDetailsProps> = ({ bookId, onClose }) => {
         ✖ Close
       </button>
       <div className="book-details-content">
-        {/* <img
-          src={book.coverImageUrl || "https://via.placeholder.com/200"}
-          alt={book.title}
-          className="book-details-image"
-        /> */}
         <div className="book-details-info">
           <h2>{book.title}</h2>
           <p>
-            <strong>📖 Author:</strong> {book.author}
+            <strong>Author:</strong> {book.author}
           </p>
           <p>
-            <strong>🏷️ Genre:</strong> {book.genre}
+            <strong>Genre:</strong> {book.genre}
           </p>
           <p>
-            <strong>🗂️ ISBN:</strong> {book.isbn}
+            <strong>ISBN:</strong> {book.isbn}
           </p>
           <p>
-            <strong>🗓️ Published Date:</strong>{" "}
+            <strong>Published Date:</strong>{" "}
             {new Date(book.publicationDate).toLocaleDateString()}
           </p>
           <p>
-            <strong>🗂️ Pages:</strong> {book.pageCount}
+            <strong>Pages:</strong> {book.pageCount}
           </p>
           <p>
-            <strong>🌐 Language:</strong> {book.language}
+            <strong>Language:</strong> {book.language}
           </p>
           <p>
-            <strong>🔍 Keywords:</strong>{" "}
+            <strong>Keywords:</strong>{" "}
             {book.keywords && Array.isArray(book.keywords)
               ? book.keywords.join(", ")
               : "No keywords available"}
           </p>
 
           <p>
-            <strong>✅ Availability:</strong>{" "}
+            <strong>Availability:</strong>{" "}
             {book.isAvailable ? "Available" : "Not Available"}
           </p>
           <p>
-            <strong>📝 Description:</strong> {book.description}
+            <strong>Description:</strong> {book.description}
           </p>
         </div>
       </div>

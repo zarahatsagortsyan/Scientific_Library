@@ -76,23 +76,9 @@ namespace ScientificLibraryBack.Controllers
             {
                 return Ok(loginResult);
             }
-            return Unauthorized();
+            return Unauthorized(new { message = "Refresh token is invalid or expired" });
         }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(LoginUser user)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    if (await _authService.Login(user))
-        //    {
-        //        var tokenString = _authService.GenerateTokenString(user);
-        //        return Ok(tokenString);
-        //    }
-        //    return BadRequest();
-        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUser user)
@@ -177,18 +163,6 @@ namespace ScientificLibraryBack.Controllers
             }
 
             return BadRequest(response);
-            //var user = await _userManager.FindByEmailAsync(resetPassword.Email!);
-            //if (user is null)
-            //    return BadRequest("Invalid Request");
-            //var result = await _userManager.ResetPasswordAsync(user, resetPassword.Token!, resetPassword.NewPassword!);
-
-            //if (!result.Succeeded)
-            //{
-            //    var errors = result.Errors.Select(e => e.Description);
-
-            //    return BadRequest(errors);
-            //}
-            //return Ok();
         }
 
         [AllowAnonymous]

@@ -133,7 +133,6 @@ namespace ScientificLibraryBack.Services.AuthService
             {
                 var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
-                // Check if email is already registered but not confirmed
                 if (existingUser != null)
                 {
                     if (!existingUser.EmailConfirmed)
@@ -166,7 +165,6 @@ namespace ScientificLibraryBack.Services.AuthService
                     };
                 }
 
-                // Create new user since the email is not found
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.Email,
@@ -194,10 +192,8 @@ namespace ScientificLibraryBack.Services.AuthService
                     };
                 }
 
-                // Add user to Reader role
                 await _userManager.AddToRoleAsync(identityUser, "Reader");
 
-                // Send confirmation email
                 var newToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                 var newEncodedToken = HttpUtility.UrlEncode(newToken);
                 var newParam = new Dictionary<string, string?>
@@ -230,26 +226,24 @@ namespace ScientificLibraryBack.Services.AuthService
 
         public IEnumerable<string>? GetUserRole(string userEmail)
         {
-            var identityUser = _userManager.FindByEmailAsync(userEmail).Result; // Get the user synchronously
+            var identityUser = _userManager.FindByEmailAsync(userEmail).Result; 
             if (identityUser == null)
             {
-                return null; // Return null if user not found
+                return null; 
             }
 
-            return _userManager.GetRolesAsync(identityUser).Result; // Get roles synchronously
+            return _userManager.GetRolesAsync(identityUser).Result; 
         }
         public async Task<ApiResponse<IdentityResult>> RegisterPublisher(RegisterPublisher user)
         {
             try
             {
-                // Check if the email already exists
                 var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
                 if (existingUser != null)
                 {
                     if (!existingUser.EmailConfirmed)
                     {
-                        // Resend confirmation email
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
                         var encodedToken = HttpUtility.UrlEncode(token);
                         var param = new Dictionary<string, string?>
@@ -278,7 +272,6 @@ namespace ScientificLibraryBack.Services.AuthService
                     };
                 }
 
-                // Create new user if email is not found
                 var identityUser = new ExtendedIdentityUser
                 {
                     UserName = user.Email,
@@ -305,10 +298,8 @@ namespace ScientificLibraryBack.Services.AuthService
                     };
                 }
 
-                // Add user to Publisher role
                 await _userManager.AddToRoleAsync(identityUser, "Publisher");
 
-                // Send confirmation email
                 var newToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
                 var newEncodedToken = HttpUtility.UrlEncode(newToken);
                 var newParam = new Dictionary<string, string?>
@@ -339,32 +330,52 @@ namespace ScientificLibraryBack.Services.AuthService
             }
         }
 
-
         public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
         {
-            var principal = GetTokenPrincipal(model.JwtToken);
-
             var response = new LoginResponse();
-            if (principal?.Identity?.Name is null)
-                return response;
 
-            var identityUser = await _userManager.FindByEmailAsync(principal.Identity.Name);
+            // Lookup user by refresh token
+            var identityUser = _userManager.Users.FirstOrDefault(u =>
+                u.RefreshToken == model.RefreshToken && u.RefreshTokenExpiryTime > DateTime.Now);
 
-            if (identityUser is null || identityUser.RefreshToken != model.RefreshToken || identityUser.RefreshTokenExpiryTime < DateTime.Now)
+            if (identityUser is null)
                 return response;
 
             response.IsLogedIn = true;
-            //response.JwtToken = GenerateTokenString(identityUser.Email!);
-            response.JwtToken = GenerateTokenString(identityUser!);
+            response.JwtToken = GenerateTokenString(identityUser);
             response.RefreshToken = GenerateRefreshTokenString();
-
 
             identityUser.RefreshToken = response.RefreshToken;
             identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
-            await _userManager.UpdateAsync(identityUser);
 
+            await _userManager.UpdateAsync(identityUser);
             return response;
         }
+
+        //public async Task<LoginResponse> RefreshToken(RefreshTokenModel model)
+        //{
+        //    var principal = GetTokenPrincipal(model.JwtToken);
+
+        //    var response = new LoginResponse();
+        //    if (principal?.Identity?.Name is null)
+        //        return response;
+
+        //    var identityUser = await _userManager.FindByEmailAsync(principal.Identity.Name);
+
+        //    if (identityUser is null || identityUser.RefreshToken != model.RefreshToken || identityUser.RefreshTokenExpiryTime < DateTime.Now)
+        //        return response;
+
+        //    response.IsLogedIn = true;
+        //    response.JwtToken = GenerateTokenString(identityUser!);
+        //    response.RefreshToken = GenerateRefreshTokenString();
+
+
+        //    identityUser.RefreshToken = response.RefreshToken;
+        //    identityUser.RefreshTokenExpiryTime = DateTime.Now.AddHours(12);
+        //    await _userManager.UpdateAsync(identityUser);
+
+        //    return response;
+        //}
         private ClaimsPrincipal? GetTokenPrincipal(string token)
         {
 
@@ -380,7 +391,7 @@ namespace ScientificLibraryBack.Services.AuthService
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidAudience = jwtSettings["Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"])),
-                RoleClaimType = ClaimTypes.Role // Make sure this is set correctly for role validation
+                RoleClaimType = ClaimTypes.Role
 
             };
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ScientificLibraryBack.DTO;
 using ScientificLibraryBack.Models.DB;
 using ScientificLibraryBack.Services.BookService;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 namespace ScientificLibraryBack.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "Reader")]
     [ApiController]
     public class ReaderController : Controller
     {

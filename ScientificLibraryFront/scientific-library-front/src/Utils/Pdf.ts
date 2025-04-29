@@ -1,10 +1,9 @@
-// utils/pdfDownloader.js
-import axios from "axios";
+import api from "../api/api";
 
 export const openPdf = async (bookId: string) => {
   try {
     const token = localStorage.getItem("jwtToken");
-    const response = await axios.get(`http://localhost:8001/api/book/open/${bookId}`, {
+    const response = await api.get(`http://localhost:8001/api/book/open/${bookId}`, {
       headers: { Authorization: `Bearer ${token}` },
       responseType: "blob",
     });
@@ -21,7 +20,7 @@ export const openPdf = async (bookId: string) => {
 export const downloadPdf = async (bookId:string) => {
   try {
     const token = localStorage.getItem("jwtToken");
-    const response = await axios.get(`http://localhost:8001/api/book/download/${bookId}`, {
+    const response = await api.get(`http://localhost:8001/api/book/download/${bookId}`, {
       headers: { Authorization: `Bearer ${token}` },
       responseType: "blob",
     });
@@ -29,7 +28,6 @@ export const downloadPdf = async (bookId:string) => {
     const blob = new Blob([response.data], { type: "application/pdf" });
     const url = window.URL.createObjectURL(blob);
 
-    // Create a temporary link to trigger the download
     const link = document.createElement("a");
     link.href = url;
     link.download = `book-${bookId}.pdf`;

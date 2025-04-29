@@ -37,14 +37,11 @@ const LoginForm: React.FC = () => {
         body: JSON.stringify(payload),
       });
 
-      // if (!response.ok) {
-      //   throw new Error("Login failed. Please check your credentials.");
-      // }
-
       const data = await response.json();
       if (data.isLogedIn) {
         setSuccessMessage("Login successful!");
         localStorage.setItem("jwtToken", data.jwtToken);
+        console.log(data.refreshToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         navigate("/");
         window.location.reload();

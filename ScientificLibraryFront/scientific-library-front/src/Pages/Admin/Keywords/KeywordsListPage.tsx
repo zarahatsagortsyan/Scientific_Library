@@ -16,11 +16,12 @@ const KeywordsListPage: React.FC = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const keywordsPerPage = 6; // ✅ Show 6 keywords per page
+  const keywordsPerPage = 6; //  Show 6 keywords per page
 
   const { keywords, keyLoading, keyError } = useKeywords();
 
-  if (keyLoading) return <div className="container mt-4">Loading keywords...</div>;
+  if (keyLoading)
+    return <div className="container mt-4">Loading keywords...</div>;
   if (keyError) return <div className="text-danger">{keyError}</div>;
 
   const handleEditKeyword = (keyword: Keyword) => {
@@ -71,7 +72,7 @@ const KeywordsListPage: React.FC = () => {
     keyword.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Pagination Logic
+  //  Pagination Logic
   const totalPages = Math.ceil(filteredKeywords.length / keywordsPerPage);
   const startIndex = (currentPage - 1) * keywordsPerPage;
   const paginatedKeywords = filteredKeywords.slice(
@@ -135,7 +136,7 @@ const KeywordsListPage: React.FC = () => {
         </table>
       )}
 
-      {/* ✅ Pagination Controls */}
+      {/*  Pagination Controls */}
       {totalPages > 1 && (
         <nav>
           <ul className="pagination justify-content-center">

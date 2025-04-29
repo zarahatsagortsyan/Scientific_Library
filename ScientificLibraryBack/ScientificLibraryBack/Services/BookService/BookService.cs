@@ -33,7 +33,6 @@ namespace ScientificLibraryBack.Services.BookService
 
             try
             {
-                // Fetch books with only necessary fields using projection
                 var books = await _context.Books
                     .Where(b => b.Status == ApprovalStatus.Approved && b.IsAvailable == true)
                     .Select(b => new BookDTO
@@ -43,9 +42,9 @@ namespace ScientificLibraryBack.Services.BookService
                         ISBN = b.ISBN,
                         Status = b.Status,
                         //Format = b.Format,
-                        Genre = b.Genre.Name, //  Get Genre Name
-                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), //  Fetch Keywords
-                        PublisherName = b.Publisher.UserName, //  Fetch Publisher Name
+                        Genre = b.Genre.Name, 
+                        Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(), 
+                        PublisherName = b.Publisher.UserName,
                         Description = b.Description,
                         Title = b.Title,
                         PageCount = b.PageCount,
@@ -69,81 +68,12 @@ namespace ScientificLibraryBack.Services.BookService
             return response;
         }
 
-        //public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
-        //{
-        //    var response = new ApiResponse<BookDTO>();
-
-        //    try
-        //    {
-        //        // Fetch the book with only necessary related data
-        //        var bookData = await _context.Books
-        //            .Where(b => b.Id == bookId)
-        //            .Select(b => new
-        //            {
-        //                b.Id,
-        //                b.Title,
-        //                b.Author,
-        //                b.ISBN,
-        //                b.Status,
-        //                b.Format,
-        //                GenreName = b.Genre.Name,
-        //                PublisherName = b.Publisher.UserName,
-        //                Keywords = b.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
-        //                b.Description,
-        //                b.PageCount,
-        //                b.IsAvailable,
-        //                b.PublicationDate,
-        //                b.State,
-        //                b.Language
-        //            })
-        //            .FirstOrDefaultAsync();
-
-        //        if (bookData == null)
-        //        {
-        //            response.Success = false;
-        //            response.Message = "Book not found.";
-        //            return response;
-        //        }
-
-        //        //  Map fetched data to DTO
-        //        var bookResponse = new BookDTO
-        //        {
-        //            Id = bookData.Id,
-        //            Title = bookData.Title,
-        //            Author = bookData.Author,
-        //            ISBN = bookData.ISBN,
-        //            Status = bookData.Status,
-        //            Format = bookData.Format,
-        //            Genre = bookData.GenreName,
-        //            Keywords = bookData.Keywords,
-        //            PublisherName = bookData.PublisherName ?? "Unknown",
-        //            Description = bookData.Description,
-        //            PageCount = bookData.PageCount,
-        //            IsAvailable = bookData.IsAvailable,
-        //            PublicationDate = bookData.PublicationDate,
-        //            State = bookData.State,
-        //            Language = bookData.Language
-        //        };
-
-        //        response.Success = true;
-        //        response.Message = "Book retrieved successfully.";
-        //        response.Data = bookResponse;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"An error occurred: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
         public async Task<ApiResponse<BookDTO>> GetBookByIdAsync(Guid bookId)
         {
             var response = new ApiResponse<BookDTO>();
 
             try
             {
-                // Fetch the book with only necessary related data, including average rating
                 var bookData = await _context.Books
                     .Where(b => b.Id == bookId)
                     .Select(b => new
@@ -174,7 +104,6 @@ namespace ScientificLibraryBack.Services.BookService
                     return response;
                 }
 
-                //  Map fetched data to DTO
                 var bookResponse = new BookDTO
                 {
                     Id = bookData.Id,
@@ -254,13 +183,13 @@ namespace ScientificLibraryBack.Services.BookService
 
                     response.Success = true;
                     response.Message = "Books retrieved successfully.";
-                    response.Data = new PDFDTO { pdfFile = bookPdf.PdfFile, pdfFileName = bookPdf.PdfFileName }; // Assign the books to the Data property
+                    response.Data = new PDFDTO { pdfFile = bookPdf.PdfFile, pdfFileName = bookPdf.PdfFileName };
                     return response;
                 }
 
                 response.Success = false;
                 response.Message = "pdf retrieved successfully.";
-                response.Data = null; // Assign the books to the Data property
+                response.Data = null;
             }
             catch (Exception ex)
             {
@@ -274,7 +203,7 @@ namespace ScientificLibraryBack.Services.BookService
         public async Task<IEnumerable<Book>> GetBooksByGenreAsync(string genreName)
         {
             return await _context.Books
-                .Include(b => b.Genre) //  Ensure Genre is included
+                .Include(b => b.Genre)
                 .Where(b => b.Genre.Name == genreName && b.Status == ApprovalStatus.Approved)
                 .ToListAsync();
         }
@@ -369,156 +298,6 @@ namespace ScientificLibraryBack.Services.BookService
 
             return response;
         }
-        //public async Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
-        //{
-        //    var response = new ApiResponse<IEnumerable<BookDTO>>();
-
-        //    try
-        //    {
-        //        var query = _context.Books
-        //            .Include(b => b.Genre)
-        //            .Include(b => b.BookKeywords)
-        //                .ThenInclude(bk => bk.Keyword)
-        //            .AsQueryable();
-
-        //        query = query.Where(b => b.Status == ApprovalStatus.Approved && b.IsAvailable == true);
-
-        //        if (!string.IsNullOrWhiteSpace(filter.Title))
-        //            query = query.Where(b => b.Title.ToLower().Contains(filter.Title.ToLower()));
-
-        //        if (!string.IsNullOrWhiteSpace(filter.Author))
-        //            query = query.Where(b => b.Author.ToLower().Contains(filter.Author.ToLower()));
-
-        //        if (filter.Genres != null && filter.Genres.Any())
-        //            query = query.Where(b => filter.Genres.Contains(b.Genre.Id));
-
-        //        if (filter.Languages != null && filter.Languages.Any())
-        //            query = query.Where(b => filter.Languages.Contains(b.Language));
-
-        //        if (filter.Keywords != null && filter.Keywords.Any())
-        //            query = query.Where(b => b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
-
-        //        var books = await query.Select(book => new BookDTO
-        //        {
-        //            Id = book.Id,
-        //            Title = book.Title,
-        //            Author = book.Author,
-        //            Genre = book.Genre.Name ?? "Unknown",
-        //            Description = book.Description,
-        //            ISBN = book.ISBN,
-        //            PublicationDate = book.PublicationDate,
-        //            PageCount = book.PageCount,
-        //            Language = book.Language,
-        //            Keywords = book.BookKeywords.Select(bk => bk.Keyword.Name).ToList(),
-        //            IsAvailable = book.IsAvailable,
-        //            State = book.State,
-        //            Status = book.Status,
-        //            PublisherId = book.PublisherId,
-        //            PublisherName = book.Publisher.CompanyName ?? "Unknown"
-        //        }).ToListAsync();
-
-        //        response.Success = true;
-        //        response.Message = "Books filtered successfully.";
-        //        response.Data = books;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"Error filtering books: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
-
-        //public async Task<ApiResponse<PagedResult<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
-        //{
-        //    var response = new ApiResponse<PagedResult<BookDTO>>();
-        //    try
-        //    {
-        //        var booksQuery = _context.Books
-        //            .Where(b => b.Status == ApprovalStatus.Approved && b.State != State.Deleted)
-        //            .AsQueryable();
-
-        //        if (!string.IsNullOrWhiteSpace(filter.Title))
-        //            booksQuery = booksQuery.Where(b => b.Title.Contains(filter.Title));
-
-        //        if (!string.IsNullOrWhiteSpace(filter.Author))
-        //            booksQuery = booksQuery.Where(b => b.Author.Contains(filter.Author));
-
-        //        if (filter.Genres != null && filter.Genres.Any())
-        //            booksQuery = booksQuery.Where(b => filter.Genres.Contains(b.GenreId));
-
-        //        if (filter.Languages != null && filter.Languages.Any())
-        //            booksQuery = booksQuery.Where(b => filter.Languages.Contains(b.Language));
-
-        //        if (filter.Keywords != null && filter.Keywords.Any())
-        //        {
-        //            booksQuery = booksQuery.Where(b =>
-        //                b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
-        //        }
-
-        //        var joinedQuery = from book in booksQuery
-        //                          join reviewGroup in _context.Reviews
-        //                              .GroupBy(r => r.BookId)
-        //                              on book.Id equals reviewGroup.Key into reviewJoin
-        //                          from reviewStats in reviewJoin.DefaultIfEmpty()
-        //                          join userBookGroup in _context.UserBooks
-        //                              .Where(ub => ub.ReadingStatus == ReadingStatus.Read)
-        //                              .GroupBy(ub => ub.BookId)
-        //                              on book.Id equals userBookGroup.Key into userBookJoin
-        //                          from readStats in userBookJoin.DefaultIfEmpty()
-        //                          select new
-        //                          {
-        //                              Book = book,
-        //                              AvgRating = reviewStats != null ? reviewStats.Average(r => r.Rating) : 0,
-        //                              ReadCount = readStats != null ? readStats.Count() : 0,
-        //                              book.PublicationDate
-        //                          };
-
-        //        // Sorting
-        //        joinedQuery = filter.OrderBy switch
-        //        {
-        //            BookOrderBy.Rating => filter.IsDescending
-        //                ? joinedQuery.OrderByDescending(b => b.AvgRating)
-        //                : joinedQuery.OrderBy(b => b.AvgRating),
-
-        //            BookOrderBy.ReadCount => filter.IsDescending
-        //                ? joinedQuery.OrderByDescending(b => b.ReadCount)
-        //                : joinedQuery.OrderBy(b => b.ReadCount),
-
-        //            BookOrderBy.DatePublished or _ => filter.IsDescending
-        //                ? joinedQuery.OrderByDescending(b => b.PublicationDate)
-        //                : joinedQuery.OrderBy(b => b.PublicationDate)
-        //        };
-
-        //        var totalCount = await joinedQuery.CountAsync();
-
-        //        var pagedBooks = await joinedQuery
-        //            .Skip((filter.PageNumber - 1) * filter.PageSize)
-        //            .Take(filter.PageSize)
-        //            .Select(x => x.Book)
-        //            .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
-        //            .ToListAsync();
-
-        //        response.Success = true;
-        //        response.Message = "Books filtered successfully.";
-        //        response.Data = new PagedResult<BookDTO>
-        //        {
-        //            Items = pagedBooks,
-        //            TotalCount = totalCount,
-        //            PageNumber = filter.PageNumber,
-        //            PageSize = filter.PageSize
-        //        };
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        response.Success = false;
-        //        response.Message = $"Error filtering books: {ex.Message}";
-        //    }
-
-        //    return response;
-        //}
-
         public async Task<ApiResponse<PagedResult<BookDTO>>> FilterBooksAsync(BookFilterRequest filter)
         {
             var response = new ApiResponse<PagedResult<BookDTO>>();
@@ -546,7 +325,6 @@ namespace ScientificLibraryBack.Services.BookService
                         b.BookKeywords.Any(bk => filter.Keywords.Contains(bk.Keyword.Name)));
                 }
 
-                // Add subqueries for AvgRating and ReadCount (EF Core-friendly)
                 var enrichedQuery = baseQuery.Select(b => new
                 {
                     Book = b,
@@ -562,7 +340,6 @@ namespace ScientificLibraryBack.Services.BookService
                     b.PublicationDate
                 });
 
-                // Apply ordering
                 enrichedQuery = filter.OrderBy switch
                 {
                     BookOrderBy.Rating => filter.IsDescending
@@ -583,7 +360,7 @@ namespace ScientificLibraryBack.Services.BookService
                 var pagedBooks = await enrichedQuery
                     .Skip((filter.PageNumber - 1) * filter.PageSize)
                     .Take(filter.PageSize)
-                    .Select(x => x.Book) // Only map the Book entity
+                    .Select(x => x.Book) 
                     .ProjectTo<BookDTO>(_mapper.ConfigurationProvider)
                     .ToListAsync();
 

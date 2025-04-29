@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import "./EmailConfirmation.css";
+import api from "../../api/api";
 
 const EmailConfirmation: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -9,12 +9,12 @@ const EmailConfirmation: React.FC = () => {
     "loading"
   );
   const navigate = useNavigate();
-  const hasConfirmed = useRef(false); // ✅ Prevent multiple calls
+  const hasConfirmed = useRef(false);
 
   useEffect(() => {
     const confirmEmail = async () => {
-      if (hasConfirmed.current) return; // ✅ Prevent second call
-      hasConfirmed.current = true; // ✅ Mark as executed
+      if (hasConfirmed.current) return;
+      hasConfirmed.current = true;
 
       const token = searchParams.get("token");
       const email = searchParams.get("email");
@@ -25,7 +25,7 @@ const EmailConfirmation: React.FC = () => {
       }
 
       try {
-        const response = await axios.post(
+        const response = await api.post(
           `${import.meta.env.VITE_API_URL}/Auth/confirm-email`,
           { email, token }
         );
@@ -42,7 +42,7 @@ const EmailConfirmation: React.FC = () => {
     };
 
     confirmEmail();
-  }, [searchParams]); // ✅ `useEffect` runs once due to ref tracking
+  }, [searchParams]);
 
   return (
     <div className="email-confirmation-container">
@@ -55,7 +55,7 @@ const EmailConfirmation: React.FC = () => {
         )}
         {status === "success" && (
           <>
-            <div className="confirmation-icon">✅</div>
+            <div className="confirmation-icon"></div>
             <h2>Email Confirmed!</h2>
             <p>
               Your email has been successfully verified. You can now log in.

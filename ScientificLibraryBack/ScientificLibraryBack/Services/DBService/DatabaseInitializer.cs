@@ -75,8 +75,9 @@ namespace ScientificLibraryBack.Services.DBService
             using (var scope = serviceProvider.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                if (!await context.Genres.AnyAsync()) // Only seed if the table is empty
+                
+                // Only seed if the table is empty
+                if (!await context.Genres.AnyAsync()) 
                 {
                     var genres = new List<Genre>
             {
@@ -101,9 +102,6 @@ namespace ScientificLibraryBack.Services.DBService
                 }
             }
         }
-
-
-
         public static async Task SeedRoles(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
@@ -121,7 +119,6 @@ namespace ScientificLibraryBack.Services.DBService
                 }
             }
         }
-
         public static async Task CreateAdmin(IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ExtendedIdentityUser>>();

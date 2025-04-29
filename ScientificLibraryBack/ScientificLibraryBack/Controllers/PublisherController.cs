@@ -31,47 +31,20 @@ namespace ScientificLibraryBack.Controllers
             return Ok(book);
         }
 
-        //[HttpPost("books")]
-        //public async Task<IActionResult> CreateBook([FromBody] BookCreateRequest bookCreateRequest)
-        //{
-        //    var publisherId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; // Extract ID from claims
-        //    if (string.IsNullOrEmpty(publisherId))
-        //        return Unauthorized("Invalid publisher identity.");
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    bookCreateRequest.PublisherId = publisherId;
-        //    var result = await _publisherService.CreateBookAsync(bookCreateRequest);
-        //    if (result.Success)
-        //    {
-        //        return CreatedAtAction(nameof(GetBookById), new { id = result.Data }, result);
-        //    }
-
-        //    return BadRequest(result);
-        //}
-
         [HttpPost("books")]
         public async Task<IActionResult> CreateBook([FromForm] BookCreateRequest bookRequest, IFormFile coverImage, IFormFile pdfFile)
         {
-            // 1️⃣ Extract Publisher ID from the token
             var publisherId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(publisherId))
                 return Unauthorized("Invalid publisher identity.");
 
-            // 2️⃣ Assign Publisher ID
             bookRequest.PublisherId = publisherId;
 
-            // 3️⃣ Validate ModelState
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // 4️⃣ Call the service layer
             var result = await _publisherService.CreateBookAsync(bookRequest, coverImage, pdfFile);
 
-            // 5️⃣ Return result
             if (result.Success)
             {
                 return CreatedAtAction(nameof(GetBookById), new { id = result.Data }, result);

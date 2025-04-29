@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import api from "../api/api";
 
 export interface PublisherBookCounts {
   approved: number;
@@ -27,7 +27,7 @@ export const usePublisherBookCounts = (): PublisherBookCounts => {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
 
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Publisher/books/all?publisherId=${publisherId}`,
           {
             headers: { Authorization: `Bearer ${token}` },

@@ -25,7 +25,6 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
-    // Extract token and email from query parameters
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
     const email = queryParams.get("email");
@@ -52,12 +51,10 @@ const ResetPassword: React.FC = () => {
       const data = await response.json();
 
       if (response.ok && data.success && data.data.succeeded) {
-        // Registration successful
-        setError("")
+        setError("");
         setSuccessMessage("Password reset was successful! You may now log in.");
         setTimeout(() => navigate("/login"), 3000);
       } else {
-        // If errors are present
         const errorDescriptions =
           data.data.errors?.map((err: any) => err.description).join("\n ") ||
           "Password reset failed.";

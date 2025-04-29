@@ -95,6 +95,15 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowCredentials());
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
+
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IBookService, BookService>();
@@ -119,6 +128,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 //app.MapIdentityApi<IdentityUser>();
 
 if (app.Environment.IsDevelopment())
@@ -131,6 +141,7 @@ if (!builder.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
 }
+//app.UseMiddleware<TokenExpiryMiddleware>();
 app.UseAuthentication(); // Make sure this is enabled
 app.UseAuthorization();
 

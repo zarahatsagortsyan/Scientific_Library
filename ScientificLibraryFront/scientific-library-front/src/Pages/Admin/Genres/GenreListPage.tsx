@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import { useGenres } from "../../../Utils/GenresOper";
 import { Genre } from "../../../Models/Genre";
 import GenreEditForm from "./GenreEditForm";
+import api from "../../../api/api";
 
 const GenresListPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -16,7 +16,7 @@ const GenresListPage: React.FC = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const genresPerPage = 6; // ✅ Show 6 genres per page
+  const genresPerPage = 6; //  Show 6 genres per page
 
   const { genres, loading, error } = useGenres();
 
@@ -53,11 +53,9 @@ const GenresListPage: React.FC = () => {
     setCreating(true);
     try {
       const token = localStorage.getItem("jwtToken");
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/Admin/genres`,
-        newGenre,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post(`${import.meta.env.VITE_API_URL}/Admin/genres`, newGenre, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       window.location.reload(); // Refresh to get updated genres
     } catch (err) {
       console.error("Error creating genre:", err);
@@ -73,7 +71,7 @@ const GenresListPage: React.FC = () => {
       genre.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Pagination Logic
+  //  Pagination Logic
   const totalPages = Math.ceil(filteredGenres.length / genresPerPage);
   const startIndex = (currentPage - 1) * genresPerPage;
   const paginatedGenres = filteredGenres.slice(
@@ -138,7 +136,7 @@ const GenresListPage: React.FC = () => {
         </table>
       )}
 
-      {/* ✅ Pagination Controls */}
+      {/*  Pagination Controls */}
       {totalPages > 1 && (
         <nav>
           <ul className="pagination justify-content-center">

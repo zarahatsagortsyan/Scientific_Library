@@ -12,7 +12,6 @@ namespace ScientificLibraryBack.Contextes
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        //The code shown provides a special constructor that makes it possible to configure the database for different environments.
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             base(options)
         {
@@ -31,23 +30,16 @@ namespace ScientificLibraryBack.Contextes
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Specify "no action" for the cascade delete on the relationship between Reviews and Books
             modelBuilder.Entity<Review>()
             .HasOne(r => r.Book)
             .WithMany(b => b.Reviews)
             .HasForeignKey(r => r.BookId)
-            .OnDelete(DeleteBehavior.Restrict); // NO ACTION or Restrict
+            .OnDelete(DeleteBehavior.Restrict); 
 
-            //modelBuilder.Entity<Book>()
-            //.HasOne(b => b.Publisher)
-            //.WithMany() // Specify if a Publisher has a collection of books, e.g., `.WithMany(p => p.Books)`
-            //.HasForeignKey(b => b.PublisherId)
-            //.OnDelete(DeleteBehavior.Cascade); // Optional: Set delete behavior
 
             base.OnModelCreating(modelBuilder);
 
@@ -55,7 +47,6 @@ namespace ScientificLibraryBack.Contextes
                          .HasIndex(ub => new { ub.BookId, ub.UserId })
                          .IsUnique();
 
-            // Many-to-Many: Book <-> Keyword
             modelBuilder.Entity<BookKeyword>()
                 .HasOne(bk => bk.Book)
                 .WithMany(b => b.BookKeywords)
@@ -70,16 +61,14 @@ namespace ScientificLibraryBack.Contextes
 
             modelBuilder.Entity<Book>()
             .HasOne(b => b.Genre)
-            .WithMany() // If Genre does not have a Books collection, keep it empty; otherwise, `.WithMany(g => g.Books)`
+            .WithMany()
             .HasForeignKey(b => b.GenreId)
-            .OnDelete(DeleteBehavior.Restrict); // Prevent deleting Genre when a book exists
+            .OnDelete(DeleteBehavior.Restrict); 
         }
-        //public DbSet<ExtendedIdentityUser> Users { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<UserBook> UserBooks { get; set; }
         public DbSet<Genre> Genres{ get; set; }
-
         public DbSet<Language> Languages { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<BookKeyword> BookKeywords { get; set; }

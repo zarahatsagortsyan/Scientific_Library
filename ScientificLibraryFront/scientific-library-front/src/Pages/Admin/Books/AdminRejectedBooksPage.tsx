@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./AdminBooks.css";
 import BookDetails from "../../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../../Utils/Pdf";
 import { useNavigate } from "react-router-dom";
 import { Book } from "../../../Models/Book";
+import api from "../../../api/api";
 
 const AdminRejectedBooksPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -37,8 +37,7 @@ const AdminRejectedBooksPage: React.FC = () => {
       }
 
       try {
-       
-        const response = await axios.get(
+        const response = await api.get(
           `${import.meta.env.VITE_API_URL}/Admin/books/rejected`,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -60,7 +59,6 @@ const AdminRejectedBooksPage: React.FC = () => {
 
     fetchBooks();
   }, []);
-
 
   if (loading) return <div className="loader">⏳ Loading materials...</div>;
   if (error) return <div className="error">{error}</div>;

@@ -18,7 +18,6 @@ namespace ScientificLibraryBack.Services.BookService
         Task<ApiResponse<IEnumerable<Genre>>> GetGenresAsync();
         Task<ApiResponse<IEnumerable<Language>>> GetLanguagesAsync();
         Task<ApiResponse<IEnumerable<Keyword>>> GetKeywordsAsync();
-        //Task<ApiResponse<IEnumerable<BookDTO>>> FilterBooksAsync(BookFilterRequest filter);
         Task<ApiResponse<PagedResult<BookDTO>>> FilterBooksAsync(BookFilterRequest filter);
     }
 }

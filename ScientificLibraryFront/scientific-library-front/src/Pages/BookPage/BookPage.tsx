@@ -44,21 +44,21 @@ const BookPage: React.FC = () => {
     }
     const fetchBookDetails = async () => {
       if (!bookId) return;
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await fetch(
           `http://localhost:8001/api/book/info/${bookId}`
         );
         const bookData = await response.json();
         if (bookData.success) {
-          setBook(bookData.data); // Store the book data in the state
+          setBook(bookData.data);
         } else {
           console.error("Failed to retrieve book data:", bookData.message);
         }
       } catch (error) {
         console.error("Failed to fetch book details", error);
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
 
@@ -136,7 +136,7 @@ const BookPage: React.FC = () => {
           : "No keywords available"}
       </p>
       <p>
-        <strong>✅ Availability:</strong>{" "}
+        <strong> Availability:</strong>{" "}
         {book.isAvailable ? "Available" : "Not Available"}
       </p>
       <div className="button-group">

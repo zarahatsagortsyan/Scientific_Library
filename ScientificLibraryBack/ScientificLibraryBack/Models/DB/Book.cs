@@ -29,22 +29,20 @@ namespace ScientificLibraryBack.Models.DB
         public string Author { get; set; }
 
         [Required(ErrorMessage = "Genre is required.")]
-        //  Genre Relationship (Foreign Key)
-        public int GenreId { get; set; }  // Store the Genre ID
-        public Genre Genre { get; set; }  // Navigation Property
-        //public string Genre { get; set; }
+        public int GenreId { get; set; }  
+        public Genre Genre { get; set; }  
 
         [Required(ErrorMessage = "Description is required.")]
         public string? Description { get; set; }
 
         [Required(ErrorMessage = "ISBN is required.")]
-        public string? ISBN { get; set; }  // ISBN of the book
+        public string? ISBN { get; set; }  
 
-        public byte[]? CoverImage { get; set; } // If storing the image in the database
-        public string? CoverImageUrl { get; set; } // If storing the image in a file system
+        public byte[]? CoverImage { get; set; } 
+        public string? CoverImageUrl { get; set; } 
 
-        public byte[]? PdfFile { get; set; } //  New property to store the PDF in the database
-        public string? PdfFileName { get; set; } //  To store the original file name
+        public byte[]? PdfFile { get; set; } 
+        public string? PdfFileName { get; set; } 
 
         public DateTime PublicationDate { get; set; }
         public int PageCount { get; set; }
@@ -53,17 +51,14 @@ namespace ScientificLibraryBack.Models.DB
         public string Language { get; set; }
 
         public string? Format { get; set; }
-        //public string? Keywords { get; set; }
         public bool IsAvailable { get; set; }
 
         public State State { get; set; }
         public ApprovalStatus Status { get; set; }
 
-        // Publisher Information
         public string PublisherId { get; set; }
         public ExtendedIdentityUser Publisher { get; set; }
 
-        // Navigation property for Reviews
         public virtual ICollection<Review> Reviews { get; set; }
         public ICollection<BookKeyword> BookKeywords { get; set; } = new List<BookKeyword>();
     }

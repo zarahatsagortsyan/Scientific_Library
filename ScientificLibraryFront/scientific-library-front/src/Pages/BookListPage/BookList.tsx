@@ -90,7 +90,7 @@ const BookListPage: React.FC = () => {
     fetchBooks();
 
     return () => {
-      isMounted.current = false; // ✅ prevent side effects after unmount
+      isMounted.current = false; //  prevent side effects after unmount
     };
   }, []);
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./AdminBooks.css";
 import BookDetails from "../../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../../Utils/Pdf";
 import { useNavigate } from "react-router-dom";
 import { Book } from "../../../Models/Book";
+import api from "../../../api/api";
 
 const AdminApprovedBooksPage: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -37,7 +37,7 @@ const AdminApprovedBooksPage: React.FC = () => {
       }
 
       try {
-        const response = await axios.get(
+        const response = await api.get(
           `${import.meta.env.VITE_API_URL}/Admin/books/approved`,
           {
             headers: { Authorization: `Bearer ${token}` },

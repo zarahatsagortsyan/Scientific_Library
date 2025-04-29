@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "./PublisherBooks.css";
 import BookDetails from "../../Components/BookDetails/BookDetails";
 import { downloadPdf, openPdf } from "../../Utils/Pdf";
 import { Book } from "../../Models/Book";
+import api from "../../api/api";
 
 const RejuectedCardGrid: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -37,7 +37,7 @@ const RejuectedCardGrid: React.FC = () => {
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
           ];
-        const response = await axios.get(
+        const response = await api.get(
           `http://localhost:8001/api/Publisher/books/rejected?publisherId=${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
