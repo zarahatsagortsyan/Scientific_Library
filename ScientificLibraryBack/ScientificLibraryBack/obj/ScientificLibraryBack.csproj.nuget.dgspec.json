@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Zaruhi Hatsagortsyan\\Desktop\\dplom\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj": {}
+    "C:\\Users\\Prog_2\\Desktop\\diplom\\Scientific_Library\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Zaruhi Hatsagortsyan\\Desktop\\dplom\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj": {
+    "C:\\Users\\Prog_2\\Desktop\\diplom\\Scientific_Library\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Zaruhi Hatsagortsyan\\Desktop\\dplom\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj",
+        "projectUniqueName": "C:\\Users\\Prog_2\\Desktop\\diplom\\Scientific_Library\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj",
         "projectName": "ScientificLibraryBack",
-        "projectPath": "C:\\Users\\Zaruhi Hatsagortsyan\\Desktop\\dplom\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj",
-        "packagesPath": "C:\\Users\\Zaruhi Hatsagortsyan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Zaruhi Hatsagortsyan\\Desktop\\dplom\\ScientificLibraryBack\\ScientificLibraryBack\\obj\\",
+        "projectPath": "C:\\Users\\Prog_2\\Desktop\\diplom\\Scientific_Library\\ScientificLibraryBack\\ScientificLibraryBack\\ScientificLibraryBack.csproj",
+        "packagesPath": "C:\\Users\\Prog_2\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Prog_2\\Desktop\\diplom\\Scientific_Library\\ScientificLibraryBack\\ScientificLibraryBack\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Zaruhi Hatsagortsyan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Prog_2\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -118,7 +118,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

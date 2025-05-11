@@ -133,14 +133,14 @@ const ReadersListPage: React.FC = () => {
                     className="btn btn-success"
                     onClick={() => handleUnbanUser(reader.id)}
                   >
-                    Unban
+                    Unblock
                   </button>
                 ) : (
                   <button
                     className="btn btn-danger"
                     onClick={() => handleBanUser(reader.id)}
                   >
-                    Ban
+                    Block
                   </button>
                 )}
               </td>
