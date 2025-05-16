@@ -121,16 +121,19 @@ const BookPage: React.FC = () => {
         <strong>Description:</strong> {book.description}
       </p>
       <p>
+        <strong>Publisher:</strong> {book.publisherName}
+      </p>
+      <p>
         <strong>Publication Date:</strong> {book.publicationDate}
       </p>
       <p>
-        <strong>🗂️ Pages:</strong> {book.pageCount}
+        <strong>Pages:</strong> {book.pageCount}
       </p>
       <p>
-        <strong>🌐 Language:</strong> {book.language}
+        <strong>Language:</strong> {book.language}
       </p>
       <p>
-        <strong>🔍 Keywords:</strong>{" "}
+        <strong>Keywords:</strong>{" "}
         {book.keywords && Array.isArray(book.keywords)
           ? book.keywords.join(", ")
           : "No keywords available"}

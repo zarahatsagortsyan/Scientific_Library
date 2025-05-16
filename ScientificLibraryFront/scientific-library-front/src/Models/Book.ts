@@ -15,5 +15,6 @@ export interface Book {
     isAvailable: boolean;
     status: string;
     averageRating:number;
+    publisherName:string;
   }
 
